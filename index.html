@@ -31,7 +31,7 @@
         body { 
             background-color: var(--app-bg); 
             color: #0f172a;
-            padding-bottom: 75px; /* Amortiguador para la barra inferior */
+            padding-bottom: 75px; 
             overflow-x: hidden;
         }
 
@@ -69,10 +69,9 @@
             box-shadow: 0 -4px 15px rgba(0,0,0,0.08); 
             z-index: 2000;
             height: 65px;
-            transition: transform 0.2s ease-out; /* Para ocultar suavemente */
+            transition: transform 0.2s ease-out; 
         }
         
-        /* Clase añadida dinámicamente con JS para ocultar la barra */
         .bottom-nav-master.nav-hidden {
             transform: translateY(100%);
             pointer-events: none;
@@ -142,10 +141,17 @@
         .caja input { 
             width: 100%; height: 50px; font-size: 24px; font-weight: bold; border: 2px solid #cbd5e1; 
             border-radius: 6px; box-sizing: border-box; text-align: center; color: #0f172a; 
-            transition: border-color 0.2s, background-color 0.2s;
+            transition: border-color 0.2s, background-color 0.2s, color 0.2s;
         }
         .caja input:focus { outline: none; border-color: var(--bcp-blue); background-color: #f8fafc; }
         .caja input::placeholder { color: #94a3b8; font-size: 16px; font-weight: normal; }
+
+        /* ESTILO MEJORADO PARA EL MODO HÍBRIDO (MÁS VISIBLE Y ELEGANTE) */
+        .caja input.active-sync {
+            background-color: #E8EEF9; /* Fondo azul suave pero sólido */
+            border: 2px dashed var(--bcp-blue); /* Borde punteado que indica enlace */
+            color: var(--bcp-blue);
+        }
 
         .panel-resultado { padding: 15px 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 10px; border: 3px solid; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05);}
         .estado-esperando { background-color: #f3f4f6; border-color: #d1d5db; color: #6b7280; }
@@ -191,7 +197,6 @@
         .view-content { display: none; padding: 15px; max-width: 500px; margin: 0 auto; }
         .view-content.active { display: block; animation: fadeInScreen 0.2s; }
 
-        /* Tarjetas del Contador */
         .item-card {
             background: var(--card-bg); border-radius: 10px; padding: 12px 10px; margin-bottom: 10px;
             display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-color);
@@ -239,9 +244,6 @@
 </head>
 <body>
 
-    <!-- =========================================
-         APLICACIÓN 1: CAJA PRINCIPAL
-         ========================================= -->
     <div id="app-caja" class="main-app-container active-app">
         <div class="caja-wrapper">
             <button class="btn-limpiar-top" onclick="limpiarCaja()">🧹 LIMPIAR CAJA</button>
@@ -255,7 +257,6 @@
                 <div class="contenedor-deslizable" id="swipeEfectivo">
                     <div class="pagina-deslizable">
                         <div class="grid-2">
-                            <!-- b1 es llenado por el Multiplicador automáticamente -->
                             <input type="text" id="b1" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
                             <input type="text" id="b2" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
                         </div>
@@ -303,9 +304,6 @@
     </div>
 
 
-    <!-- =========================================
-         APLICACIÓN 2: MULTIPLICADOR
-         ========================================= -->
     <div id="app-multiplicador" class="main-app-container">
         <div class="multiplicador-wrapper">
             
@@ -349,9 +347,6 @@
         </div>
     </div>
 
-    <!-- =========================================
-         BARRA DE NAVEGACIÓN INFERIOR MAESTRA
-         ========================================= -->
     <nav class="bottom-nav-master" id="barraNavegacion">
         <button class="nav-master-item active" onclick="switchMainApp('app-caja', this)" id="btnNavCaja">
             <span class="nav-icon">🛒</span>
@@ -364,13 +359,10 @@
     </nav>
 
 
-    <!-- =========================================
-         LÓGICA JAVASCRIPT UNIFICADA
-         ========================================= -->
     <script>
         const formatoSoles = (num) => num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
-        // --- 1. NAVEGACIÓN PRINCIPAL Y AUTO-OCULTAMIENTO (NUEVO) ---
+        // --- 1. NAVEGACIÓN PRINCIPAL Y AUTO-OCULTAMIENTO ---
         function switchMainApp(appId, btnElement) {
             document.querySelectorAll('.main-app-container').forEach(screen => screen.classList.remove('active-app'));
             document.querySelectorAll('.nav-master-item').forEach(btn => btn.classList.remove('active'));
@@ -380,23 +372,18 @@
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
-        // AUTO-OCULTAMIENTO DE LA BARRA AL ABRIR TECLADO (NUEVO CÓDIGO)
         const barraNavegacion = document.getElementById('barraNavegacion');
         
-        // Función que se aplica a todos los inputs, incluso los que se generan dinámicamente
         function aplicarAutoOcultar() {
-            const inputs = document.querySelectorAll('input');
+            const inputs = document.querySelectorAll('input:not([readonly])');
             inputs.forEach(input => {
-                // Al tocar el cajón de texto, ocultamos la barra
                 input.addEventListener('focus', () => {
                     barraNavegacion.classList.add('nav-hidden');
                 });
                 
-                // Al quitar el dedo (cerrar teclado), la barra vuelve
                 input.addEventListener('blur', () => {
                     setTimeout(() => {
-                        // Comprobamos que no haya saltado a otro input directamente
-                        if (document.activeElement.tagName !== 'INPUT') {
+                        if (document.activeElement && document.activeElement.tagName !== 'INPUT') {
                             barraNavegacion.classList.remove('nav-hidden');
                         }
                     }, 50);
@@ -404,10 +391,8 @@
             });
         }
         
-        // Ejecutamos la función de ocultamiento al inicio
         aplicarAutoOcultar();
 
-        // Lógica de Gesto de Deslizamiento Global (Swipe)
         let startX = 0;
         let startY = 0;
 
@@ -498,14 +483,21 @@
             }
         }
 
+        // LIMPIEZA TOTAL SINCRONIZADA
         function limpiarCaja() {
-            document.querySelectorAll('#app-caja .caja input').forEach(i => {
-                if(i.id !== 'b1') i.value = '';
+            // 1. Limpiamos el Multiplicador. Esto desvincula automáticamente el cuadro que estaba en uso.
+            clearAllData(); 
+            
+            // 2. Limpiamos manualmente el resto de cuadros que el usuario haya ingresado.
+            document.querySelectorAll('#app-caja input').forEach(i => {
+                i.value = '';
             });
+            
+            // 3. Refrescamos visuales
             calcularTodo();
         }
 
-        // --- 3. LÓGICA DEL MULTIPLICADOR ---
+        // --- 3. LÓGICA DEL MULTIPLICADOR Y ENRUTAMIENTO INTELIGENTE ---
         const denominacionesBilletes = [200, 100, 50, 20, 10];
         const denominacionesMonedas = [5.00, 2.00, 1.00, 0.50, 0.20, 0.10];
         let cantidadesBilletes = {}; let cantidadesMonedas = {}; let bloquesPrecontados = [];
@@ -545,7 +537,6 @@
                 </div>`;
         });
         
-        // Volvemos a aplicar eventos a los inputs recién generados del multiplicador
         aplicarAutoOcultar();
 
         function switchSubTab(tabId, element) {
@@ -615,6 +606,9 @@
             renderBlocks(); calculateAllCounter();
         }
 
+        // --- ENRUTAMIENTO INTELIGENTE HACIA LA CAJA ---
+        let cuadroVinculado = null; // Guarda el ID del cuadro que está usando el multiplicador
+
         function calculateAllCounter() {
             let tBilletes = 0, tMonedas = 0, tFajos = 0;
             denominacionesBilletes.forEach(d => { const sub = d * cantidadesBilletes[d]; tBilletes += sub; document.getElementById(`sub-b-${d}`).innerText = formatter.format(sub); });
@@ -626,13 +620,37 @@
             let granTotalNumerico = tBilletes + tMonedas + tFajos;
             document.getElementById('txtGranTotal').innerText = formatter.format(granTotalNumerico);
 
-            // Sincronización Automática con B1
-            let inputB1 = document.getElementById('b1');
             if(granTotalNumerico > 0) {
-                inputB1.value = granTotalNumerico.toFixed(2);
-                formatInput(inputB1);
+                // Si aún no tenemos un cuadro asignado, buscamos el primero libre (b1, b2, b3, b4)
+                if (!cuadroVinculado) {
+                    const opciones = ['b1', 'b2', 'b3', 'b4'];
+                    for (let id of opciones) {
+                        let cajaFisica = document.getElementById(id);
+                        if (cajaFisica.value.trim() === '') {
+                            cuadroVinculado = id;
+                            break;
+                        }
+                    }
+                    // Si todos están ocupados, por seguridad forzamos a sobreescribir el último (b4)
+                    if (!cuadroVinculado) cuadroVinculado = 'b4';
+                }
+
+                // Escribimos el valor y aplicamos estilo distintivo al cuadro elegido
+                let targetInput = document.getElementById(cuadroVinculado);
+                targetInput.value = granTotalNumerico.toFixed(2);
+                formatInput(targetInput);
+                targetInput.classList.add('active-sync');
+                targetInput.readOnly = true;
+
             } else {
-                inputB1.value = '';
+                // Si el multiplicador llega a cero, desvinculamos y limpiamos el cuadro
+                if (cuadroVinculado) {
+                    let targetInput = document.getElementById(cuadroVinculado);
+                    targetInput.value = '';
+                    targetInput.classList.remove('active-sync');
+                    targetInput.readOnly = false;
+                    cuadroVinculado = null;
+                }
             }
             calcularTodo(); 
         }
