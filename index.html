@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>Caja Agente - Pantalla Completa</title>
+    <title>Sistema Ágil Integrado</title>
     <style>
         /* =========================================
            VARIABLES Y ESTILOS GLOBALES
@@ -17,6 +17,7 @@
             --text-muted: #666666;
             --border-color: #E2E8F0;
             --danger-color: #D32F2F;
+            --app-bg: #f3f4f6;
         }
 
         * {
@@ -27,114 +28,176 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        body { 
+            background-color: var(--app-bg); 
+            color: #0f172a;
+            padding-bottom: 75px; /* Amortiguador para la barra inferior */
+            overflow-x: hidden;
+        }
+
+        /* =========================================
+           ESTRUCTURA DE APLICACIONES PRINCIPALES
+           ========================================= */
+        .main-app-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.25s ease-in-out;
+            width: 100%;
+            animation: fadeInScreen 0.3s forwards;
+        }
+
+        .main-app-container.active-app {
+            display: block;
+        }
+
+        @keyframes fadeInScreen {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =========================================
+           BARRA DE NAVEGACIÓN INFERIOR MAESTRA
+           ========================================= */
+        .bottom-nav-master {
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            background-color: #ffffff;
+            display: flex; 
+            border-top: 1px solid #cbd5e1; 
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.08); 
+            z-index: 2000;
+            height: 65px;
+            transition: transform 0.2s ease-out; /* Para ocultar suavemente */
+        }
+        
+        /* Clase añadida dinámicamente con JS para ocultar la barra */
+        .bottom-nav-master.nav-hidden {
+            transform: translateY(100%);
+            pointer-events: none;
+        }
+        
+        .nav-master-item { 
+            flex: 1; 
+            background: none; 
+            border: none; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px; 
+            font-weight: bold; 
+            color: #64748b; 
+            cursor: pointer; 
+            transition: all 0.2s;
+            border-top: 4px solid transparent;
+        }
+
+        .nav-master-item .nav-icon {
+            font-size: 22px;
+            margin-bottom: 2px;
+        }
+        
+        .nav-master-item.active { 
+            color: var(--bcp-blue); 
+            border-top: 4px solid var(--bcp-orange); 
+            background-color: rgba(0, 42, 141, 0.03); 
+        }
+
         /* =========================================
            ESTILOS: CAJA PRINCIPAL
            ========================================= */
-        body { 
-            background-color: #f3f4f6; 
-            color: #0f172a;
-            padding: 0 10px 60px 10px; 
-            overflow-x: hidden;
+        .caja-wrapper {
+            padding: 0 10px;
         }
 
         .btn-limpiar-top { 
             width: calc(100% + 20px); margin: 0 -10px 8px -10px; background-color: #10b981; 
             color: white; padding: 14px 10px; font-size: 17px; font-weight: bold; border: none; 
             border-radius: 0 0 8px 8px; cursor: pointer; text-transform: uppercase; 
+            box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3);
         }
-        .btn-limpiar-top:active { background-color: #059669; }
+        .btn-limpiar-top:active { background-color: #059669; transform: scale(0.98);}
 
         .panel-total { 
             display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; 
             border-radius: 8px; font-size: 22px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .total-efectivo { background-color: #2563eb; color: white; } 
         .total-recibo { background-color: #facc15; color: #000; } 
 
-        .caja { padding: 8px; border-radius: 8px; margin-bottom: 10px; border: 2px solid #e5e7eb; background: white; }
+        .caja { padding: 8px; border-radius: 8px; margin-bottom: 15px; border: 2px solid #e5e7eb; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
         .contenedor-deslizable {
             display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px;
             scrollbar-width: none; -ms-overflow-style: none;
+            padding-bottom: 5px;
         }
         .contenedor-deslizable::-webkit-scrollbar { display: none; }
         .pagina-deslizable { flex: 0 0 100%; scroll-snap-align: start; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
         .caja input { 
-            width: 100%; height: 45px; font-size: 22px; font-weight: bold; border: 2px solid #cbd5e1; 
+            width: 100%; height: 50px; font-size: 24px; font-weight: bold; border: 2px solid #cbd5e1; 
             border-radius: 6px; box-sizing: border-box; text-align: center; color: #0f172a; 
+            transition: border-color 0.2s, background-color 0.2s;
         }
-        .caja input:focus { outline: none; border-color: #2563eb; background-color: #f8fafc; }
-        .caja input::placeholder { color: #94a3b8; font-size: 16px; }
+        .caja input:focus { outline: none; border-color: var(--bcp-blue); background-color: #f8fafc; }
+        .caja input::placeholder { color: #94a3b8; font-size: 16px; font-weight: normal; }
 
-        .panel-resultado { padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 10px; border: 3px solid; transition: all 0.2s; }
+        .panel-resultado { padding: 15px 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 10px; border: 3px solid; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05);}
         .estado-esperando { background-color: #f3f4f6; border-color: #d1d5db; color: #6b7280; }
         .estado-proceso { background-color: #f3e8ff; border-color: #9333ea; color: #7e22ce; }
         .estado-cobrar { background-color: #ffedd5; border-color: #ea580c; color: #c2410c; }
         .estado-vuelto { background-color: #e0f2fe; border-color: #0284c7; color: #0369a1; }
         .estado-faltante { background-color: #fee2e2; border-color: #dc2626; color: #b91c1c; }
         .estado-exacto { background-color: #dcfce3; border-color: #16a34a; color: #15803d; }
-        .monto-final { display: block; font-size: 32px; margin-top: 2px; }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; background-color: #ffffff;
-            display: flex; border-top: 1px solid #cbd5e1; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 1000;
-        }
-        .nav-item { flex: 1; padding: 12px 0; text-align: center; background: none; border: none; font-size: 15px; font-weight: bold; color: #64748b; cursor: pointer; }
-        .nav-item.active { color: #2563eb; border-top: 3px solid #2563eb; background-color: #f8fafc; }
-        
-        .lbl-retiro { font-size: 14px; font-weight: bold; color: #be185d; margin-bottom: 5px; display: block; text-transform: uppercase; }
-        .btn-reg { width: 60%; background-color: #10b981; color: white; padding: 10px; font-size: 14px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; display: block; margin: 0 auto; }
-        #notificacion { text-align: center; color: #10b981; font-weight: bold; margin-top: 10px; display: none; }
+        .monto-final { display: block; font-size: 38px; margin-top: 4px; line-height: 1;}
 
         /* =========================================
-           ESTILOS: APP CONTADOR PANTALLA COMPLETA
+           ESTILOS: MULTIPLICADOR / CONTADOR
            ========================================= */
-        .modal-content {
-            position: fixed; top: 0; left: -100%; /* Inicia fuera de la pantalla a la izquierda */
-            width: 100%; height: 100vh; height: 100dvh;
-            background: var(--bg-light);
-            transform: translateX(0);
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 9999; display: flex; flex-direction: column;
-        }
-        
-        /* Al activarse, se desplaza 100% hacia la derecha cubriendo la pantalla */
-        .modal-content.active { 
-            transform: translateX(100%); 
+        .multiplicador-wrapper {
+            background-color: var(--bg-light);
+            min-height: 100vh;
         }
 
-        .modal-header {
-            background: linear-gradient(135deg, var(--bcp-blue) 0%, #001F6B 100%); color: white;
-            padding: 15px 15px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15); z-index: 10;
+        .sticky-header {
+            position: sticky; top: 0; background: linear-gradient(135deg, var(--bcp-blue) 0%, #001F6B 100%); color: white;
+            padding: 12px 15px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); z-index: 1000;
         }
-        .main-total { font-size: 32px; font-weight: 800; line-height: 1; text-align: right; }
+        .header-info { display: flex; flex-direction: column; align-items: flex-end; }
+        .main-total { font-size: 34px; font-weight: 800; line-height: 1; }
+        
         .btn-clear-compact {
             background-color: var(--danger-color); color: white; border: none; border-radius: 8px;
-            padding: 8px 16px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            padding: 10px 16px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex; align-items: center; gap: 6px;
         }
+        .btn-clear-compact:active { background-color: #B71C1C; transform: scale(0.95); }
 
-        .tabs-container-modal { background: white; display: flex; border-bottom: 1px solid var(--border-color); z-index: 9;}
-        .tab-btn {
+        .tabs-container-sub { background: white; display: flex; border-bottom: 1px solid var(--border-color); position: sticky; top: 62px; z-index: 999;}
+        
+        .sub-tab-btn {
             flex: 1; padding: 12px 2px; text-align: center; background: none; border: none; font-size: 15px;
             font-weight: 700; color: var(--text-muted); cursor: pointer; border-bottom: 4px solid transparent;
+            transition: all 0.2s ease;
         }
-        .tab-btn.active { color: var(--bcp-blue); font-weight: 800; background-color: rgba(0, 42, 141, 0.05); border-bottom: 4px solid var(--bcp-orange); }
+        .sub-tab-btn.active { color: var(--bcp-blue); font-weight: 800; background-color: rgba(0, 42, 141, 0.05); border-bottom: 4px solid var(--bcp-orange); }
 
-        .modal-body-scroll { flex: 1; overflow-y: auto; padding: 15px; }
-        .view-content { display: none; max-width: 500px; margin: 0 auto; }
-        .view-content.active { display: block; }
+        .view-content { display: none; padding: 15px; max-width: 500px; margin: 0 auto; }
+        .view-content.active { display: block; animation: fadeInScreen 0.2s; }
 
-        /* Tarjetas Contador */
+        /* Tarjetas del Contador */
         .item-card {
             background: var(--card-bg); border-radius: 10px; padding: 12px 10px; margin-bottom: 10px;
-            display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-color); flex-shrink: 0; 
+            display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
+        
         #tab-monedas .item-card { padding: 10px 10px; margin-bottom: 8px; }
         #tab-monedas .item-denomination { font-size: 22px; }
         #tab-monedas .input-qty { height: 46px; font-size: 26px; }
@@ -148,19 +211,23 @@
         .btn-step {
             width: 44px; height: 44px; border-radius: 8px; border: 1px solid var(--border-color);
             background-color: #F8FAFC; font-size: 24px; font-weight: bold; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--text-dark); transition: background 0.1s;
         }
+        .btn-step:active { background-color: #E2E8F0; }
+        
         .input-qty {
             width: 90px; height: 50px; border: 2px solid var(--border-color); border-radius: 8px;
             text-align: center; font-size: 28px; font-weight: 800; color: var(--bcp-blue); background-color: #FAFAFA;
         }
         .input-qty:focus { outline: none; border-color: var(--bcp-orange); background-color: white; }
 
-        .block-input-section { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); width: 100%; }
+        .block-input-section { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .block-form { display: flex; gap: 8px; width: 100%; align-items: stretch; }
         .input-block-amount { flex: 1 1 0%; min-width: 0; height: 60px; border: 2px solid var(--border-color); border-radius: 10px; padding: 0 15px; font-size: 32px; font-weight: 800; color: var(--bcp-blue); background-color: #FAFAFA; }
         .input-block-amount:focus { outline: none; border-color: var(--bcp-orange); background-color: white; }
-        .btn-add-block { flex-shrink: 0; background-color: var(--bcp-orange); color: white; border: none; border-radius: 10px; padding: 0 20px; font-size: 20px; font-weight: 800; cursor: pointer; transition: 0.1s; }
+        .btn-add-block { flex-shrink: 0; background-color: var(--bcp-orange); color: white; border: none; border-radius: 10px; padding: 0 20px; font-size: 18px; font-weight: 800; cursor: pointer; transition: 0.1s; }
         .btn-add-block:active { background-color: #E05D00; transform: scale(0.96); }
+        
         .blocks-list-header { font-size: 14px; font-weight: 700; color: var(--text-muted); margin: 10px 0 8px 5px; display: flex; justify-content: space-between; }
         .block-item { background: white; padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--bcp-orange); border-bottom: 1px solid var(--border-color); }
         .block-value { font-size: 18px; font-weight: 700; }
@@ -173,105 +240,102 @@
 <body>
 
     <!-- =========================================
-         CAJA PRINCIPAL
+         APLICACIÓN 1: CAJA PRINCIPAL
          ========================================= -->
-    <div id="tab1" class="tab-content active">
-        <button class="btn-limpiar-top" onclick="limpiar()">🧹 LIMPIAR TODO</button>
+    <div id="app-caja" class="main-app-container active-app">
+        <div class="caja-wrapper">
+            <button class="btn-limpiar-top" onclick="limpiarCaja()">🧹 LIMPIAR CAJA</button>
 
-        <div class="panel-total total-efectivo">
-            <span>EFECTIVO</span>
-            <span id="lblEfectivo">0.00</span>
-        </div>
-        <div class="caja">
-            <div class="contenedor-deslizable">
-                <div class="pagina-deslizable">
-                    <div class="grid-2">
-                        <input type="text" id="b1" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                        <input type="text" id="b2" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+            <div class="panel-total total-efectivo">
+                <span>EFECTIVO</span>
+                <span id="lblEfectivo">0.00</span>
+            </div>
+            
+            <div class="caja">
+                <div class="contenedor-deslizable" id="swipeEfectivo">
+                    <div class="pagina-deslizable">
+                        <div class="grid-2">
+                            <!-- b1 es llenado por el Multiplicador automáticamente -->
+                            <input type="text" id="b1" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                            <input type="text" id="b2" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                        </div>
                     </div>
-                </div>
-                <div class="pagina-deslizable">
-                    <div class="grid-2">
-                        <input type="text" id="b3" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                        <input type="text" id="b4" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                    <div class="pagina-deslizable">
+                        <div class="grid-2">
+                            <input type="text" id="b3" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                            <input type="text" id="b4" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="panel-total total-recibo">
-            <span>RECIBO</span>
-            <span id="lblRecibo">0.00</span>
-        </div>
-        <div class="caja">
-            <div class="contenedor-deslizable">
-                <div class="pagina-deslizable">
-                    <div class="grid-2">
-                        <input type="text" id="p1" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                        <input type="text" id="p2" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                        <input type="text" id="p3" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                        <input type="text" id="p4" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+            <div class="panel-total total-recibo">
+                <span>RECIBO</span>
+                <span id="lblRecibo">0.00</span>
+            </div>
+            
+            <div class="caja">
+                <div class="contenedor-deslizable" id="swipeRecibo">
+                    <div class="pagina-deslizable">
+                        <div class="grid-2">
+                            <input type="text" id="p1" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                            <input type="text" id="p2" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                            <input type="text" id="p3" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                            <input type="text" id="p4" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                        </div>
                     </div>
-                </div>
-                <div class="pagina-deslizable">
-                    <div class="grid-2">
-                        <input type="text" id="p5" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                        <input type="text" id="p6" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                        <input type="text" id="p7" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                        <input type="text" id="p8" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                    <div class="pagina-deslizable">
+                        <div class="grid-2">
+                            <input type="text" id="p5" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                            <input type="text" id="p6" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                            <input type="text" id="p7" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                            <input type="text" id="p8" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="panel-resultado estado-esperando" id="panelFinal">
-            <span id="textoFinal" style="font-size: 18px;">ESPERANDO...</span>
-            <span class="monto-final" id="montoFinal">0.00</span>
+            <div class="panel-resultado estado-esperando" id="panelFinal">
+                <span id="textoFinal" style="font-size: 16px; letter-spacing: 1px;">ESPERANDO...</span>
+                <span class="monto-final" id="montoFinal">0.00</span>
+            </div>
         </div>
     </div>
-
-    <div id="tab2" class="tab-content">
-        <br>
-        <div class="caja" style="border-left: 8px solid #ec4899; padding: 8px 10px;">
-            <span class="lbl-retiro">Retiro de Efectivo</span>
-            <input type="text" id="retiro" inputmode="decimal" oninput="formatInput(this)" placeholder="0.00" style="height: 40px; font-size: 22px;">
-        </div>
-        <button class="btn-reg" id="btnRegistrar" onclick="registrar()">✔ GUARDAR</button>
-        <div id="notificacion">Guardado ✔</div>
-    </div>
-
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="cambiarTab(1, this)">📝 Operación</button>
-        <button class="nav-item" onclick="cambiarTab(2, this)">⚙️ Extras / Guardar</button>
-    </nav>
 
 
     <!-- =========================================
-         APP CONTADOR (PANTALLA COMPLETA DESLIZABLE)
+         APLICACIÓN 2: MULTIPLICADOR
          ========================================= -->
-    <div id="modalContador" class="modal-content">
-        <div class="modal-header">
-            <button class="btn-clear-compact" onclick="clearAllData()">🧹 Limpiar</button>
-            <div class="main-total" id="txtGranTotal">S/ 0.00</div>
-        </div>
+    <div id="app-multiplicador" class="main-app-container">
+        <div class="multiplicador-wrapper">
+            
+            <div class="sticky-header">
+                <button class="btn-clear-compact" onclick="clearAllData()">
+                    <span>🧹</span> Limpiar
+                </button>
+                <div class="header-info">
+                    <div class="main-total" id="txtGranTotal">S/ 0.00</div>
+                </div>
+            </div>
 
-        <div class="tabs-container-modal">
-            <button class="tab-btn active" onclick="switchTabModal('tab-billetes', this)">💵 Billetes</button>
-            <button class="tab-btn" onclick="switchTabModal('tab-monedas', this)">🪙 Monedas</button>
-            <button class="tab-btn" onclick="switchTabModal('tab-bloques', this)">📦 Fajos</button>
-        </div>
+            <div class="tabs-container-sub">
+                <button class="sub-tab-btn active" onclick="switchSubTab('tab-billetes', this)">💵 Billetes</button>
+                <button class="sub-tab-btn" onclick="switchSubTab('tab-monedas', this)">🪙 Monedas</button>
+                <button class="sub-tab-btn" onclick="switchSubTab('tab-bloques', this)">📦 Fajos</button>
+            </div>
 
-        <div class="modal-body-scroll">
             <div id="tab-billetes" class="view-content active">
                 <div id="containerBilletes"></div>
             </div>
+            
             <div id="tab-monedas" class="view-content">
                 <div id="containerMonedas"></div>
             </div>
+            
             <div id="tab-bloques" class="view-content">
                 <div class="block-input-section">
                     <div class="block-form">
-                        <input type="text" id="inputMontoBloque" class="input-block-amount" inputmode="decimal" placeholder="0" oninput="formatCurrencyInput(this)" onkeydown="if(event.key==='Enter') addPrecountedBlock()">
+                        <input type="text" id="inputMontoBloque" class="input-block-amount" inputmode="decimal" placeholder="Monto" oninput="formatCurrencyInput(this)" onkeydown="if(event.key==='Enter') addPrecountedBlock()">
                         <button class="btn-add-block" onclick="addPrecountedBlock()">+ Añadir</button>
                     </div>
                 </div>
@@ -281,16 +345,100 @@
                 </div>
                 <div id="listaBloques"></div>
             </div>
+
         </div>
     </div>
 
+    <!-- =========================================
+         BARRA DE NAVEGACIÓN INFERIOR MAESTRA
+         ========================================= -->
+    <nav class="bottom-nav-master" id="barraNavegacion">
+        <button class="nav-master-item active" onclick="switchMainApp('app-caja', this)" id="btnNavCaja">
+            <span class="nav-icon">🛒</span>
+            <span>Caja Registradora</span>
+        </button>
+        <button class="nav-master-item" onclick="switchMainApp('app-multiplicador', this)" id="btnNavMulti">
+            <span class="nav-icon">💵</span>
+            <span>Multiplicador</span>
+        </button>
+    </nav>
+
 
     <!-- =========================================
-         LÓGICA JAVASCRIPT
+         LÓGICA JAVASCRIPT UNIFICADA
          ========================================= -->
     <script>
-        // --- 1. LÓGICA DE CAJA PRINCIPAL ---
         const formatoSoles = (num) => num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        
+        // --- 1. NAVEGACIÓN PRINCIPAL Y AUTO-OCULTAMIENTO (NUEVO) ---
+        function switchMainApp(appId, btnElement) {
+            document.querySelectorAll('.main-app-container').forEach(screen => screen.classList.remove('active-app'));
+            document.querySelectorAll('.nav-master-item').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(appId).classList.add('active-app');
+            btnElement.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        // AUTO-OCULTAMIENTO DE LA BARRA AL ABRIR TECLADO (NUEVO CÓDIGO)
+        const barraNavegacion = document.getElementById('barraNavegacion');
+        
+        // Función que se aplica a todos los inputs, incluso los que se generan dinámicamente
+        function aplicarAutoOcultar() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                // Al tocar el cajón de texto, ocultamos la barra
+                input.addEventListener('focus', () => {
+                    barraNavegacion.classList.add('nav-hidden');
+                });
+                
+                // Al quitar el dedo (cerrar teclado), la barra vuelve
+                input.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        // Comprobamos que no haya saltado a otro input directamente
+                        if (document.activeElement.tagName !== 'INPUT') {
+                            barraNavegacion.classList.remove('nav-hidden');
+                        }
+                    }, 50);
+                });
+            });
+        }
+        
+        // Ejecutamos la función de ocultamiento al inicio
+        aplicarAutoOcultar();
+
+        // Lógica de Gesto de Deslizamiento Global (Swipe)
+        let startX = 0;
+        let startY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            if(e.target.closest('.contenedor-deslizable')) return;
+            if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, {passive: true});
+
+        document.addEventListener('touchend', (e) => {
+            if(startX === 0) return;
+            let endX = e.changedTouches[0].clientX;
+            let endY = e.changedTouches[0].clientY;
+            let diffX = endX - startX;
+            let diffY = endY - startY;
+
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                let appCajaActiva = document.getElementById('app-caja').classList.contains('active-app');
+                if (diffX < -60 && appCajaActiva) {
+                    switchMainApp('app-multiplicador', document.getElementById('btnNavMulti'));
+                } else if (diffX > 60 && !appCajaActiva) {
+                    switchMainApp('app-caja', document.getElementById('btnNavCaja'));
+                }
+            }
+            startX = 0;
+            startY = 0;
+        }, {passive: true});
+
+
+        // --- 2. LÓGICA DE LA CAJA PRINCIPAL ---
         const getVal = (id) => parseFloat(document.getElementById(id).value.replace(/,/g, '')) || 0;
 
         function formatInput(input) {
@@ -303,27 +451,18 @@
                 let entero = parseInt(partes[0], 10);
                 partes[0] = isNaN(entero) ? "" : entero.toLocaleString('en-US');
             }
+            if (partes[1] && partes[1].length > 2) {
+                partes[1] = partes[1].substring(0, 2);
+            }
             input.value = partes.join('.');
         }
 
         function handleInput(input) { formatInput(input); calcularTodo(); }
 
-        function cambiarTab(tabIndex, elemento) {
-            document.querySelectorAll('body > .tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('tab' + tabIndex).classList.add('active');
-            elemento.classList.add('active');
-        }
-
-        const barraNav = document.querySelector('.bottom-nav');
-        document.querySelectorAll('.caja input').forEach(input => {
-            input.addEventListener('focus', () => { barraNav.style.display = 'none'; });
-            input.addEventListener('blur', () => { barraNav.style.display = 'flex'; });
-        });
-
         function calcularTodo() {
             var b1 = getVal('b1'); var b2 = getVal('b2'); var b3 = getVal('b3'); var b4 = getVal('b4');
             var totalEfectivo = b1 + b2 + b3 + b4;
+            
             var p1 = getVal('p1'); var p2 = getVal('p2'); var p3 = getVal('p3'); var p4 = getVal('p4'); 
             var p5 = getVal('p5'); var p6 = getVal('p6'); var p7 = getVal('p7'); var p8 = getVal('p8');
             var totalRecibo = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8;
@@ -354,30 +493,19 @@
                     texto.innerText = "PAGO EXACTO"; monto.innerText = formatoSoles(0);
                 } else {
                     panel.className = "panel-resultado estado-vuelto";
-                    texto.innerText = "VUELTO"; monto.innerText = formatoSoles(diferencia);
+                    texto.innerText = "VUELTO A ENTREGAR"; monto.innerText = formatoSoles(diferencia);
                 }
             }
         }
 
-        function limpiar() {
-            document.querySelectorAll('.caja input').forEach(i => i.value = '');
+        function limpiarCaja() {
+            document.querySelectorAll('#app-caja .caja input').forEach(i => {
+                if(i.id !== 'b1') i.value = '';
+            });
             calcularTodo();
         }
 
-        function registrar() {
-            var esFaltante = document.getElementById('textoFinal').innerText === "FALTANTE";
-            var esPorCobrar = document.getElementById('textoFinal').innerText === "POR COBRAR";
-            if (esFaltante || esPorCobrar) { alert("No se puede guardar: Operación incompleta."); return; }
-            var btn = document.getElementById('btnRegistrar');
-            btn.innerText = "Guardando..."; btn.disabled = true;
-            setTimeout(function() {
-                document.getElementById('notificacion').style.display = 'block';
-                setTimeout(function() { document.getElementById('notificacion').style.display = 'none'; }, 2000);
-                limpiar(); btn.innerText = "✔ GUARDAR"; btn.disabled = false;
-            }, 1000); 
-        }
-
-        // --- 2. LÓGICA DEL CONTADOR (APP 2) ---
+        // --- 3. LÓGICA DEL MULTIPLICADOR ---
         const denominacionesBilletes = [200, 100, 50, 20, 10];
         const denominacionesMonedas = [5.00, 2.00, 1.00, 0.50, 0.20, 0.10];
         let cantidadesBilletes = {}; let cantidadesMonedas = {}; let bloquesPrecontados = [];
@@ -416,13 +544,15 @@
                     </div>
                 </div>`;
         });
+        
+        // Volvemos a aplicar eventos a los inputs recién generados del multiplicador
+        aplicarAutoOcultar();
 
-        function switchTabModal(tabId, element) {
-            document.querySelectorAll('.modal-body-scroll .view-content').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        function switchSubTab(tabId, element) {
+            document.querySelectorAll('#app-multiplicador .view-content').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             element.classList.add('active');
-            document.querySelector('.modal-body-scroll').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function changeQty(type, denom, delta) {
@@ -480,85 +610,33 @@
             denominacionesBilletes.forEach(d => cantidadesBilletes[d] = 0);
             denominacionesMonedas.forEach(d => cantidadesMonedas[d] = 0);
             bloquesPrecontados = [];
-            document.querySelectorAll('#modalContador .input-qty').forEach(i => i.value = '');
+            document.querySelectorAll('#app-multiplicador .input-qty').forEach(i => i.value = '');
             document.getElementById('inputMontoBloque').value = '';
             renderBlocks(); calculateAllCounter();
         }
 
-        // --- 3. LÓGICA DE INTEGRACIÓN (GESTOS Y SINCRONIZACIÓN) ---
-        
         function calculateAllCounter() {
             let tBilletes = 0, tMonedas = 0, tFajos = 0;
             denominacionesBilletes.forEach(d => { const sub = d * cantidadesBilletes[d]; tBilletes += sub; document.getElementById(`sub-b-${d}`).innerText = formatter.format(sub); });
             denominacionesMonedas.forEach(d => { const sub = d * cantidadesMonedas[d]; tMonedas += sub; document.getElementById(`sub-m-${d}`).innerText = formatter.format(sub); });
             bloquesPrecontados.forEach(b => tFajos += b);
-            document.getElementById('txtSubtotalBloques').innerText = `Subtotal: ${formatter.format(tFajos)}`;
             
+            document.getElementById('txtSubtotalBloques').innerText = `Subtotal: ${formatter.format(tFajos)}`;
+
             let granTotalNumerico = tBilletes + tMonedas + tFajos;
             document.getElementById('txtGranTotal').innerText = formatter.format(granTotalNumerico);
 
-            // SINCRONIZACIÓN AUTOMÁTICA CON LA CAJA PRINCIPAL
+            // Sincronización Automática con B1
             let inputB1 = document.getElementById('b1');
             if(granTotalNumerico > 0) {
                 inputB1.value = granTotalNumerico.toFixed(2);
-                formatInput(inputB1); // Le da formato de miles si es necesario
+                formatInput(inputB1);
             } else {
-                inputB1.value = ''; // Lo deja vacío si es cero
+                inputB1.value = '';
             }
-            calcularTodo(); // Actualiza el cálculo final de la caja en tiempo real
+            calcularTodo(); 
         }
 
-        // FUNCIONES ABRIR/CERRAR MODAL COMPLETO
-        const modal = document.getElementById('modalContador');
-
-        function abrirContador() {
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function cerrarContador() {
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // DETECCIÓN DE GESTOS LATERALES (SWIPE RIGHT / LEFT)
-        let startX = 0;
-        let startY = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            // Ignoramos si el usuario toca la sección que ya tiene deslizamiento propio (grid de inputs)
-            if(e.target.closest('.contenedor-deslizable')) return;
-            // Ignoramos si toca botones o inputs para no interrumpir escritura
-            if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
-            
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-        }, {passive: true});
-
-        document.addEventListener('touchend', (e) => {
-            if(startX === 0) return;
-            
-            let endX = e.changedTouches[0].clientX;
-            let endY = e.changedTouches[0].clientY;
-            
-            let diffX = endX - startX;
-            let diffY = endY - startY;
-
-            // Comprobamos que el movimiento sea principalmente horizontal (izq-der), no vertical (arriba-abajo)
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                // Deslizar hacia la DERECHA (dedo se mueve de Izquierda a Derecha)
-                if (diffX > 60 && !modal.classList.contains('active')) {
-                    abrirContador();
-                }
-                // Deslizar hacia la IZQUIERDA (dedo se mueve de Derecha a Izquierda)
-                else if (diffX < -60 && modal.classList.contains('active')) {
-                    cerrarContador();
-                }
-            }
-            
-            startX = 0;
-            startY = 0;
-        }, {passive: true});
     </script>
 </body>
 </html>
