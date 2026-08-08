@@ -124,6 +124,14 @@
             border-radius: 8px; font-size: 22px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; 
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        
+        /* HACER QUE SOLO EL NÚMERO DE LOS PANELES SEA MÁS GRANDE */
+        .panel-total span:nth-child(2) {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
         .total-efectivo { background-color: #2563eb; color: white; } 
         .total-recibo { background-color: #facc15; color: #000; } 
 
@@ -138,18 +146,18 @@
         .pagina-deslizable { flex: 0 0 100%; scroll-snap-align: start; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
+        /* NÚMEROS DE LA CAJA PRINCIPAL MÁS GRANDES (Casi al ras del input de 50px) */
         .caja input { 
-            width: 100%; height: 50px; font-size: 24px; font-weight: bold; border: 2px solid #cbd5e1; 
+            width: 100%; height: 50px; font-size: 34px; font-weight: 800; border: 2px solid #cbd5e1; 
             border-radius: 6px; box-sizing: border-box; text-align: center; color: #0f172a; 
             transition: border-color 0.2s, background-color 0.2s, color 0.2s;
         }
         .caja input:focus { outline: none; border-color: var(--bcp-blue); background-color: #f8fafc; }
-        .caja input::placeholder { color: #94a3b8; font-size: 16px; font-weight: normal; }
+        .caja input::placeholder { color: #94a3b8; font-size: 18px; font-weight: normal; }
 
-        /* ESTILO MEJORADO PARA EL MODO HÍBRIDO (MÁS VISIBLE Y ELEGANTE) */
         .caja input.active-sync {
-            background-color: #E8EEF9; /* Fondo azul suave pero sólido */
-            border: 2px dashed var(--bcp-blue); /* Borde punteado que indica enlace */
+            background-color: #E8EEF9; 
+            border: 2px dashed var(--bcp-blue); 
             color: var(--bcp-blue);
         }
 
@@ -160,7 +168,9 @@
         .estado-vuelto { background-color: #e0f2fe; border-color: #0284c7; color: #0369a1; }
         .estado-faltante { background-color: #fee2e2; border-color: #dc2626; color: #b91c1c; }
         .estado-exacto { background-color: #dcfce3; border-color: #16a34a; color: #15803d; }
-        .monto-final { display: block; font-size: 38px; margin-top: 4px; line-height: 1;}
+        
+        /* NÚMERO FINAL GIGANTE */
+        .monto-final { display: block; font-size: 48px; font-weight: 900; margin-top: 4px; line-height: 1; letter-spacing: -1px;}
 
         /* =========================================
            ESTILOS: MULTIPLICADOR / CONTADOR
@@ -176,7 +186,9 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.15); z-index: 1000;
         }
         .header-info { display: flex; flex-direction: column; align-items: flex-end; }
-        .main-total { font-size: 34px; font-weight: 800; line-height: 1; }
+        
+        /* GRAN TOTAL DEL MULTIPLICADOR MÁS GRANDE */
+        .main-total { font-size: 42px; font-weight: 900; line-height: 1; letter-spacing: -1px; }
         
         .btn-clear-compact {
             background-color: var(--danger-color); color: white; border: none; border-radius: 8px;
@@ -204,38 +216,79 @@
         }
         
         #tab-monedas .item-card { padding: 10px 10px; margin-bottom: 8px; }
-        #tab-monedas .item-denomination { font-size: 22px; }
-        #tab-monedas .input-qty { height: 46px; font-size: 26px; }
-        #tab-monedas .btn-step { width: 42px; height: 42px; font-size: 22px; }
+        #tab-monedas .item-denomination { font-size: 28px; } 
+        #tab-monedas .input-qty { height: 46px; font-size: 32px; }
+        #tab-monedas .btn-step { width: 42px; height: 42px; font-size: 36px; padding-bottom: 4px; }
 
-        .item-info { display: flex; flex-direction: column; width: 80px; }
-        .item-denomination { font-size: 24px; font-weight: 800; color: var(--bcp-blue); }
-        .item-subtotal { font-size: 13px; color: var(--text-muted); font-weight: 600; }
-
+        /* =========================================
+           NUEVOS ESTILOS: NÚMEROS MAXIMIZADOS
+           ========================================= */
+        .item-info { 
+            display: flex; 
+            flex-direction: column; 
+            width: 130px; /* Ampliado para que el subtotal y denominación grandes quepan sin bajar de línea */
+            justify-content: center;
+            gap: 2px; 
+        }
+        .item-denomination { 
+            font-size: 32px; /* Denominación al máximo tamaño posible sin romper */
+            font-weight: 900; 
+            color: var(--bcp-blue); 
+            line-height: 1; 
+            letter-spacing: -0.5px;
+        }
+        .item-subtotal { 
+            font-size: 20px; /* Subtotal verde aún más grande */
+            color: #16A34A; 
+            font-weight: 800; 
+            line-height: 1; 
+        }
+        
         .stepper-control { display: flex; align-items: center; gap: 6px; }
+        
+        /* BOTONES + Y - GIGANTES */
         .btn-step {
             width: 44px; height: 44px; border-radius: 8px; border: 1px solid var(--border-color);
-            background-color: #F8FAFC; font-size: 24px; font-weight: bold; display: flex; align-items: center; justify-content: center;
+            background-color: #F8FAFC; 
+            font-size: 36px; /* Símbolo gigante */
+            font-weight: 500; 
+            display: flex; align-items: center; justify-content: center;
+            line-height: 0; /* Evita que el botón se estire */
+            padding-bottom: 4px; /* Centra ópticamente el + y el - */
             cursor: pointer; color: var(--text-dark); transition: background 0.1s;
         }
         .btn-step:active { background-color: #E2E8F0; }
         
+        /* NÚMERO DE CANTIDAD (MULTIPLICADOR) */
         .input-qty {
             width: 90px; height: 50px; border: 2px solid var(--border-color); border-radius: 8px;
-            text-align: center; font-size: 28px; font-weight: 800; color: var(--bcp-blue); background-color: #FAFAFA;
+            text-align: center; 
+            font-size: 36px; /* Casi al ras del input */
+            font-weight: 900; 
+            color: var(--bcp-blue); background-color: #FAFAFA;
         }
         .input-qty:focus { outline: none; border-color: var(--bcp-orange); background-color: white; }
 
         .block-input-section { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .block-form { display: flex; gap: 8px; width: 100%; align-items: stretch; }
-        .input-block-amount { flex: 1 1 0%; min-width: 0; height: 60px; border: 2px solid var(--border-color); border-radius: 10px; padding: 0 15px; font-size: 32px; font-weight: 800; color: var(--bcp-blue); background-color: #FAFAFA; }
+        
+        /* MONTO DE FAJOS */
+        .input-block-amount { 
+            flex: 1 1 0%; min-width: 0; height: 60px; border: 2px solid var(--border-color); 
+            border-radius: 10px; padding: 0 15px; 
+            font-size: 42px; /* Gigante dentro del espacio */
+            font-weight: 900; 
+            color: var(--bcp-blue); background-color: #FAFAFA; 
+        }
         .input-block-amount:focus { outline: none; border-color: var(--bcp-orange); background-color: white; }
         .btn-add-block { flex-shrink: 0; background-color: var(--bcp-orange); color: white; border: none; border-radius: 10px; padding: 0 20px; font-size: 18px; font-weight: 800; cursor: pointer; transition: 0.1s; }
         .btn-add-block:active { background-color: #E05D00; transform: scale(0.96); }
         
         .blocks-list-header { font-size: 14px; font-weight: 700; color: var(--text-muted); margin: 10px 0 8px 5px; display: flex; justify-content: space-between; }
+        
+        /* LISTA DE FAJOS */
         .block-item { background: white; padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--bcp-orange); border-bottom: 1px solid var(--border-color); }
-        .block-value { font-size: 18px; font-weight: 700; }
+        .block-value { font-size: 22px; font-weight: 800; } /* Número de fajo más grande */
         .btn-delete-block { background: none; border: none; color: var(--danger-color); font-size: 26px; padding: 0 10px; cursor: pointer; }
 
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -339,7 +392,7 @@
                 </div>
                 <div class="blocks-list-header">
                     <span>Lista de Fajos</span>
-                    <span id="txtSubtotalBloques">Subtotal: S/ 0.00</span>
+                    <span id="txtSubtotalBloques" style="font-size: 16px; font-weight: 800; color: var(--bcp-blue);">Subtotal: S/ 0.00</span>
                 </div>
                 <div id="listaBloques"></div>
             </div>
