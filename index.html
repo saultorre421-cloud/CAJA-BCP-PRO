@@ -31,7 +31,7 @@
         body { 
             background-color: var(--app-bg); 
             color: #0f172a;
-            padding-bottom: 75px; 
+            padding-bottom: 25px; /* Reducido al eliminar la barra inferior */
             overflow-x: hidden;
         }
 
@@ -56,68 +56,85 @@
         }
 
         /* =========================================
-           BARRA DE NAVEGACIÓN INFERIOR MAESTRA
+           DIVISORES Y CÍRCULO INTERACTIVO DE NAVEGACIÓN
            ========================================= */
-        .bottom-nav-master {
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            background-color: #ffffff;
-            display: flex; 
-            border-top: 1px solid #cbd5e1; 
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.08); 
-            z-index: 2000;
-            height: 65px;
-            transition: transform 0.2s ease-out; 
-        }
-        
-        .bottom-nav-master.nav-hidden {
-            transform: translateY(100%);
-            pointer-events: none;
-        }
-        
-        .nav-master-item { 
-            flex: 1; 
-            background: none; 
-            border: none; 
+        .header-left-controls {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            font-size: 13px; 
-            font-weight: bold; 
-            color: #64748b; 
-            cursor: pointer; 
-            transition: all 0.2s;
-            border-top: 4px solid transparent;
+            gap: 12px;
+            flex-shrink: 0; 
         }
 
-        .nav-master-item .nav-icon {
-            font-size: 22px;
-            margin-bottom: 2px;
+        .header-divider {
+            width: 2px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            margin: 0 4px;
         }
-        
-        .nav-master-item.active { 
-            color: var(--bcp-blue); 
-            border-top: 4px solid var(--bcp-orange); 
-            background-color: rgba(0, 42, 141, 0.03); 
+
+        .profile-toggle {
+            width: 56px;
+            height: 56px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+            border: 3px solid var(--bcp-orange);
+            touch-action: none;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            user-select: none;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .profile-toggle:active {
+            background-color: #f0f0f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .toggle-icon {
+            font-size: 28px;
+            line-height: 1;
+            pointer-events: none;
         }
 
         /* =========================================
-           ESTILOS: CAJA PRINCIPAL
+           CAJA PRINCIPAL
            ========================================= */
         .caja-wrapper {
-            padding: 0 10px;
+            padding: 10px;
+        }
+
+        .caja-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 12px;
         }
 
         .btn-limpiar-top { 
-            width: calc(100% + 20px); margin: 0 -10px 8px -10px; background-color: #10b981; 
-            color: white; padding: 14px 10px; font-size: 17px; font-weight: bold; border: none; 
-            border-radius: 0 0 8px 8px; cursor: pointer; text-transform: uppercase; 
-            box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3);
+            flex: 1;
+            max-width: 75%; 
+            background-color: #10b981; 
+            color: white; 
+            height: 56px; /* Altura sincronizada con el círculo */
+            padding: 0 10px; 
+            font-size: 17px; 
+            font-weight: 800; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+            transition: background-color 0.1s, transform 0.1s;
         }
-        .btn-limpiar-top:active { background-color: #059669; transform: scale(0.98);}
+        .btn-limpiar-top:active { 
+            background-color: #059669; 
+            transform: scale(0.98); 
+        }
 
         .panel-total { 
             display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; 
@@ -125,7 +142,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
-        /* HACER QUE SOLO EL NÚMERO DE LOS PANELES SEA MÁS GRANDE */
         .panel-total span:nth-child(2) {
             font-size: 28px;
             font-weight: 900;
@@ -146,7 +162,6 @@
         .pagina-deslizable { flex: 0 0 100%; scroll-snap-align: start; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-        /* NÚMEROS DE LA CAJA PRINCIPAL MÁS GRANDES (Casi al ras del input de 50px) */
         .caja input { 
             width: 100%; height: 50px; font-size: 34px; font-weight: 800; border: 2px solid #cbd5e1; 
             border-radius: 6px; box-sizing: border-box; text-align: center; color: #0f172a; 
@@ -169,11 +184,10 @@
         .estado-faltante { background-color: #fee2e2; border-color: #dc2626; color: #b91c1c; }
         .estado-exacto { background-color: #dcfce3; border-color: #16a34a; color: #15803d; }
         
-        /* NÚMERO FINAL GIGANTE */
         .monto-final { display: block; font-size: 48px; font-weight: 900; margin-top: 4px; line-height: 1; letter-spacing: -1px;}
 
         /* =========================================
-           ESTILOS: MULTIPLICADOR / CONTADOR
+           MULTIPLICADOR
            ========================================= */
         .multiplicador-wrapper {
             background-color: var(--bg-light);
@@ -185,24 +199,41 @@
             padding: 12px 15px; display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15); z-index: 1000;
         }
-        .header-info { display: flex; flex-direction: column; align-items: flex-end; }
-        
-        /* GRAN TOTAL DEL MULTIPLICADOR MÁS GRANDE */
-        .main-total { font-size: 42px; font-weight: 900; line-height: 1; letter-spacing: -1px; }
-        
-        .btn-clear-compact {
-            background-color: var(--danger-color); color: white; border: none; border-radius: 8px;
-            padding: 10px 16px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            display: flex; align-items: center; gap: 6px;
-        }
-        .btn-clear-compact:active { background-color: #B71C1C; transform: scale(0.95); }
 
-        .tabs-container-sub { background: white; display: flex; border-bottom: 1px solid var(--border-color); position: sticky; top: 62px; z-index: 999;}
+        .header-info { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-end; 
+            min-width: 0; 
+            flex: 1; 
+            margin-left: 10px;
+        }
+        
+        .main-total { 
+            font-size: clamp(32px, 9vw, 50px); 
+            font-weight: 900; 
+            line-height: 1; 
+            letter-spacing: -1px; 
+            white-space: nowrap; 
+        }
+        
+        /* BOTÓN LIMPIAR MULTIPLICADOR (AMPLIADO A 56PX DE ALTO) */
+        .btn-clear-compact {
+            background-color: var(--danger-color); color: white; border: none; border-radius: 10px;
+            height: 56px; /* Altura exacta para simetría con el perfil */
+            padding: 0 20px; font-size: 17px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: transform 0.1s;
+        }
+        .btn-clear-compact:active { background-color: #B71C1C; transform: scale(0.96); }
+
+        .tabs-container-sub { background: white; display: flex; border-bottom: 1px solid var(--border-color); position: sticky; top: 80px; z-index: 999;}
         
         .sub-tab-btn {
             flex: 1; padding: 12px 2px; text-align: center; background: none; border: none; font-size: 15px;
             font-weight: 700; color: var(--text-muted); cursor: pointer; border-bottom: 4px solid transparent;
             transition: all 0.2s ease;
+            touch-action: manipulation;
         }
         .sub-tab-btn.active { color: var(--bcp-blue); font-weight: 800; background-color: rgba(0, 42, 141, 0.05); border-bottom: 4px solid var(--bcp-orange); }
 
@@ -220,25 +251,22 @@
         #tab-monedas .input-qty { height: 46px; font-size: 32px; }
         #tab-monedas .btn-step { width: 42px; height: 42px; font-size: 36px; padding-bottom: 4px; }
 
-        /* =========================================
-           NUEVOS ESTILOS: NÚMEROS MAXIMIZADOS
-           ========================================= */
         .item-info { 
             display: flex; 
             flex-direction: column; 
-            width: 130px; /* Ampliado para que el subtotal y denominación grandes quepan sin bajar de línea */
+            width: 130px; 
             justify-content: center;
             gap: 2px; 
         }
         .item-denomination { 
-            font-size: 32px; /* Denominación al máximo tamaño posible sin romper */
+            font-size: 32px; 
             font-weight: 900; 
             color: var(--bcp-blue); 
             line-height: 1; 
             letter-spacing: -0.5px;
         }
         .item-subtotal { 
-            font-size: 20px; /* Subtotal verde aún más grande */
+            font-size: 20px; 
             color: #16A34A; 
             font-weight: 800; 
             line-height: 1; 
@@ -246,24 +274,22 @@
         
         .stepper-control { display: flex; align-items: center; gap: 6px; }
         
-        /* BOTONES + Y - GIGANTES */
         .btn-step {
             width: 44px; height: 44px; border-radius: 8px; border: 1px solid var(--border-color);
             background-color: #F8FAFC; 
-            font-size: 36px; /* Símbolo gigante */
+            font-size: 36px; 
             font-weight: 500; 
             display: flex; align-items: center; justify-content: center;
-            line-height: 0; /* Evita que el botón se estire */
-            padding-bottom: 4px; /* Centra ópticamente el + y el - */
+            line-height: 0; 
+            padding-bottom: 4px; 
             cursor: pointer; color: var(--text-dark); transition: background 0.1s;
         }
         .btn-step:active { background-color: #E2E8F0; }
         
-        /* NÚMERO DE CANTIDAD (MULTIPLICADOR) */
         .input-qty {
             width: 90px; height: 50px; border: 2px solid var(--border-color); border-radius: 8px;
             text-align: center; 
-            font-size: 36px; /* Casi al ras del input */
+            font-size: 36px; 
             font-weight: 900; 
             color: var(--bcp-blue); background-color: #FAFAFA;
         }
@@ -272,11 +298,10 @@
         .block-input-section { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .block-form { display: flex; gap: 8px; width: 100%; align-items: stretch; }
         
-        /* MONTO DE FAJOS */
         .input-block-amount { 
             flex: 1 1 0%; min-width: 0; height: 60px; border: 2px solid var(--border-color); 
             border-radius: 10px; padding: 0 15px; 
-            font-size: 42px; /* Gigante dentro del espacio */
+            font-size: 42px; 
             font-weight: 900; 
             color: var(--bcp-blue); background-color: #FAFAFA; 
         }
@@ -286,9 +311,8 @@
         
         .blocks-list-header { font-size: 14px; font-weight: 700; color: var(--text-muted); margin: 10px 0 8px 5px; display: flex; justify-content: space-between; }
         
-        /* LISTA DE FAJOS */
         .block-item { background: white; padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--bcp-orange); border-bottom: 1px solid var(--border-color); }
-        .block-value { font-size: 22px; font-weight: 800; } /* Número de fajo más grande */
+        .block-value { font-size: 22px; font-weight: 800; } 
         .btn-delete-block { background: none; border: none; color: var(--danger-color); font-size: 26px; padding: 0 10px; cursor: pointer; }
 
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -299,7 +323,13 @@
 
     <div id="app-caja" class="main-app-container active-app">
         <div class="caja-wrapper">
-            <button class="btn-limpiar-top" onclick="limpiarCaja()">🧹 LIMPIAR CAJA</button>
+            <!-- CABECERA CAJA CON BLOQUEO DE TECLADO -->
+            <div class="caja-header-row">
+                <button class="btn-limpiar-top" onmousedown="gestionarLimpiarCaja(event)" ontouchstart="gestionarLimpiarCaja(event)">🧹 LIMPIAR CAJA</button>
+                <div class="profile-toggle" id="btn-toggle-caja" style="border-color: #10b981;">
+                    <span class="toggle-icon">💵</span>
+                </div>
+            </div>
 
             <div class="panel-total total-efectivo">
                 <span>EFECTIVO</span>
@@ -360,19 +390,26 @@
     <div id="app-multiplicador" class="main-app-container">
         <div class="multiplicador-wrapper">
             
+            <!-- CABECERA MULTIPLICADOR CON BLOQUEO DE TECLADO -->
             <div class="sticky-header">
-                <button class="btn-clear-compact" onclick="clearAllData()">
-                    <span>🧹</span> Limpiar
-                </button>
+                <div class="header-left-controls">
+                    <button class="btn-clear-compact" onmousedown="gestionarLimpiarMultiplicador(event)" ontouchstart="gestionarLimpiarMultiplicador(event)">
+                        <span>🧹</span> Limpiar
+                    </button>
+                    <div class="header-divider"></div>
+                    <div class="profile-toggle" id="btn-toggle-multi">
+                        <span class="toggle-icon">🛒</span>
+                    </div>
+                </div>
                 <div class="header-info">
-                    <div class="main-total" id="txtGranTotal">S/ 0.00</div>
+                    <div class="main-total" id="txtGranTotal">0.00</div>
                 </div>
             </div>
 
             <div class="tabs-container-sub">
-                <button class="sub-tab-btn active" onclick="switchSubTab('tab-billetes', this)">💵 Billetes</button>
-                <button class="sub-tab-btn" onclick="switchSubTab('tab-monedas', this)">🪙 Monedas</button>
-                <button class="sub-tab-btn" onclick="switchSubTab('tab-bloques', this)">📦 Fajos</button>
+                <button class="sub-tab-btn active" onmousedown="gestionarPestanaMultiplicador(event, 'tab-billetes', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-billetes', this)">💵 Billetes</button>
+                <button class="sub-tab-btn" onmousedown="gestionarPestanaMultiplicador(event, 'tab-monedas', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-monedas', this)">🪙 Monedas</button>
+                <button class="sub-tab-btn" onmousedown="gestionarPestanaMultiplicador(event, 'tab-bloques', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-bloques', this)">📦 Fajos</button>
             </div>
 
             <div id="tab-billetes" class="view-content active">
@@ -387,12 +424,12 @@
                 <div class="block-input-section">
                     <div class="block-form">
                         <input type="text" id="inputMontoBloque" class="input-block-amount" inputmode="decimal" placeholder="Monto" oninput="formatCurrencyInput(this)" onkeydown="if(event.key==='Enter') addPrecountedBlock()">
-                        <button class="btn-add-block" onclick="addPrecountedBlock()">+ Añadir</button>
+                        <button class="btn-add-block" onmousedown="gestionarAnadirFajo(event)" ontouchstart="gestionarAnadirFajo(event)">+ Añadir</button>
                     </div>
                 </div>
                 <div class="blocks-list-header">
                     <span>Lista de Fajos</span>
-                    <span id="txtSubtotalBloques" style="font-size: 16px; font-weight: 800; color: var(--bcp-blue);">Subtotal: S/ 0.00</span>
+                    <span id="txtSubtotalBloques" style="font-size: 16px; font-weight: 800; color: var(--bcp-blue);">Subtotal: 0.00</span>
                 </div>
                 <div id="listaBloques"></div>
             </div>
@@ -400,57 +437,74 @@
         </div>
     </div>
 
-    <nav class="bottom-nav-master" id="barraNavegacion">
-        <button class="nav-master-item active" onclick="switchMainApp('app-caja', this)" id="btnNavCaja">
-            <span class="nav-icon">🛒</span>
-            <span>Caja Registradora</span>
-        </button>
-        <button class="nav-master-item" onclick="switchMainApp('app-multiplicador', this)" id="btnNavMulti">
-            <span class="nav-icon">💵</span>
-            <span>Multiplicador</span>
-        </button>
-    </nav>
-
 
     <script>
         const formatoSoles = (num) => num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
-        // --- 1. NAVEGACIÓN PRINCIPAL Y AUTO-OCULTAMIENTO ---
-        function switchMainApp(appId, btnElement) {
+        // --- NAVEGACIÓN PRINCIPAL ACTUALIZADA (SIN BARRA INFERIOR) ---
+        function switchMainApp(appId) {
             document.querySelectorAll('.main-app-container').forEach(screen => screen.classList.remove('active-app'));
-            document.querySelectorAll('.nav-master-item').forEach(btn => btn.classList.remove('active'));
-
             document.getElementById(appId).classList.add('active-app');
-            btnElement.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
-        const barraNavegacion = document.getElementById('barraNavegacion');
-        
-        function aplicarAutoOcultar() {
-            const inputs = document.querySelectorAll('input:not([readonly])');
-            inputs.forEach(input => {
-                input.addEventListener('focus', () => {
-                    barraNavegacion.classList.add('nav-hidden');
-                });
-                
-                input.addEventListener('blur', () => {
-                    setTimeout(() => {
-                        if (document.activeElement && document.activeElement.tagName !== 'INPUT') {
-                            barraNavegacion.classList.remove('nav-hidden');
-                        }
-                    }, 50);
-                });
-            });
+        // --- MANEJO DEL FOCO INMEDIATO (MANTIENE EL TECLADO VIVO) ---
+        function enfocarSiguienteInputVisible(containerId) {
+            let inputs = document.querySelectorAll(`#${containerId} input:not([readonly])`);
+            for (let i = 0; i < inputs.length; i++) {
+                if (inputs[i].value === '' || inputs[i].value === '0') {
+                    inputs[i].focus();
+                    return;
+                }
+            }
+            if(inputs.length > 0) inputs[0].focus();
         }
-        
-        aplicarAutoOcultar();
 
+        // --- GESTORES CON "FOCUS LOCK" (Evitan que el teclado baje) ---
+        function gestionarLimpiarCaja(event) {
+            event.preventDefault(); 
+            limpiarCaja(); 
+            enfocarSiguienteInputVisible('app-caja'); 
+        }
+
+        function gestionarLimpiarMultiplicador(event) {
+            event.preventDefault(); 
+            clearAllData(); 
+            const tabActiva = document.querySelector('.sub-tab-btn.active');
+            if (tabActiva) {
+                let tabTarget = tabActiva.innerText.includes('Billetes') ? 'tab-billetes' : (tabActiva.innerText.includes('Monedas') ? 'tab-monedas' : 'tab-bloques');
+                enfocarSiguienteInputVisible(tabTarget);
+            }
+        }
+
+        function gestionarPestanaMultiplicador(event, tabId, element) {
+            event.preventDefault(); 
+            document.querySelectorAll('#app-multiplicador .view-content').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+            enfocarSiguienteInputVisible(tabId);
+        }
+
+        function gestionarStep(event, type, denom, delta) {
+            event.preventDefault(); 
+            changeQty(type, denom, delta);
+        }
+
+        function gestionarAnadirFajo(event) {
+            event.preventDefault();
+            addPrecountedBlock();
+            document.getElementById('inputMontoBloque').focus();
+        }
+
+        // --- GESTOS GLOBALES Y CÍRCULOS (SWIPE Y TOGGLE) ---
         let startX = 0;
         let startY = 0;
 
         document.addEventListener('touchstart', (e) => {
             if(e.target.closest('.contenedor-deslizable')) return;
+            if(e.target.closest('.profile-toggle')) return; 
+            if(e.target.closest('.sub-tab-btn')) return; 
             if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
@@ -464,19 +518,55 @@
             let diffY = endY - startY;
 
             if (Math.abs(diffX) > Math.abs(diffY)) {
+                const isTyping = document.activeElement && document.activeElement.tagName === 'INPUT';
                 let appCajaActiva = document.getElementById('app-caja').classList.contains('active-app');
+                
                 if (diffX < -60 && appCajaActiva) {
-                    switchMainApp('app-multiplicador', document.getElementById('btnNavMulti'));
+                    switchMainApp('app-multiplicador');
+                    if (isTyping) enfocarSiguienteInputVisible('app-multiplicador');
                 } else if (diffX > 60 && !appCajaActiva) {
-                    switchMainApp('app-caja', document.getElementById('btnNavCaja'));
+                    switchMainApp('app-caja');
+                    if (isTyping) enfocarSiguienteInputVisible('app-caja');
                 }
             }
             startX = 0;
             startY = 0;
         }, {passive: true});
 
+        function setupProfileToggle(elementId) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
 
-        // --- 2. LÓGICA DE LA CAJA PRINCIPAL ---
+            const handleInteraccion = (e) => {
+                e.preventDefault(); 
+                const isTyping = document.activeElement && document.activeElement.tagName === 'INPUT';
+                
+                el.style.transform = "scale(0.85)";
+                setTimeout(() => { el.style.transform = "scale(1)"; }, 150);
+                
+                const isCajaActive = document.getElementById('app-caja').classList.contains('active-app');
+                if (isCajaActive) {
+                    switchMainApp('app-multiplicador');
+                    const tabActiva = document.querySelector('.sub-tab-btn.active');
+                    if (isTyping && tabActiva) {
+                        let tabTarget = tabActiva.innerText.includes('Billetes') ? 'tab-billetes' : (tabActiva.innerText.includes('Monedas') ? 'tab-monedas' : 'tab-bloques');
+                        enfocarSiguienteInputVisible(tabTarget);
+                    }
+                } else {
+                    switchMainApp('app-caja');
+                    if (isTyping) enfocarSiguienteInputVisible('app-caja');
+                }
+            };
+
+            el.addEventListener('mousedown', handleInteraccion, { passive: false });
+            el.addEventListener('touchstart', handleInteraccion, { passive: false });
+        }
+
+        setupProfileToggle('btn-toggle-caja');
+        setupProfileToggle('btn-toggle-multi');
+
+
+        // --- LÓGICA DE LA CAJA PRINCIPAL INTACTA ---
         const getVal = (id) => parseFloat(document.getElementById(id).value.replace(/,/g, '')) || 0;
 
         function formatInput(input) {
@@ -536,21 +626,13 @@
             }
         }
 
-        // LIMPIEZA TOTAL SINCRONIZADA
         function limpiarCaja() {
-            // 1. Limpiamos el Multiplicador. Esto desvincula automáticamente el cuadro que estaba en uso.
             clearAllData(); 
-            
-            // 2. Limpiamos manualmente el resto de cuadros que el usuario haya ingresado.
-            document.querySelectorAll('#app-caja input').forEach(i => {
-                i.value = '';
-            });
-            
-            // 3. Refrescamos visuales
+            document.querySelectorAll('#app-caja input').forEach(i => { i.value = ''; });
             calcularTodo();
         }
 
-        // --- 3. LÓGICA DEL MULTIPLICADOR Y ENRUTAMIENTO INTELIGENTE ---
+        // --- LÓGICA DEL MULTIPLICADOR INTACTA ---
         const denominacionesBilletes = [200, 100, 50, 20, 10];
         const denominacionesMonedas = [5.00, 2.00, 1.00, 0.50, 0.20, 0.10];
         let cantidadesBilletes = {}; let cantidadesMonedas = {}; let bloquesPrecontados = [];
@@ -564,12 +646,12 @@
                 <div class="item-card">
                     <div class="item-info">
                         <span class="item-denomination">S/ ${denom}</span>
-                        <span class="item-subtotal" id="sub-b-${denom}">S/ 0.00</span>
+                        <span class="item-subtotal" id="sub-b-${denom}">0.00</span>
                     </div>
                     <div class="stepper-control">
-                        <button class="btn-step" onclick="changeQty('billete', ${denom}, -1)">-</button>
+                        <button class="btn-step" onmousedown="gestionarStep(event, 'billete', ${denom}, -1)" ontouchstart="gestionarStep(event, 'billete', ${denom}, -1)">-</button>
                         <input type="number" class="input-qty" id="input-b-${denom}" placeholder="0" oninput="updateQty('billete', ${denom}, this.value)">
-                        <button class="btn-step" onclick="changeQty('billete', ${denom}, 1)">+</button>
+                        <button class="btn-step" onmousedown="gestionarStep(event, 'billete', ${denom}, 1)" ontouchstart="gestionarStep(event, 'billete', ${denom}, 1)">+</button>
                     </div>
                 </div>`;
         });
@@ -580,25 +662,16 @@
                 <div class="item-card">
                     <div class="item-info">
                         <span class="item-denomination">S/ ${denom.toFixed(2)}</span>
-                        <span class="item-subtotal" id="sub-m-${denom}">S/ 0.00</span>
+                        <span class="item-subtotal" id="sub-m-${denom}">0.00</span>
                     </div>
                     <div class="stepper-control">
-                        <button class="btn-step" onclick="changeQty('moneda', ${denom}, -1)">-</button>
+                        <button class="btn-step" onmousedown="gestionarStep(event, 'moneda', ${denom}, -1)" ontouchstart="gestionarStep(event, 'moneda', ${denom}, -1)">-</button>
                         <input type="number" class="input-qty" id="input-m-${denom}" placeholder="0" oninput="updateQty('moneda', ${denom}, this.value)">
-                        <button class="btn-step" onclick="changeQty('moneda', ${denom}, 1)">+</button>
+                        <button class="btn-step" onmousedown="gestionarStep(event, 'moneda', ${denom}, 1)" ontouchstart="gestionarStep(event, 'moneda', ${denom}, 1)">+</button>
                     </div>
                 </div>`;
         });
         
-        aplicarAutoOcultar();
-
-        function switchSubTab(tabId, element) {
-            document.querySelectorAll('#app-multiplicador .view-content').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            element.classList.add('active');
-        }
-
         function changeQty(type, denom, delta) {
             const inputEl = document.getElementById(`input-${type === 'billete' ? 'b' : 'm'}-${denom}`);
             let val = (parseInt(inputEl.value) || 0) + delta;
@@ -646,7 +719,7 @@
             const container = document.getElementById('listaBloques');
             container.innerHTML = '';
             for (let i = bloquesPrecontados.length - 1; i >= 0; i--) {
-                container.innerHTML += `<div class="block-item"><span class="block-value">Fajo #${i + 1}: &nbsp;&nbsp; ${formatter.format(bloquesPrecontados[i])}</span><button class="btn-delete-block" onclick="deleteBlock(${i})">×</button></div>`;
+                container.innerHTML += `<div class="block-item"><span class="block-value">Fajo #${i + 1}: &nbsp;&nbsp; ${formatter.format(bloquesPrecontados[i]).replace(/S\/\s*/, '')}</span><button class="btn-delete-block" onclick="deleteBlock(${i})">×</button></div>`;
             }
         }
 
@@ -659,22 +732,29 @@
             renderBlocks(); calculateAllCounter();
         }
 
-        // --- ENRUTAMIENTO INTELIGENTE HACIA LA CAJA ---
-        let cuadroVinculado = null; // Guarda el ID del cuadro que está usando el multiplicador
+        let cuadroVinculado = null; 
 
         function calculateAllCounter() {
             let tBilletes = 0, tMonedas = 0, tFajos = 0;
-            denominacionesBilletes.forEach(d => { const sub = d * cantidadesBilletes[d]; tBilletes += sub; document.getElementById(`sub-b-${d}`).innerText = formatter.format(sub); });
-            denominacionesMonedas.forEach(d => { const sub = d * cantidadesMonedas[d]; tMonedas += sub; document.getElementById(`sub-m-${d}`).innerText = formatter.format(sub); });
+            denominacionesBilletes.forEach(d => { 
+                const sub = d * cantidadesBilletes[d]; tBilletes += sub; 
+                document.getElementById(`sub-b-${d}`).innerText = formatter.format(sub).replace(/S\/\s*/, ''); 
+            });
+            denominacionesMonedas.forEach(d => { 
+                const sub = d * cantidadesMonedas[d]; tMonedas += sub; 
+                document.getElementById(`sub-m-${d}`).innerText = formatter.format(sub).replace(/S\/\s*/, ''); 
+            });
             bloquesPrecontados.forEach(b => tFajos += b);
             
-            document.getElementById('txtSubtotalBloques').innerText = `Subtotal: ${formatter.format(tFajos)}`;
+            document.getElementById('txtSubtotalBloques').innerText = `Subtotal: ${formatter.format(tFajos).replace(/S\/\s*/, '')}`;
 
             let granTotalNumerico = tBilletes + tMonedas + tFajos;
-            document.getElementById('txtGranTotal').innerText = formatter.format(granTotalNumerico);
+            
+            let totalFormateado = formatter.format(granTotalNumerico);
+            let soloNumero = totalFormateado.replace(/S\/\s*/, '');
+            document.getElementById('txtGranTotal').innerHTML = soloNumero;
 
             if(granTotalNumerico > 0) {
-                // Si aún no tenemos un cuadro asignado, buscamos el primero libre (b1, b2, b3, b4)
                 if (!cuadroVinculado) {
                     const opciones = ['b1', 'b2', 'b3', 'b4'];
                     for (let id of opciones) {
@@ -684,11 +764,9 @@
                             break;
                         }
                     }
-                    // Si todos están ocupados, por seguridad forzamos a sobreescribir el último (b4)
                     if (!cuadroVinculado) cuadroVinculado = 'b4';
                 }
 
-                // Escribimos el valor y aplicamos estilo distintivo al cuadro elegido
                 let targetInput = document.getElementById(cuadroVinculado);
                 targetInput.value = granTotalNumerico.toFixed(2);
                 formatInput(targetInput);
@@ -696,7 +774,6 @@
                 targetInput.readOnly = true;
 
             } else {
-                // Si el multiplicador llega a cero, desvinculamos y limpiamos el cuadro
                 if (cuadroVinculado) {
                     let targetInput = document.getElementById(cuadroVinculado);
                     targetInput.value = '';
@@ -707,7 +784,6 @@
             }
             calcularTodo(); 
         }
-
     </script>
 </body>
 </html>
