@@ -19,6 +19,15 @@
             --danger-color: #D32F2F;
             --app-bg: #f3f4f6;
             --retiro-accent: #E11D48;
+
+            /* Tonos de intensidad intermedia (claramente visibles en pantalla móvil) */
+            --bg-billetes: #dcfce7;
+            --border-billetes: #86efac;
+            --accent-billetes: #059669;
+
+            --bg-monedas: #fef08a;
+            --border-monedas: #fde047;
+            --accent-monedas: #d97706;
         }
 
         * {
@@ -260,26 +269,74 @@
         }
         .btn-clear-compact:active { background-color: #B71C1C; transform: scale(0.96); }
 
-        .tabs-container-sub { background: white; display: flex; border-bottom: 1px solid var(--border-color); position: sticky; top: 80px; z-index: 999;}
+        .tabs-container-sub { 
+            background: white; 
+            display: flex; 
+            border-bottom: 1px solid var(--border-color); 
+            position: sticky; 
+            top: 80px; 
+            z-index: 999;
+        }
         
         .sub-tab-btn {
-            flex: 1; padding: 12px 2px; text-align: center; background: none; border: none; font-size: 15px;
+            flex: 1; padding: 12px 2px; text-align: center; background: none; border: none; font-size: 16px;
             font-weight: 700; color: var(--text-muted); cursor: pointer; border-bottom: 4px solid transparent;
             transition: all 0.2s ease;
             touch-action: manipulation;
         }
-        .sub-tab-btn.active { color: var(--bcp-blue); font-weight: 800; background-color: rgba(0, 42, 141, 0.05); border-bottom: 4px solid var(--bcp-orange); }
+        
+        /* Acentos visuales para las pestañas de selección */
+        .sub-tab-btn#tab-btn-billetes.active {
+            color: #065f46;
+            background-color: #d1fae5;
+            border-bottom: 4px solid var(--accent-billetes);
+            font-weight: 900;
+        }
+
+        .sub-tab-btn#tab-btn-monedas.active {
+            color: #92400e;
+            background-color: #fef3c7;
+            border-bottom: 4px solid var(--accent-monedas);
+            font-weight: 900;
+        }
 
         .view-content { display: none; padding: 15px; max-width: 500px; margin: 0 auto; }
         .view-content.active { display: block; animation: fadeInScreen 0.2s; }
 
+        /* Contenedores con color de fondo intermedio y bordes de delimitación claros */
+        #tab-billetes {
+            background-color: var(--bg-billetes);
+            border-bottom: 3px solid var(--border-billetes);
+            border-left: 2px solid var(--border-billetes);
+            border-right: 2px solid var(--border-billetes);
+            border-radius: 0 0 16px 16px;
+        }
+
+        #tab-monedas {
+            background-color: var(--bg-monedas);
+            border-bottom: 3px solid var(--border-monedas);
+            border-left: 2px solid var(--border-monedas);
+            border-right: 2px solid var(--border-monedas);
+            border-radius: 0 0 16px 16px;
+        }
+
+        /* Cápsulas blancas con contraste limpio */
         .item-card {
-            background: var(--card-bg); border-radius: 10px; padding: 12px 10px; margin-bottom: 10px;
-            display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-color);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            background: var(--card-bg); 
+            border-radius: 10px; 
+            padding: 12px 10px; 
+            margin-bottom: 10px;
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06);
         }
         
-        #tab-monedas .item-card { padding: 10px 10px; margin-bottom: 8px; }
+        #tab-monedas .item-card { 
+            padding: 10px 10px; 
+            margin-bottom: 8px; 
+        }
         #tab-monedas .item-denomination { font-size: 28px; } 
         #tab-monedas .input-qty { height: 46px; font-size: 32px; }
         #tab-monedas .btn-step { width: 42px; height: 42px; font-size: 36px; padding-bottom: 4px; }
@@ -327,26 +384,6 @@
             color: var(--bcp-blue); background-color: #FAFAFA;
         }
         .input-qty:focus { outline: none; border-color: var(--bcp-orange); background-color: white; }
-
-        .block-input-section { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .block-form { display: flex; gap: 8px; width: 100%; align-items: stretch; }
-        
-        .input-block-amount { 
-            flex: 1 1 0%; min-width: 0; height: 60px; border: 2px solid var(--border-color); 
-            border-radius: 10px; padding: 0 15px; 
-            font-size: 42px; 
-            font-weight: 900; 
-            color: var(--bcp-blue); background-color: #FAFAFA; 
-        }
-        .input-block-amount:focus { outline: none; border-color: var(--bcp-orange); background-color: white; }
-        .btn-add-block { flex-shrink: 0; background-color: var(--bcp-orange); color: white; border: none; border-radius: 10px; padding: 0 20px; font-size: 18px; font-weight: 800; cursor: pointer; transition: 0.1s; }
-        .btn-add-block:active { background-color: #E05D00; transform: scale(0.96); }
-        
-        .blocks-list-header { font-size: 14px; font-weight: 700; color: var(--text-muted); margin: 10px 0 8px 5px; display: flex; justify-content: space-between; }
-        
-        .block-item { background: white; padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--bcp-orange); border-bottom: 1px solid var(--border-color); }
-        .block-value { font-size: 22px; font-weight: 800; } 
-        .btn-delete-block { background: none; border: none; color: var(--danger-color); font-size: 26px; padding: 0 10px; cursor: pointer; }
 
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
@@ -442,9 +479,8 @@
             </div>
 
             <div class="tabs-container-sub">
-                <button class="sub-tab-btn active" onmousedown="gestionarPestanaMultiplicador(event, 'tab-billetes', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-billetes', this)">💵 Billetes</button>
-                <button class="sub-tab-btn" onmousedown="gestionarPestanaMultiplicador(event, 'tab-monedas', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-monedas', this)">🪙 Monedas</button>
-                <button class="sub-tab-btn" onmousedown="gestionarPestanaMultiplicador(event, 'tab-bloques', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-bloques', this)">📦 Fajos</button>
+                <button id="tab-btn-billetes" class="sub-tab-btn active" onmousedown="gestionarPestanaMultiplicador(event, 'tab-billetes', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-billetes', this)">💵 Billetes</button>
+                <button id="tab-btn-monedas" class="sub-tab-btn" onmousedown="gestionarPestanaMultiplicador(event, 'tab-monedas', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-monedas', this)">🪙 Monedas</button>
             </div>
 
             <div id="tab-billetes" class="view-content active">
@@ -453,20 +489,6 @@
             
             <div id="tab-monedas" class="view-content">
                 <div id="containerMonedas"></div>
-            </div>
-            
-            <div id="tab-bloques" class="view-content">
-                <div class="block-input-section">
-                    <div class="block-form">
-                        <input type="text" id="inputMontoBloque" class="input-block-amount" inputmode="decimal" placeholder="Monto" oninput="formatCurrencyInput(this)" onkeydown="if(event.key==='Enter') addPrecountedBlock()">
-                        <button class="btn-add-block" onmousedown="gestionarAnadirFajo(event)" ontouchstart="gestionarAnadirFajo(event)">+ Añadir</button>
-                    </div>
-                </div>
-                <div class="blocks-list-header">
-                    <span>Lista de Fajos</span>
-                    <span id="txtSubtotalBloques" style="font-size: 16px; font-weight: 800; color: var(--bcp-blue);">Subtotal: 0.00</span>
-                </div>
-                <div id="listaBloques"></div>
             </div>
 
         </div>
@@ -495,7 +517,6 @@
                 panelSecundario.className = 'panel-total total-retiro';
                 tituloSecundario.innerText = 'RETIRO';
 
-                // Texto superior ajustado
                 panelSuperior.className = 'panel-total total-meta-retiro';
                 tituloSuperior.innerText = 'MONTO POR RETIRAR';
             } else {
@@ -531,20 +552,16 @@
 
         // --- GESTIÓN PERSISTENTE DE SELECCIÓN Y MARCA DE MULTIPLICADOR ---
         function reaplicarEstiloSincronizacion() {
-            // Limpiar estilos previos en todos los inputs
             document.querySelectorAll('#app-caja input').forEach(input => {
                 input.classList.remove('active-sync', 'active-sync-retiro');
                 input.readOnly = false;
             });
 
-            // Si hay un cuadro actualmente vinculado y el multiplicador tiene valor positivo
             if (cuadroVinculado) {
                 const el = document.getElementById(cuadroVinculado);
                 if (el) {
-                    // Si el cuadro vinculado es del panel secundario pero no pertenece al modo actual, se oculta la marca
                     const esSecundario = cuadroVinculado.startsWith('p');
                     if (esSecundario && modoSecundario === 'recibo') {
-                        // En modo recibo no mostramos marcas de retiro
                         return;
                     }
 
@@ -598,7 +615,7 @@
             clearAllData(); 
             const tabActiva = document.querySelector('.sub-tab-btn.active');
             if (tabActiva) {
-                let tabTarget = tabActiva.innerText.includes('Billetes') ? 'tab-billetes' : (tabActiva.innerText.includes('Monedas') ? 'tab-monedas' : 'tab-bloques');
+                let tabTarget = tabActiva.innerText.includes('Billetes') ? 'tab-billetes' : 'tab-monedas';
                 enfocarSiguienteInputVisible(tabTarget);
             }
         }
@@ -615,12 +632,6 @@
         function gestionarStep(event, type, denom, delta) {
             event.preventDefault(); 
             changeQty(type, denom, delta);
-        }
-
-        function gestionarAnadirFajo(event) {
-            event.preventDefault();
-            addPrecountedBlock();
-            document.getElementById('inputMontoBloque').focus();
         }
 
         // --- GESTOS Y BOTONES TOGGLE ---
@@ -675,7 +686,7 @@
                     switchMainApp('app-multiplicador');
                     const tabActiva = document.querySelector('.sub-tab-btn.active');
                     if (isTyping && tabActiva) {
-                        let tabTarget = tabActiva.innerText.includes('Billetes') ? 'tab-billetes' : (tabActiva.innerText.includes('Monedas') ? 'tab-monedas' : 'tab-bloques');
+                        let tabTarget = tabActiva.innerText.includes('Billetes') ? 'tab-billetes' : 'tab-monedas';
                         enfocarSiguienteInputVisible(tabTarget);
                     }
                 } else {
@@ -756,7 +767,6 @@
                     }
                 }
             } else {
-                // Modo Retiro Operativo
                 if (totalInferior === 0 && totalSuperior === 0) {
                     panel.className = "panel-resultado estado-esperando";
                     texto.innerText = "ESPERANDO..."; monto.innerText = "0.00";
@@ -798,7 +808,7 @@
         // --- LÓGICA DEL MULTIPLICADOR CON SINCRONIZACIÓN PERSISTENTE ---
         const denominacionesBilletes = [200, 100, 50, 20, 10];
         const denominacionesMonedas = [5.00, 2.00, 1.00, 0.50, 0.20, 0.10];
-        let cantidadesBilletes = {}; let cantidadesMonedas = {}; let bloquesPrecontados = [];
+        let cantidadesBilletes = {}; let cantidadesMonedas = {};
         denominacionesBilletes.forEach(d => cantidadesBilletes[d] = 0);
         denominacionesMonedas.forEach(d => cantidadesMonedas[d] = 0);
         const formatter = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN', minimumFractionDigits: 2 });
@@ -851,54 +861,17 @@
             calculateAllCounter();
         }
 
-        function formatCurrencyInput(input) {
-            let cursorPosition = input.selectionStart;
-            let originalLength = input.value.length;
-            let cleanValue = input.value.replace(/[^0-9.]/g, '');
-            let parts = cleanValue.split('.');
-            if (parts.length > 2) { cleanValue = parts[0] + '.' + parts.slice(1).join(''); parts = cleanValue.split('.'); }
-            if (parts[0] !== '') { parts[0] = parseInt(parts[0], 10).toLocaleString('en-US'); }
-            input.value = parts.join('.');
-            let newLength = input.value.length;
-            input.selectionStart = input.selectionEnd = cursorPosition + (newLength - originalLength);
-        }
-
-        function addPrecountedBlock() {
-            const inputEl = document.getElementById('inputMontoBloque');
-            const amt = parseFloat(inputEl.value.replace(/,/g, '')) || 0;
-            if (amt > 0) {
-                bloquesPrecontados.push(amt);
-                inputEl.value = '';
-                renderBlocks(); calculateAllCounter();
-            }
-        }
-
-        function deleteBlock(index) {
-            bloquesPrecontados.splice(index, 1);
-            renderBlocks(); calculateAllCounter();
-        }
-
-        function renderBlocks() {
-            const container = document.getElementById('listaBloques');
-            container.innerHTML = '';
-            for (let i = bloquesPrecontados.length - 1; i >= 0; i--) {
-                container.innerHTML += `<div class="block-item"><span class="block-value">Fajo #${i + 1}: &nbsp;&nbsp; ${formatter.format(bloquesPrecontados[i]).replace(/S\/\s*/, '')}</span><button class="btn-delete-block" onclick="deleteBlock(${i})">×</button></div>`;
-            }
-        }
-
         function clearAllData() {
             denominacionesBilletes.forEach(d => cantidadesBilletes[d] = 0);
             denominacionesMonedas.forEach(d => cantidadesMonedas[d] = 0);
-            bloquesPrecontados = [];
             document.querySelectorAll('#app-multiplicador .input-qty').forEach(i => i.value = '');
-            document.getElementById('inputMontoBloque').value = '';
-            renderBlocks(); calculateAllCounter();
+            calculateAllCounter();
         }
 
         let cuadroVinculado = null; 
 
         function calculateAllCounter() {
-            let tBilletes = 0, tMonedas = 0, tFajos = 0;
+            let tBilletes = 0, tMonedas = 0;
             denominacionesBilletes.forEach(d => { 
                 const sub = d * cantidadesBilletes[d]; tBilletes += sub; 
                 document.getElementById(`sub-b-${d}`).innerText = formatter.format(sub).replace(/S\/\s*/, ''); 
@@ -907,11 +880,8 @@
                 const sub = d * cantidadesMonedas[d]; tMonedas += sub; 
                 document.getElementById(`sub-m-${d}`).innerText = formatter.format(sub).replace(/S\/\s*/, ''); 
             });
-            bloquesPrecontados.forEach(b => tFajos += b);
-            
-            document.getElementById('txtSubtotalBloques').innerText = `Subtotal: ${formatter.format(tFajos).replace(/S\/\s*/, '')}`;
 
-            let granTotalNumerico = tBilletes + tMonedas + tFajos;
+            let granTotalNumerico = tBilletes + tMonedas;
             let totalFormateado = formatter.format(granTotalNumerico);
             let soloNumero = totalFormateado.replace(/S\/\s*/, '');
             document.getElementById('txtGranTotal').innerHTML = soloNumero;
@@ -921,7 +891,6 @@
                     ? ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8'] 
                     : ['b1', 'b2', 'b3', 'b4'];
 
-                // Si no hay cuadro vinculado o el actual no pertenece a las opciones del modo
                 if (!cuadroVinculado || !listaOpciones.includes(cuadroVinculado)) {
                     if (cuadroVinculado) {
                         let prev = document.getElementById(cuadroVinculado);
