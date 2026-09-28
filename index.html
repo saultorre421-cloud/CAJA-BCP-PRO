@@ -61,7 +61,7 @@
         body { 
             background-color: var(--app-bg); 
             color: #0f172a;
-            padding-bottom: 25px;
+            padding-bottom: 15px;
             overflow-x: hidden;
         }
 
@@ -104,8 +104,8 @@
         }
 
         .profile-toggle {
-            width: 56px;
-            height: 56px;
+            width: 50px;
+            height: 50px;
             background-color: var(--card-bg);
             border-radius: 50%;
             display: flex;
@@ -124,41 +124,41 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .toggle-icon {
-            font-size: 28px;
+            font-size: 26px;
             line-height: 1;
             pointer-events: none;
         }
 
         /* =========================================
-           CAJA PRINCIPAL
+           CAJA PRINCIPAL COMPACTADA
            ========================================= */
         .caja-wrapper {
-            padding: 10px;
+            padding: 8px 10px 4px 10px;
         }
 
         .caja-header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
-            gap: 12px;
+            margin-bottom: 8px;
+            gap: 10px;
         }
 
         .btn-limpiar-top { 
             flex: 1;
-            max-width: 75%; 
+            max-width: 78%; 
             background-color: #10b981; 
             color: white; 
-            height: 56px; 
-            padding: 0 10px; 
-            font-size: 17px; 
+            height: 50px; 
+            padding: 0 8px; 
+            font-size: 16px; 
             font-weight: 800; 
             border: none; 
-            border-radius: 10px; 
+            border-radius: 9px; 
             cursor: pointer; 
             text-transform: uppercase; 
             text-align: center;
-            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 3px 6px rgba(16, 185, 129, 0.25);
             transition: background-color 0.1s, transform 0.1s;
         }
         .btn-limpiar-top:active { 
@@ -166,25 +166,66 @@
             transform: scale(0.98); 
         }
 
-        /* Paneles interactivos de totales */
+        /* Paneles interactivos de totales (Optimizados en altura) */
         .panel-total { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 11px 14px; 
-            border-radius: 10px 10px 0 0; 
-            font-size: 18px; 
+            padding: 6px 12px; 
+            border-radius: 9px 9px 0 0; 
+            font-size: 16px; 
             font-weight: 900; 
             text-transform: uppercase; 
-            box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
             user-select: none;
             cursor: pointer;
             transition: background-color 0.2s ease, transform 0.05s, color 0.2s ease;
         }
         .panel-total:active { transform: scale(0.99); }
         
+        .panel-title-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Puntos de paginación integrados en el título (0px de altura extra) */
+        .header-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.12);
+            padding: 3px 6px;
+            border-radius: 10px;
+        }
+        .h-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease;
+        }
+        .tema-recibo-header .h-dot {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        .h-dot.active {
+            background-color: #ffffff !important;
+            transform: scale(1.3);
+        }
+        .tema-recibo-header .h-dot.active {
+            background-color: #000000 !important;
+        }
+        .h-dot.warn-hidden {
+            background-color: #ef4444 !important;
+            animation: pulseWarn 1s infinite alternate;
+        }
+        @keyframes pulseWarn {
+            from { transform: scale(1); opacity: 0.8; }
+            to { transform: scale(1.5); opacity: 1; }
+        }
+
         .panel-total span:nth-child(2) {
-            font-size: 30px;
+            font-size: 26px;
             font-weight: 900;
             letter-spacing: -0.5px;
         }
@@ -203,15 +244,15 @@
             color: var(--retiro-header-text) !important; 
         }
 
-        /* Contenedores con color de fondo envolvente unificado */
+        /* Contenedores con color de fondo envolvente unificado (Compactados) */
         .caja-contenedor { 
-            padding: 6px 8px 8px 8px; 
-            border-radius: 0 0 12px 12px; 
-            margin-bottom: 14px; 
+            padding: 4px 6px 5px 6px; 
+            border-radius: 0 0 10px 10px; 
+            margin-bottom: 8px; 
             border-bottom: 3px solid; 
             border-left: 2px solid; 
             border-right: 2px solid; 
-            box-shadow: 0 3px 8px rgba(0,0,0,0.06); 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05); 
             transition: background-color 0.2s ease, border-color 0.2s ease;
             position: relative;
         }
@@ -229,117 +270,72 @@
             border-color: var(--retiro-caja-border);
         }
 
-        /* Barra de Paginación y Alerta de Contenido Oculto */
-        .caja-pager-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2px 4px 5px 4px;
-        }
-        .pager-dots {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .pager-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: rgba(0, 0, 0, 0.2);
-            transition: all 0.2s ease;
-        }
-        .pager-dot.active {
-            background-color: #0f172a;
-            transform: scale(1.25);
-        }
-        .pager-notice {
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            padding: 2px 8px;
-            border-radius: 6px;
-            display: none;
-            animation: pulseAlert 1.2s infinite;
-        }
-        .pager-notice.visible {
-            display: inline-block;
-            background-color: #fee2e2;
-            color: #b91c1c;
-            border: 1px solid #f87171;
-        }
-        @keyframes pulseAlert {
-            0% { opacity: 0.8; }
-            50% { opacity: 1; transform: scale(1.02); }
-            100% { opacity: 0.8; }
-        }
-
         .contenedor-deslizable {
             display: flex; 
             overflow-x: auto; 
             scroll-snap-type: x mandatory; 
-            gap: 12px;
+            gap: 10px;
             scrollbar-width: none; 
             -ms-overflow-style: none;
-            padding-bottom: 2px;
+            padding: 1px 0;
         }
         .contenedor-deslizable::-webkit-scrollbar { display: none; }
+        
         .pagina-deslizable { 
             flex: 0 0 100%; 
             scroll-snap-align: start; 
-            border-radius: 8px;
+            border-radius: 6px;
             position: relative;
         }
 
         /* =========================================
-           DIFERENCIADOR VISUAL DE LA SEGUNDA PÁGINA:
-           LÍNEAS VERTICALES BLANCAS DE SEGURIDAD (TRAMADO)
+           DIFERENCIADOR VISUAL DE PÁGINA 2
+           LÍNEAS VERTICALES LIMPIAS + BADGE AL RAS
            ========================================= */
         .pagina-deslizable.pagina-secundaria {
-            /* Patrón de líneas verticales semitransparentes que no ensucian ni alteran el tono de base */
             background-image: repeating-linear-gradient(
                 90deg,
-                rgba(255, 255, 255, 0.55),
-                rgba(255, 255, 255, 0.55) 6px,
-                transparent 6px,
-                transparent 14px
+                rgba(255, 255, 255, 0.65),
+                rgba(255, 255, 255, 0.65) 5px,
+                transparent 5px,
+                transparent 12px
             );
-            border: 1.5px dashed rgba(0, 0, 0, 0.25);
-            padding: 4px;
+            border: 1px dashed rgba(0, 0, 0, 0.25);
+            padding: 3px 2px;
         }
 
-        /* Pequeña etiqueta de esquina para confirmación instantánea */
+        /* Etiqueta PÁG. 2 exactamente al ras del límite entre cabecera y fondo */
         .badge-pagina-dos {
             position: absolute;
-            top: -7px;
-            right: 8px;
+            top: -4px;
+            right: 4px;
             background-color: #0f172a;
             color: #ffffff;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 900;
-            padding: 1px 7px;
-            border-radius: 4px;
+            padding: 1px 6px;
+            border-radius: 3px;
             letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
             pointer-events: none;
             z-index: 10;
         }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
-        /* Cápsulas de entrada: Blanco níveo de alta visibilidad */
+        /* Cápsulas de entrada: Compactas y nítidas */
         .caja-contenedor input { 
             width: 100%; 
-            height: 52px; 
-            font-size: 34px; 
+            height: 48px; 
+            font-size: 32px; 
             font-weight: 900; 
             border: 2px solid #94a3b8; 
-            border-radius: 8px; 
+            border-radius: 7px; 
             box-sizing: border-box; 
             text-align: center; 
             color: #0f172a; 
             background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
             transition: border-color 0.2s, background-color 0.2s, color 0.2s;
         }
         .caja-contenedor input:focus { 
@@ -349,7 +345,7 @@
         }
         .caja-contenedor input::placeholder { 
             color: #94a3b8; 
-            font-size: 18px; 
+            font-size: 17px; 
             font-weight: normal; 
         }
 
@@ -371,51 +367,51 @@
         }
 
         /* =========================================
-           PANEL DE RESULTADO: AL RAS SUPERIOR Y CÓMODO
+           PANEL DE RESULTADO: ALTO ULTRA OPTIMIZADO
            ========================================= */
         .panel-resultado { 
-            padding: 0 10px 8px 10px;
-            border-radius: 12px; 
+            padding: 0 8px 6px 8px;
+            border-radius: 10px; 
             text-align: center; 
             font-weight: bold; 
-            margin-bottom: 6px; 
+            margin-bottom: 4px; 
             border: 3px solid; 
             transition: all 0.2s; 
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             position: relative;
             overflow: hidden;
         }
 
         .badge-operacion {
             display: inline-block;
-            padding: 3px 16px;
-            border-radius: 0 0 10px 10px;
-            font-size: 12px;
+            padding: 2px 14px;
+            border-radius: 0 0 8px 8px;
+            font-size: 11px;
             font-weight: 900;
             letter-spacing: 0.8px;
             text-transform: uppercase;
             margin-top: 0;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             background: rgba(0, 0, 0, 0.11);
             line-height: 1.2;
         }
 
         #textoFinal {
-            font-size: clamp(17px, 4.5vw, 22px);
+            font-size: clamp(16px, 4.2vw, 20px);
             font-weight: 900;
             letter-spacing: 0.8px;
-            line-height: 1.15;
+            line-height: 1.1;
             text-transform: uppercase;
-            margin-top: 2px;
-            margin-bottom: 4px;
+            margin-top: 1px;
+            margin-bottom: 2px;
         }
 
         .monto-final { 
             display: block; 
-            font-size: clamp(56px, 14vw, 72px); 
+            font-size: clamp(52px, 13vw, 68px); 
             font-weight: 900; 
-            margin-top: 2px; 
-            line-height: 0.98; 
+            margin-top: 1px; 
+            line-height: 0.95; 
             letter-spacing: -2px;
         }
 
@@ -438,7 +434,7 @@
 
         .sticky-header {
             position: sticky; top: 0; background: linear-gradient(135deg, var(--bcp-blue) 0%, #001F6B 100%); color: white;
-            padding: 12px 15px; display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15); z-index: 1000;
         }
 
@@ -452,7 +448,7 @@
         }
         
         .main-total { 
-            font-size: clamp(32px, 9vw, 50px); 
+            font-size: clamp(30px, 8.5vw, 48px); 
             font-weight: 900; 
             line-height: 1; 
             letter-spacing: -1px; 
@@ -460,10 +456,10 @@
         }
         
         .btn-clear-compact {
-            background-color: var(--danger-color); color: white; border: none; border-radius: 10px;
-            height: 56px; 
-            padding: 0 20px; font-size: 17px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background-color: var(--danger-color); color: white; border: none; border-radius: 9px;
+            height: 50px; 
+            padding: 0 16px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+            display: flex; align-items: center; justify-content: center; gap: 6px;
             transition: transform 0.1s;
         }
         .btn-clear-compact:active { background-color: #B71C1C; transform: scale(0.96); }
@@ -473,12 +469,12 @@
             display: flex; 
             border-bottom: 1px solid var(--border-color); 
             position: sticky; 
-            top: 80px; 
+            top: 70px; 
             z-index: 999;
         }
         
         .sub-tab-btn {
-            flex: 1; padding: 12px 2px; text-align: center; background: none; border: none; font-size: 16px;
+            flex: 1; padding: 10px 2px; text-align: center; background: none; border: none; font-size: 15px;
             font-weight: 700; color: var(--text-muted); cursor: pointer; border-bottom: 4px solid transparent;
             transition: all 0.2s ease;
             touch-action: manipulation;
@@ -498,7 +494,7 @@
             font-weight: 900;
         }
 
-        .view-content { display: none; padding: 15px; max-width: 500px; margin: 0 auto; }
+        .view-content { display: none; padding: 12px; max-width: 500px; margin: 0 auto; }
         .view-content.active { display: block; animation: fadeInScreen 0.2s; }
 
         #tab-billetes {
@@ -519,51 +515,51 @@
 
         .item-card {
             background: var(--card-bg); 
-            border-radius: 10px; 
-            padding: 12px 10px; 
-            margin-bottom: 10px;
+            border-radius: 9px; 
+            padding: 10px 8px; 
+            margin-bottom: 8px;
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
             border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
         
         #tab-monedas .item-card { 
-            padding: 10px 10px; 
-            margin-bottom: 8px; 
+            padding: 8px 8px; 
+            margin-bottom: 7px; 
         }
-        #tab-monedas .item-denomination { font-size: 28px; } 
-        #tab-monedas .input-qty { height: 46px; font-size: 32px; }
-        #tab-monedas .btn-step { width: 42px; height: 42px; font-size: 36px; padding-bottom: 4px; }
+        #tab-monedas .item-denomination { font-size: 26px; } 
+        #tab-monedas .input-qty { height: 44px; font-size: 30px; }
+        #tab-monedas .btn-step { width: 40px; height: 40px; font-size: 34px; padding-bottom: 4px; }
 
         .item-info { 
             display: flex; 
             flex-direction: column; 
-            width: 130px; 
+            width: 125px; 
             justify-content: center;
             gap: 2px; 
         }
         .item-denomination { 
-            font-size: 32px; 
+            font-size: 30px; 
             font-weight: 900; 
             color: var(--bcp-blue); 
             line-height: 1; 
             letter-spacing: -0.5px;
         }
         .item-subtotal { 
-            font-size: 20px; 
+            font-size: 19px; 
             color: #16A34A; 
             font-weight: 800; 
             line-height: 1; 
         }
         
-        .stepper-control { display: flex; align-items: center; gap: 6px; }
+        .stepper-control { display: flex; align-items: center; gap: 5px; }
         
         .btn-step {
-            width: 44px; height: 44px; border-radius: 8px; border: 1px solid var(--border-color);
+            width: 42px; height: 42px; border-radius: 8px; border: 1px solid var(--border-color);
             background-color: #F8FAFC; 
-            font-size: 36px; 
+            font-size: 34px; 
             font-weight: 500; 
             display: flex; align-items: center; justify-content: center;
             line-height: 0; 
@@ -573,9 +569,9 @@
         .btn-step:active { background-color: #E2E8F0; }
         
         .input-qty {
-            width: 90px; height: 50px; border: 2px solid var(--border-color); border-radius: 8px;
+            width: 85px; height: 46px; border: 2px solid var(--border-color); border-radius: 8px;
             text-align: center; 
-            font-size: 36px; 
+            font-size: 34px; 
             font-weight: 900; 
             color: var(--bcp-blue); background-color: #FAFAFA;
         }
@@ -599,29 +595,26 @@
 
             <!-- PANEL SUPERIOR: EFECTIVO RECIBIDO / MONTO POR RETIRAR / MONTO A DEPOSITAR -->
             <div class="panel-total tema-recibo-header" id="panelSuperior" onmousedown="gestionarModoDeposito(event)" ontouchstart="gestionarModoDeposito(event)">
-                <span id="lblTituloSuperior">EFECTIVO RECIBIDO</span>
+                <div class="panel-title-area">
+                    <span id="lblTituloSuperior">EFECTIVO RECIBIDO</span>
+                    <div class="header-dots">
+                        <div class="h-dot active" id="dot-sup-1"></div>
+                        <div class="h-dot" id="dot-sup-2"></div>
+                    </div>
+                </div>
                 <span id="lblEfectivo">0.00</span>
             </div>
             
             <div class="caja-contenedor tema-recibo-bg" id="cajaSuperiorContenedor">
-                <!-- Barra de Paginación Superior -->
-                <div class="caja-pager-bar">
-                    <div class="pager-dots">
-                        <div class="pager-dot active" id="dot-sup-1"></div>
-                        <div class="pager-dot" id="dot-sup-2"></div>
-                    </div>
-                    <div class="pager-notice" id="notice-sup">⚠️ HAY MONTOS EN PÁG. 2</div>
-                </div>
-
                 <div class="contenedor-deslizable" id="swipeEfectivo" onscroll="handleScrollIndicators('swipeEfectivo', 'dot-sup-1', 'dot-sup-2')">
-                    <!-- Página 1: Estándar Limpia -->
+                    <!-- Página 1 -->
                     <div class="pagina-deslizable">
                         <div class="grid-2">
                             <input type="text" id="b1" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
                             <input type="text" id="b2" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
                         </div>
                     </div>
-                    <!-- Página 2: Rayado Vertical de Seguridad + Etiqueta -->
+                    <!-- Página 2: Con trama de seguridad y etiqueta al ras -->
                     <div class="pagina-deslizable pagina-secundaria">
                         <span class="badge-pagina-dos">PÁG. 2</span>
                         <div class="grid-2">
@@ -634,22 +627,19 @@
 
             <!-- PANEL INFERIOR: RECIBO POR PAGAR / EFECTIVO RETIRADO / EFECTIVO RECIBIDO -->
             <div class="panel-total tema-recibo-header" id="panelModoSecundario" onmousedown="gestionarCambioModo(event)" ontouchstart="gestionarCambioModo(event)">
-                <span id="lblTituloModo">RECIBO POR PAGAR</span>
+                <div class="panel-title-area">
+                    <span id="lblTituloModo">RECIBO POR PAGAR</span>
+                    <div class="header-dots">
+                        <div class="h-dot active" id="dot-inf-1"></div>
+                        <div class="h-dot" id="dot-inf-2"></div>
+                    </div>
+                </div>
                 <span id="lblRecibo">0.00</span>
             </div>
             
             <div class="caja-contenedor tema-recibo-bg" id="cajaInferiorContenedor">
-                <!-- Barra de Paginación Inferior -->
-                <div class="caja-pager-bar">
-                    <div class="pager-dots">
-                        <div class="pager-dot active" id="dot-inf-1"></div>
-                        <div class="pager-dot" id="dot-inf-2"></div>
-                    </div>
-                    <div class="pager-notice" id="notice-inf">⚠️ HAY MONTOS EN PÁG. 2</div>
-                </div>
-
                 <div class="contenedor-deslizable" id="swipeRecibo" onscroll="handleScrollIndicators('swipeRecibo', 'dot-inf-1', 'dot-inf-2')">
-                    <!-- Página 1: Estándar Limpia -->
+                    <!-- Página 1 -->
                     <div class="pagina-deslizable">
                         <div class="grid-2">
                             <input type="text" id="p1" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
@@ -658,7 +648,7 @@
                             <input type="text" id="p4" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
                         </div>
                     </div>
-                    <!-- Página 2: Rayado Vertical de Seguridad + Etiqueta -->
+                    <!-- Página 2: Con trama de seguridad y etiqueta al ras -->
                     <div class="pagina-deslizable pagina-secundaria">
                         <span class="badge-pagina-dos">PÁG. 2</span>
                         <div class="grid-2">
@@ -671,7 +661,7 @@
                 </div>
             </div>
 
-            <!-- PANEL INFORMATIVO DE RESULTADO (MENSAJES CLAROS Y AMIGABLES) -->
+            <!-- PANEL INFORMATIVO DE RESULTADO (VISIBLE Y PROTEGIDO DEL TECLADO) -->
             <div class="panel-resultado estado-esperando" id="panelFinal">
                 <div class="badge-operacion" id="badgeOperacion">PAGO DE SERVICIOS</div>
                 <div id="textoFinal">ESPERANDO MONTOS...</div>
@@ -776,7 +766,7 @@
             }
         }
 
-        // --- MANEJO DE INDICADORES DE DESLIZAMIENTO Y ALERTA DE DINERO OCULTO ---
+        // --- INDICADORES INTEGRADOS EN TÍTULO Y ALERTA SILENCIOSA DE DINERO OCULTO ---
         function handleScrollIndicators(scrollId, dot1Id, dot2Id) {
             const el = document.getElementById(scrollId);
             if (!el) return;
@@ -787,14 +777,14 @@
         }
 
         function actualizarAlertasDeOcultos() {
-            // Superior: b3 o b4 con valor y en página 1
+            // Superior: si está en pág 1 y hay datos en b3 o b4 -> dot 2 parpadea
             const swipeSup = document.getElementById('swipeEfectivo');
             const enPag1Sup = swipeSup.scrollLeft <= (swipeSup.clientWidth / 2);
             const hayPlataOcultaSup = (document.getElementById('b3').value.trim() !== '' || document.getElementById('b4').value.trim() !== '');
-            const noticeSup = document.getElementById('notice-sup');
-            noticeSup.classList.toggle('visible', enPag1Sup && hayPlataOcultaSup);
+            const dotSup2 = document.getElementById('dot-sup-2');
+            dotSup2.classList.toggle('warn-hidden', enPag1Sup && hayPlataOcultaSup);
 
-            // Inferior: p5, p6, p7 o p8 con valor y en página 1
+            // Inferior: si está en pág 1 y hay datos en p5..p8 -> dot 2 parpadea
             const swipeInf = document.getElementById('swipeRecibo');
             const enPag1Inf = swipeInf.scrollLeft <= (swipeInf.clientWidth / 2);
             const hayPlataOcultaInf = (
@@ -803,8 +793,8 @@
                 document.getElementById('p7').value.trim() !== '' ||
                 document.getElementById('p8').value.trim() !== ''
             );
-            const noticeInf = document.getElementById('notice-inf');
-            noticeInf.classList.toggle('visible', enPag1Inf && hayPlataOcultaInf);
+            const dotInf2 = document.getElementById('dot-inf-2');
+            dotInf2.classList.toggle('warn-hidden', enPag1Inf && hayPlataOcultaInf);
         }
 
         function gestionarCambioModo(event) {
@@ -1060,9 +1050,6 @@
             var texto = document.getElementById('textoFinal');
             var monto = document.getElementById('montoFinal');
 
-            // ============================================================
-            // MENSAJES AMIGABLES, CORTOS Y HUMANOS POR OPERACIÓN
-            // ============================================================
             if (modoOperacion === 'recibo') {
                 var diferencia = totalSuperior - totalInferior;
 
@@ -1161,7 +1148,6 @@
             datosDeposito = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
             cuadroVinculado = null;
             
-            // Regresar scrolls a página 1
             document.getElementById('swipeEfectivo').scrollTo({ left: 0, behavior: 'instant' });
             document.getElementById('swipeRecibo').scrollTo({ left: 0, behavior: 'instant' });
             
