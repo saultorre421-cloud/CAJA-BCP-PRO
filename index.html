@@ -285,10 +285,10 @@
         }
 
         /* =========================================
-           PANEL DE RESULTADO: AL RAS SUPERIOR Y ESPACIADO ÓPTIMO
+           PANEL DE RESULTADO: AL RAS SUPERIOR Y CÓMODO
            ========================================= */
         .panel-resultado { 
-            padding: 0 10px 8px 10px; /* Cero padding superior: la pastilla toca el tope exacto */
+            padding: 0 10px 8px 10px;
             border-radius: 12px; 
             text-align: center; 
             font-weight: bold; 
@@ -300,11 +300,10 @@
             overflow: hidden;
         }
 
-        /* La cápsula del título queda pegada al ras de la parte superior */
         .badge-operacion {
             display: inline-block;
             padding: 3px 16px;
-            border-radius: 0 0 10px 10px; /* Acople perfecto a la cornisa superior */
+            border-radius: 0 0 10px 10px;
             font-size: 12px;
             font-weight: 900;
             letter-spacing: 0.8px;
@@ -322,7 +321,7 @@
             line-height: 1.15;
             text-transform: uppercase;
             margin-top: 2px;
-            margin-bottom: 4px; /* Separación clara y no pegada al número */
+            margin-bottom: 4px;
         }
 
         .monto-final { 
@@ -504,7 +503,6 @@
 
     <div id="app-caja" class="main-app-container active-app">
         <div class="caja-wrapper">
-            <!-- CABECERA CAJA -->
             <div class="caja-header-row">
                 <button class="btn-limpiar-top" onmousedown="gestionarLimpiarCaja(event)" ontouchstart="gestionarLimpiarCaja(event)">🧹 LIMPIAR CAJA</button>
                 <div class="profile-toggle" id="btn-toggle-caja" style="border-color: #10b981;">
@@ -512,7 +510,6 @@
                 </div>
             </div>
 
-            <!-- PANEL SUPERIOR: EFECTIVO RECIBIDO / MONTO POR RETIRAR / MONTO A DEPOSITAR -->
             <div class="panel-total tema-recibo-header" id="panelSuperior" onmousedown="gestionarModoDeposito(event)" ontouchstart="gestionarModoDeposito(event)">
                 <span id="lblTituloSuperior">EFECTIVO RECIBIDO</span>
                 <span id="lblEfectivo">0.00</span>
@@ -535,7 +532,6 @@
                 </div>
             </div>
 
-            <!-- PANEL INFERIOR: RECIBO POR PAGAR / EFECTIVO RETIRADO / EFECTIVO RECIBIDO -->
             <div class="panel-total tema-recibo-header" id="panelModoSecundario" onmousedown="gestionarCambioModo(event)" ontouchstart="gestionarCambioModo(event)">
                 <span id="lblTituloModo">RECIBO POR PAGAR</span>
                 <span id="lblRecibo">0.00</span>
@@ -562,7 +558,6 @@
                 </div>
             </div>
 
-            <!-- PANEL INFORMATIVO DE RESULTADO AL RAS SUPERIOR Y CON RESPIRO ADECUADO -->
             <div class="panel-resultado estado-esperando" id="panelFinal">
                 <div class="badge-operacion" id="badgeOperacion">PAGO DE SERVICIOS</div>
                 <div id="textoFinal">ESPERANDO MONTOS...</div>
@@ -575,7 +570,6 @@
     <div id="app-multiplicador" class="main-app-container">
         <div class="multiplicador-wrapper">
             
-            <!-- CABECERA MULTIPLICADOR -->
             <div class="sticky-header">
                 <div class="header-left-controls">
                     <button class="btn-clear-compact" onmousedown="gestionarLimpiarMultiplicador(event)" ontouchstart="gestionarLimpiarMultiplicador(event)">
@@ -916,6 +910,9 @@
             var texto = document.getElementById('textoFinal');
             var monto = document.getElementById('montoFinal');
 
+            // ============================================================
+            // MENSAJES AMIGABLES, CORTOS Y HUMANOS POR OPERACIÓN
+            // ============================================================
             if (modoOperacion === 'recibo') {
                 var diferencia = totalSuperior - totalInferior;
 
@@ -927,17 +924,17 @@
                     texto.innerText = "EFECTIVO RECIBIDO"; monto.innerText = formatoSoles(totalSuperior);
                 } else if (totalInferior > 0 && totalSuperior === 0) {
                     panel.className = "panel-resultado estado-cobrar";
-                    texto.innerText = "POR COBRAR"; monto.innerText = formatoSoles(totalInferior);
+                    texto.innerText = "FALTA QUE TE PAGUE"; monto.innerText = formatoSoles(totalInferior);
                 } else {
                     if (diferencia < 0) {
                         panel.className = "panel-resultado estado-faltante";
-                        texto.innerText = "FALTANTE POR COBRAR"; monto.innerText = formatoSoles(Math.abs(diferencia));
+                        texto.innerText = "FALTA QUE TE PAGUE"; monto.innerText = formatoSoles(Math.abs(diferencia));
                     } else if (diferencia === 0) {
                         panel.className = "panel-resultado estado-exacto";
-                        texto.innerText = "PAGO EXACTO"; monto.innerText = formatoSoles(0);
+                        texto.innerText = "PAGO EXACTO CONFORME"; monto.innerText = formatoSoles(0);
                     } else {
                         panel.className = "panel-resultado estado-vuelto";
-                        texto.innerText = "VUELTO A ENTREGAR"; monto.innerText = formatoSoles(diferencia);
+                        texto.innerText = "VUELTO PARA EL CLIENTE"; monto.innerText = formatoSoles(diferencia);
                     }
                 }
             } else if (modoOperacion === 'retiro') {
@@ -946,24 +943,26 @@
                     texto.innerText = "ESPERANDO RETIRO..."; monto.innerText = "0.00";
                 } else if (totalInferior > 0 && totalSuperior === 0) {
                     panel.className = "panel-resultado estado-retiro";
-                    texto.innerText = "EFECTIVO ENTREGADO"; monto.innerText = formatoSoles(totalInferior);
+                    texto.innerText = "DINERO CONTADO EN MANO"; monto.innerText = formatoSoles(totalInferior);
                 } else if (totalSuperior > 0 && totalInferior === 0) {
                     panel.className = "panel-resultado estado-proceso";
-                    texto.innerText = "MONTO POR RETIRAR"; monto.innerText = formatoSoles(totalSuperior);
+                    texto.innerText = "MONTO POR ENTREGAR"; monto.innerText = formatoSoles(totalSuperior);
                 } else {
                     var difRetiro = totalSuperior - totalInferior;
                     if (difRetiro === 0) {
                         panel.className = "panel-resultado estado-exacto";
-                        texto.innerText = "RETIRO EXACTO"; monto.innerText = formatoSoles(0);
+                        texto.innerText = "MONTO EXACTO A ENTREGAR"; monto.innerText = formatoSoles(0);
                     } else if (difRetiro > 0) {
                         panel.className = "panel-resultado estado-faltante";
-                        texto.innerText = "FALTA COMPLETAR ENTREGA"; monto.innerText = formatoSoles(difRetiro);
+                        texto.innerText = "FALTA ENTREGAR AL CLIENTE"; monto.innerText = formatoSoles(difRetiro);
                     } else {
+                        // Alerta viva y protectora si te pasas contando billetes
                         panel.className = "panel-resultado estado-cobrar";
-                        texto.innerText = "RETIRO EXCEDIDO (SOBRANTE)"; monto.innerText = formatoSoles(Math.abs(difRetiro));
+                        texto.innerText = "¡CUIDADO! DAS DE MÁS"; monto.innerText = formatoSoles(Math.abs(difRetiro));
                     }
                 }
             } else {
+                // Modo Depósito
                 if (totalInferior === 0 && totalSuperior === 0) {
                     panel.className = "panel-resultado estado-esperando";
                     texto.innerText = "ESPERANDO DEPÓSITO..."; 
@@ -976,7 +975,7 @@
 
                 } else if (totalSuperior === 0 && totalInferior > 0) {
                     panel.className = "panel-resultado estado-deposito";
-                    texto.innerText = "EFECTIVO EN MANO CONTADO"; 
+                    texto.innerText = "DINERO CONTADO EN MANO"; 
                     monto.innerText = formatoSoles(totalInferior);
 
                 } else {
@@ -984,17 +983,17 @@
 
                     if (balanceDeposito === 0) {
                         panel.className = "panel-resultado estado-exacto";
-                        texto.innerText = "MONTO EXACTO RECIBIDO"; 
+                        texto.innerText = "DEPÓSITO EXACTO CONFORME"; 
                         monto.innerText = formatoSoles(0);
 
                     } else if (balanceDeposito > 0) {
                         panel.className = "panel-resultado estado-vuelto";
-                        texto.innerText = "VUELTO AL CLIENTE"; 
+                        texto.innerText = "VUELTO PARA EL CLIENTE"; 
                         monto.innerText = formatoSoles(balanceDeposito);
 
                     } else {
                         panel.className = "panel-resultado estado-faltante";
-                        texto.innerText = "FALTA RECIBIR DEL CLIENTE"; 
+                        texto.innerText = "FALTA QUE TE PAGUE"; 
                         monto.innerText = formatoSoles(Math.abs(balanceDeposito));
                     }
                 }
