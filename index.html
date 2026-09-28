@@ -205,7 +205,7 @@
 
         /* Contenedores con color de fondo envolvente unificado */
         .caja-contenedor { 
-            padding: 10px 8px 8px 8px; 
+            padding: 6px 8px 8px 8px; 
             border-radius: 0 0 12px 12px; 
             margin-bottom: 14px; 
             border-bottom: 3px solid; 
@@ -213,6 +213,7 @@
             border-right: 2px solid; 
             box-shadow: 0 3px 8px rgba(0,0,0,0.06); 
             transition: background-color 0.2s ease, border-color 0.2s ease;
+            position: relative;
         }
 
         .caja-contenedor.tema-recibo-bg {
@@ -228,6 +229,51 @@
             border-color: var(--retiro-caja-border);
         }
 
+        /* Barra de Paginación y Alerta de Contenido Oculto */
+        .caja-pager-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 4px 5px 4px;
+        }
+        .pager-dots {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .pager-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+        .pager-dot.active {
+            background-color: #0f172a;
+            transform: scale(1.25);
+        }
+        .pager-notice {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: none;
+            animation: pulseAlert 1.2s infinite;
+        }
+        .pager-notice.visible {
+            display: inline-block;
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #f87171;
+        }
+        @keyframes pulseAlert {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0.8; }
+        }
+
         .contenedor-deslizable {
             display: flex; 
             overflow-x: auto; 
@@ -238,7 +284,47 @@
             padding-bottom: 2px;
         }
         .contenedor-deslizable::-webkit-scrollbar { display: none; }
-        .pagina-deslizable { flex: 0 0 100%; scroll-snap-align: start; }
+        .pagina-deslizable { 
+            flex: 0 0 100%; 
+            scroll-snap-align: start; 
+            border-radius: 8px;
+            position: relative;
+        }
+
+        /* =========================================
+           DIFERENCIADOR VISUAL DE LA SEGUNDA PÁGINA:
+           LÍNEAS VERTICALES BLANCAS DE SEGURIDAD (TRAMADO)
+           ========================================= */
+        .pagina-deslizable.pagina-secundaria {
+            /* Patrón de líneas verticales semitransparentes que no ensucian ni alteran el tono de base */
+            background-image: repeating-linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.55),
+                rgba(255, 255, 255, 0.55) 6px,
+                transparent 6px,
+                transparent 14px
+            );
+            border: 1.5px dashed rgba(0, 0, 0, 0.25);
+            padding: 4px;
+        }
+
+        /* Pequeña etiqueta de esquina para confirmación instantánea */
+        .badge-pagina-dos {
+            position: absolute;
+            top: -7px;
+            right: 8px;
+            background-color: #0f172a;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 900;
+            padding: 1px 7px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            pointer-events: none;
+            z-index: 10;
+        }
+
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
         /* Cápsulas de entrada: Blanco níveo de alta visibilidad */
@@ -503,6 +589,7 @@
 
     <div id="app-caja" class="main-app-container active-app">
         <div class="caja-wrapper">
+            <!-- CABECERA CAJA -->
             <div class="caja-header-row">
                 <button class="btn-limpiar-top" onmousedown="gestionarLimpiarCaja(event)" ontouchstart="gestionarLimpiarCaja(event)">🧹 LIMPIAR CAJA</button>
                 <div class="profile-toggle" id="btn-toggle-caja" style="border-color: #10b981;">
@@ -510,20 +597,33 @@
                 </div>
             </div>
 
+            <!-- PANEL SUPERIOR: EFECTIVO RECIBIDO / MONTO POR RETIRAR / MONTO A DEPOSITAR -->
             <div class="panel-total tema-recibo-header" id="panelSuperior" onmousedown="gestionarModoDeposito(event)" ontouchstart="gestionarModoDeposito(event)">
                 <span id="lblTituloSuperior">EFECTIVO RECIBIDO</span>
                 <span id="lblEfectivo">0.00</span>
             </div>
             
             <div class="caja-contenedor tema-recibo-bg" id="cajaSuperiorContenedor">
-                <div class="contenedor-deslizable" id="swipeEfectivo">
+                <!-- Barra de Paginación Superior -->
+                <div class="caja-pager-bar">
+                    <div class="pager-dots">
+                        <div class="pager-dot active" id="dot-sup-1"></div>
+                        <div class="pager-dot" id="dot-sup-2"></div>
+                    </div>
+                    <div class="pager-notice" id="notice-sup">⚠️ HAY MONTOS EN PÁG. 2</div>
+                </div>
+
+                <div class="contenedor-deslizable" id="swipeEfectivo" onscroll="handleScrollIndicators('swipeEfectivo', 'dot-sup-1', 'dot-sup-2')">
+                    <!-- Página 1: Estándar Limpia -->
                     <div class="pagina-deslizable">
                         <div class="grid-2">
                             <input type="text" id="b1" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
                             <input type="text" id="b2" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
                         </div>
                     </div>
-                    <div class="pagina-deslizable">
+                    <!-- Página 2: Rayado Vertical de Seguridad + Etiqueta -->
+                    <div class="pagina-deslizable pagina-secundaria">
+                        <span class="badge-pagina-dos">PÁG. 2</span>
                         <div class="grid-2">
                             <input type="text" id="b3" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
                             <input type="text" id="b4" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
@@ -532,13 +632,24 @@
                 </div>
             </div>
 
+            <!-- PANEL INFERIOR: RECIBO POR PAGAR / EFECTIVO RETIRADO / EFECTIVO RECIBIDO -->
             <div class="panel-total tema-recibo-header" id="panelModoSecundario" onmousedown="gestionarCambioModo(event)" ontouchstart="gestionarCambioModo(event)">
                 <span id="lblTituloModo">RECIBO POR PAGAR</span>
                 <span id="lblRecibo">0.00</span>
             </div>
             
             <div class="caja-contenedor tema-recibo-bg" id="cajaInferiorContenedor">
-                <div class="contenedor-deslizable" id="swipeRecibo">
+                <!-- Barra de Paginación Inferior -->
+                <div class="caja-pager-bar">
+                    <div class="pager-dots">
+                        <div class="pager-dot active" id="dot-inf-1"></div>
+                        <div class="pager-dot" id="dot-inf-2"></div>
+                    </div>
+                    <div class="pager-notice" id="notice-inf">⚠️ HAY MONTOS EN PÁG. 2</div>
+                </div>
+
+                <div class="contenedor-deslizable" id="swipeRecibo" onscroll="handleScrollIndicators('swipeRecibo', 'dot-inf-1', 'dot-inf-2')">
+                    <!-- Página 1: Estándar Limpia -->
                     <div class="pagina-deslizable">
                         <div class="grid-2">
                             <input type="text" id="p1" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
@@ -547,7 +658,9 @@
                             <input type="text" id="p4" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
                         </div>
                     </div>
-                    <div class="pagina-deslizable">
+                    <!-- Página 2: Rayado Vertical de Seguridad + Etiqueta -->
+                    <div class="pagina-deslizable pagina-secundaria">
+                        <span class="badge-pagina-dos">PÁG. 2</span>
                         <div class="grid-2">
                             <input type="text" id="p5" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
                             <input type="text" id="p6" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
@@ -558,6 +671,7 @@
                 </div>
             </div>
 
+            <!-- PANEL INFORMATIVO DE RESULTADO (MENSAJES CLAROS Y AMIGABLES) -->
             <div class="panel-resultado estado-esperando" id="panelFinal">
                 <div class="badge-operacion" id="badgeOperacion">PAGO DE SERVICIOS</div>
                 <div id="textoFinal">ESPERANDO MONTOS...</div>
@@ -570,6 +684,7 @@
     <div id="app-multiplicador" class="main-app-container">
         <div class="multiplicador-wrapper">
             
+            <!-- CABECERA MULTIPLICADOR -->
             <div class="sticky-header">
                 <div class="header-left-controls">
                     <button class="btn-clear-compact" onmousedown="gestionarLimpiarMultiplicador(event)" ontouchstart="gestionarLimpiarMultiplicador(event)">
@@ -661,6 +776,37 @@
             }
         }
 
+        // --- MANEJO DE INDICADORES DE DESLIZAMIENTO Y ALERTA DE DINERO OCULTO ---
+        function handleScrollIndicators(scrollId, dot1Id, dot2Id) {
+            const el = document.getElementById(scrollId);
+            if (!el) return;
+            const esPagina2 = el.scrollLeft > (el.clientWidth / 2);
+            document.getElementById(dot1Id).classList.toggle('active', !esPagina2);
+            document.getElementById(dot2Id).classList.toggle('active', esPagina2);
+            actualizarAlertasDeOcultos();
+        }
+
+        function actualizarAlertasDeOcultos() {
+            // Superior: b3 o b4 con valor y en página 1
+            const swipeSup = document.getElementById('swipeEfectivo');
+            const enPag1Sup = swipeSup.scrollLeft <= (swipeSup.clientWidth / 2);
+            const hayPlataOcultaSup = (document.getElementById('b3').value.trim() !== '' || document.getElementById('b4').value.trim() !== '');
+            const noticeSup = document.getElementById('notice-sup');
+            noticeSup.classList.toggle('visible', enPag1Sup && hayPlataOcultaSup);
+
+            // Inferior: p5, p6, p7 o p8 con valor y en página 1
+            const swipeInf = document.getElementById('swipeRecibo');
+            const enPag1Inf = swipeInf.scrollLeft <= (swipeInf.clientWidth / 2);
+            const hayPlataOcultaInf = (
+                document.getElementById('p5').value.trim() !== '' ||
+                document.getElementById('p6').value.trim() !== '' ||
+                document.getElementById('p7').value.trim() !== '' ||
+                document.getElementById('p8').value.trim() !== ''
+            );
+            const noticeInf = document.getElementById('notice-inf');
+            noticeInf.classList.toggle('visible', enPag1Inf && hayPlataOcultaInf);
+        }
+
         function gestionarCambioModo(event) {
             event.preventDefault();
             guardarValoresPanelSecundario();
@@ -675,6 +821,7 @@
             restaurarValoresPanelSecundario();
             reaplicarEstiloSincronizacion();
             calcularTodo();
+            actualizarAlertasDeOcultos();
             enfocarSiguienteInputVisible('app-caja');
         }
 
@@ -692,6 +839,7 @@
             restaurarValoresPanelSecundario();
             reaplicarEstiloSincronizacion();
             calcularTodo();
+            actualizarAlertasDeOcultos();
             enfocarSiguienteInputVisible('app-caja');
         }
 
@@ -754,6 +902,7 @@
 
             if (appId === 'app-caja') {
                 reaplicarEstiloSincronizacion();
+                actualizarAlertasDeOcultos();
             }
         }
 
@@ -893,6 +1042,7 @@
             formatInput(input); 
             guardarValoresPanelSecundario();
             calcularTodo(); 
+            actualizarAlertasDeOcultos();
         }
 
         function calcularTodo() {
@@ -956,7 +1106,6 @@
                         panel.className = "panel-resultado estado-faltante";
                         texto.innerText = "FALTA ENTREGAR AL CLIENTE"; monto.innerText = formatoSoles(difRetiro);
                     } else {
-                        // Alerta viva y protectora si te pasas contando billetes
                         panel.className = "panel-resultado estado-cobrar";
                         texto.innerText = "¡CUIDADO! DAS DE MÁS"; monto.innerText = formatoSoles(Math.abs(difRetiro));
                     }
@@ -1011,6 +1160,17 @@
             datosRetiro = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
             datosDeposito = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
             cuadroVinculado = null;
+            
+            // Regresar scrolls a página 1
+            document.getElementById('swipeEfectivo').scrollTo({ left: 0, behavior: 'instant' });
+            document.getElementById('swipeRecibo').scrollTo({ left: 0, behavior: 'instant' });
+            
+            document.getElementById('dot-sup-1').classList.add('active');
+            document.getElementById('dot-sup-2').classList.remove('active');
+            document.getElementById('dot-inf-1').classList.add('active');
+            document.getElementById('dot-inf-2').classList.remove('active');
+
+            actualizarAlertasDeOcultos();
             calcularTodo();
         }
 
@@ -1147,6 +1307,7 @@
                 }
             }
             calcularTodo(); 
+            actualizarAlertasDeOcultos();
         }
     </script>
 </body>
