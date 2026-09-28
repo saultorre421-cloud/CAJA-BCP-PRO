@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>Sistema Ágil Integrado</title>
+    <title>Sistema Ágil Integrado - Agente BCP</title>
     <style>
         /* =========================================
            VARIABLES Y ESTILOS GLOBALES
@@ -17,10 +17,9 @@
             --text-muted: #666666;
             --border-color: #E2E8F0;
             --danger-color: #D32F2F;
-            --app-bg: #f3f4f6;
-            --retiro-accent: #E11D48;
+            --app-bg: #f1f5f9;
 
-            /* Tonos de intensidad intermedia (claramente visibles en pantalla móvil) */
+            /* Multiplicador */
             --bg-billetes: #dcfce7;
             --border-billetes: #86efac;
             --accent-billetes: #059669;
@@ -28,6 +27,27 @@
             --bg-monedas: #fef08a;
             --border-monedas: #fde047;
             --accent-monedas: #d97706;
+
+            /* =========================================
+               SISTEMA DE COLORES UNIFICADO POR OPERACIÓN
+               ========================================= */
+            /* 1. MODO RECIBO / PAGO DE SERVICIOS (AMARILLO / ÁMBAR) */
+            --recibo-header: #eab308;
+            --recibo-header-text: #000000;
+            --recibo-caja-bg: #fef9c3;
+            --recibo-caja-border: #facc15;
+
+            /* 2. MODO DEPÓSITO EN CUENTA (VERDE ESMERALDA / TEAL) */
+            --deposito-header: #0d9488;
+            --deposito-header-text: #ffffff;
+            --deposito-caja-bg: #ccfbf1;
+            --deposito-caja-border: #2dd4bf;
+
+            /* 3. MODO RETIRO EN EFECTIVO (ROJO RUBÍ BCP) */
+            --retiro-header: #e11d48;
+            --retiro-header-text: #ffffff;
+            --retiro-caja-bg: #ffe4e6;
+            --retiro-caja-border: #fb7185;
         }
 
         * {
@@ -120,7 +140,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             gap: 12px;
         }
 
@@ -146,88 +166,182 @@
             transform: scale(0.98); 
         }
 
+        /* Paneles interactivos de totales */
         .panel-total { 
-            display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; 
-            border-radius: 8px; font-size: 22px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 11px 14px; 
+            border-radius: 10px 10px 0 0; 
+            font-size: 18px; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            box-shadow: 0 3px 6px rgba(0,0,0,0.12);
             user-select: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.05s, color 0.2s ease;
         }
+        .panel-total:active { transform: scale(0.99); }
         
         .panel-total span:nth-child(2) {
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 900;
             letter-spacing: -0.5px;
         }
 
-        .total-efectivo { 
-            background-color: #2563eb; 
-            color: white; 
-            transition: background-color 0.2s;
-        } 
-        
-        .total-meta-retiro {
-            background-color: #0284c7;
-            color: white;
-            transition: background-color 0.2s;
+        /* Clases cromáticas unificadas para cabeceras */
+        .tema-recibo-header { 
+            background-color: var(--recibo-header) !important; 
+            color: var(--recibo-header-text) !important; 
+        }
+        .tema-deposito-header { 
+            background-color: var(--deposito-header) !important; 
+            color: var(--deposito-header-text) !important; 
+        }
+        .tema-retiro-header { 
+            background-color: var(--retiro-header) !important; 
+            color: var(--retiro-header-text) !important; 
         }
 
-        .total-recibo { 
-            background-color: #facc15; 
-            color: #000; 
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.05s;
+        /* Contenedores con color de fondo envolvente unificado */
+        .caja-contenedor { 
+            padding: 10px 8px 8px 8px; 
+            border-radius: 0 0 12px 12px; 
+            margin-bottom: 14px; 
+            border-bottom: 3px solid; 
+            border-left: 2px solid; 
+            border-right: 2px solid; 
+            box-shadow: 0 3px 8px rgba(0,0,0,0.06); 
+            transition: background-color 0.2s ease, border-color 0.2s ease;
         }
-        .total-recibo:active { transform: scale(0.99); }
 
-        .total-retiro { 
-            background-color: var(--retiro-accent); 
-            color: #ffffff; 
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.05s;
+        .caja-contenedor.tema-recibo-bg {
+            background-color: var(--recibo-caja-bg);
+            border-color: var(--recibo-caja-border);
         }
-        .total-retiro:active { transform: scale(0.99); }
-
-        .caja { padding: 8px; border-radius: 8px; margin-bottom: 15px; border: 2px solid #e5e7eb; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .caja-contenedor.tema-deposito-bg {
+            background-color: var(--deposito-caja-bg);
+            border-color: var(--deposito-caja-border);
+        }
+        .caja-contenedor.tema-retiro-bg {
+            background-color: var(--retiro-caja-bg);
+            border-color: var(--retiro-caja-border);
+        }
 
         .contenedor-deslizable {
-            display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px;
-            scrollbar-width: none; -ms-overflow-style: none;
-            padding-bottom: 5px;
+            display: flex; 
+            overflow-x: auto; 
+            scroll-snap-type: x mandatory; 
+            gap: 12px;
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+            padding-bottom: 2px;
         }
         .contenedor-deslizable::-webkit-scrollbar { display: none; }
         .pagina-deslizable { flex: 0 0 100%; scroll-snap-align: start; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-        .caja input { 
-            width: 100%; height: 50px; font-size: 34px; font-weight: 800; border: 2px solid #cbd5e1; 
-            border-radius: 6px; box-sizing: border-box; text-align: center; color: #0f172a; 
+        /* Cápsulas de entrada: Blanco níveo de alta visibilidad */
+        .caja-contenedor input { 
+            width: 100%; 
+            height: 52px; 
+            font-size: 34px; 
+            font-weight: 900; 
+            border: 2px solid #94a3b8; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            text-align: center; 
+            color: #0f172a; 
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
             transition: border-color 0.2s, background-color 0.2s, color 0.2s;
         }
-        .caja input:focus { outline: none; border-color: var(--bcp-blue); background-color: #f8fafc; }
-        .caja input::placeholder { color: #94a3b8; font-size: 18px; font-weight: normal; }
-
-        /* MARCAS DE SINCRONIZACIÓN PERSISTENTES */
-        .caja input.active-sync {
-            background-color: #E8EEF9 !important; 
-            border: 2px dashed var(--bcp-blue) !important; 
-            color: var(--bcp-blue) !important;
+        .caja-contenedor input:focus { 
+            outline: none; 
+            border-color: var(--bcp-orange); 
+            background-color: #ffffff; 
         }
-        .caja input.active-sync-retiro {
-            background-color: #FFE4E6 !important; 
-            border: 2px dashed var(--retiro-accent) !important; 
-            color: var(--retiro-accent) !important;
+        .caja-contenedor input::placeholder { 
+            color: #94a3b8; 
+            font-size: 18px; 
+            font-weight: normal; 
         }
 
-        .panel-resultado { padding: 15px 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 10px; border: 3px solid; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05);}
-        .estado-esperando { background-color: #f3f4f6; border-color: #d1d5db; color: #6b7280; }
+        /* Resaltados de Sincronización Automática */
+        .caja-contenedor input.active-sync {
+            background-color: #fefce8 !important; 
+            border: 2px dashed #ca8a04 !important; 
+            color: #854d0e !important;
+        }
+        .caja-contenedor input.active-sync-deposito {
+            background-color: #f0fdfa !important; 
+            border: 2px dashed #0d9488 !important; 
+            color: #0f766e !important;
+        }
+        .caja-contenedor input.active-sync-retiro {
+            background-color: #fff1f2 !important; 
+            border: 2px dashed var(--retiro-header) !important; 
+            color: var(--retiro-header) !important;
+        }
+
+        /* =========================================
+           PANEL DE RESULTADO: AL RAS SUPERIOR Y ESPACIADO ÓPTIMO
+           ========================================= */
+        .panel-resultado { 
+            padding: 0 10px 8px 10px; /* Cero padding superior: la pastilla toca el tope exacto */
+            border-radius: 12px; 
+            text-align: center; 
+            font-weight: bold; 
+            margin-bottom: 6px; 
+            border: 3px solid; 
+            transition: all 0.2s; 
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* La cápsula del título queda pegada al ras de la parte superior */
+        .badge-operacion {
+            display: inline-block;
+            padding: 3px 16px;
+            border-radius: 0 0 10px 10px; /* Acople perfecto a la cornisa superior */
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-top: 0;
+            margin-bottom: 6px;
+            background: rgba(0, 0, 0, 0.11);
+            line-height: 1.2;
+        }
+
+        #textoFinal {
+            font-size: clamp(17px, 4.5vw, 22px);
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            line-height: 1.15;
+            text-transform: uppercase;
+            margin-top: 2px;
+            margin-bottom: 4px; /* Separación clara y no pegada al número */
+        }
+
+        .monto-final { 
+            display: block; 
+            font-size: clamp(56px, 14vw, 72px); 
+            font-weight: 900; 
+            margin-top: 2px; 
+            line-height: 0.98; 
+            letter-spacing: -2px;
+        }
+
+        .estado-esperando { background-color: #f8fafc; border-color: #cbd5e1; color: #475569; }
         .estado-proceso { background-color: #f3e8ff; border-color: #9333ea; color: #7e22ce; }
         .estado-cobrar { background-color: #ffedd5; border-color: #ea580c; color: #c2410c; }
         .estado-vuelto { background-color: #e0f2fe; border-color: #0284c7; color: #0369a1; }
         .estado-faltante { background-color: #fee2e2; border-color: #dc2626; color: #b91c1c; }
-        .estado-exacto { background-color: #dcfce3; border-color: #16a34a; color: #15803d; }
-        .estado-retiro { background-color: #FFF1F2; border-color: var(--retiro-accent); color: #9F1239; }
-        
-        .monto-final { display: block; font-size: 48px; font-weight: 900; margin-top: 4px; line-height: 1; letter-spacing: -1px;}
+        .estado-exacto { background-color: #dcfce7; border-color: #16a34a; color: #15803d; }
+        .estado-retiro { background-color: #FFF1F2; border-color: var(--retiro-header); color: #9F1239; }
+        .estado-deposito { background-color: #ccfbf1; border-color: var(--deposito-header); color: #0f766e; }
 
         /* =========================================
            MULTIPLICADOR
@@ -285,7 +399,6 @@
             touch-action: manipulation;
         }
         
-        /* Acentos visuales para las pestañas de selección */
         .sub-tab-btn#tab-btn-billetes.active {
             color: #065f46;
             background-color: #d1fae5;
@@ -303,7 +416,6 @@
         .view-content { display: none; padding: 15px; max-width: 500px; margin: 0 auto; }
         .view-content.active { display: block; animation: fadeInScreen 0.2s; }
 
-        /* Contenedores con color de fondo intermedio y bordes de delimitación claros */
         #tab-billetes {
             background-color: var(--bg-billetes);
             border-bottom: 3px solid var(--border-billetes);
@@ -320,7 +432,6 @@
             border-radius: 0 0 16px 16px;
         }
 
-        /* Cápsulas blancas con contraste limpio */
         .item-card {
             background: var(--card-bg); 
             border-radius: 10px; 
@@ -401,13 +512,13 @@
                 </div>
             </div>
 
-            <!-- PANEL SUPERIOR: EFECTIVO / MONTO POR RETIRAR -->
-            <div class="panel-total total-efectivo" id="panelSuperior">
-                <span id="lblTituloSuperior">EFECTIVO</span>
+            <!-- PANEL SUPERIOR: EFECTIVO RECIBIDO / MONTO POR RETIRAR / MONTO A DEPOSITAR -->
+            <div class="panel-total tema-recibo-header" id="panelSuperior" onmousedown="gestionarModoDeposito(event)" ontouchstart="gestionarModoDeposito(event)">
+                <span id="lblTituloSuperior">EFECTIVO RECIBIDO</span>
                 <span id="lblEfectivo">0.00</span>
             </div>
             
-            <div class="caja">
+            <div class="caja-contenedor tema-recibo-bg" id="cajaSuperiorContenedor">
                 <div class="contenedor-deslizable" id="swipeEfectivo">
                     <div class="pagina-deslizable">
                         <div class="grid-2">
@@ -424,13 +535,13 @@
                 </div>
             </div>
 
-            <!-- PANEL SECUNDARIO INTERACTIVO (RECIBO / RETIRO) -->
-            <div class="panel-total total-recibo" id="panelModoSecundario" onmousedown="gestionarCambioModo(event)" ontouchstart="gestionarCambioModo(event)">
-                <span id="lblTituloModo">RECIBO</span>
+            <!-- PANEL INFERIOR: RECIBO POR PAGAR / EFECTIVO RETIRADO / EFECTIVO RECIBIDO -->
+            <div class="panel-total tema-recibo-header" id="panelModoSecundario" onmousedown="gestionarCambioModo(event)" ontouchstart="gestionarCambioModo(event)">
+                <span id="lblTituloModo">RECIBO POR PAGAR</span>
                 <span id="lblRecibo">0.00</span>
             </div>
             
-            <div class="caja">
+            <div class="caja-contenedor tema-recibo-bg" id="cajaInferiorContenedor">
                 <div class="contenedor-deslizable" id="swipeRecibo">
                     <div class="pagina-deslizable">
                         <div class="grid-2">
@@ -451,8 +562,10 @@
                 </div>
             </div>
 
+            <!-- PANEL INFORMATIVO DE RESULTADO AL RAS SUPERIOR Y CON RESPIRO ADECUADO -->
             <div class="panel-resultado estado-esperando" id="panelFinal">
-                <span id="textoFinal" style="font-size: 16px; letter-spacing: 1px;">ESPERANDO...</span>
+                <div class="badge-operacion" id="badgeOperacion">PAGO DE SERVICIOS</div>
+                <div id="textoFinal">ESPERANDO MONTOS...</div>
                 <span class="monto-final" id="montoFinal">0.00</span>
             </div>
         </div>
@@ -498,36 +611,90 @@
     <script>
         const formatoSoles = (num) => num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
-        // --- CONTROL DE MODO DUAL (RECIBO / RETIRO) E INDEPENDENCIA DE DATOS ---
-        let modoSecundario = 'recibo'; // 'recibo' o 'retiro'
+        // --- CONTROL DE MODOS E INDEPENDENCIA DE DATOS ---
+        let modoOperacion = 'recibo'; 
         let datosRecibo = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
         let datosRetiro = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
+        let datosDeposito = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
 
-        function gestionarCambioModo(event) {
-            event.preventDefault();
-            guardarValoresPanelSecundario();
-
+        function actualizarEstiloVisualModo() {
             const panelSecundario = document.getElementById('panelModoSecundario');
             const tituloSecundario = document.getElementById('lblTituloModo');
             const panelSuperior = document.getElementById('panelSuperior');
             const tituloSuperior = document.getElementById('lblTituloSuperior');
 
-            if (modoSecundario === 'recibo') {
-                modoSecundario = 'retiro';
-                panelSecundario.className = 'panel-total total-retiro';
-                tituloSecundario.innerText = 'RETIRO';
+            const cajaSup = document.getElementById('cajaSuperiorContenedor');
+            const cajaInf = document.getElementById('cajaInferiorContenedor');
+            const badge = document.getElementById('badgeOperacion');
 
-                panelSuperior.className = 'panel-total total-meta-retiro';
+            panelSuperior.className = 'panel-total';
+            panelSecundario.className = 'panel-total';
+            cajaSup.className = 'caja-contenedor';
+            cajaInf.className = 'caja-contenedor';
+
+            if (modoOperacion === 'recibo') {
+                panelSuperior.classList.add('tema-recibo-header');
+                tituloSuperior.innerText = 'EFECTIVO RECIBIDO';
+                cajaSup.classList.add('tema-recibo-bg');
+
+                panelSecundario.classList.add('tema-recibo-header');
+                tituloSecundario.innerText = 'RECIBO POR PAGAR';
+                cajaInf.classList.add('tema-recibo-bg');
+
+                badge.innerText = 'PAGO DE SERVICIOS / RECIBO';
+
+            } else if (modoOperacion === 'retiro') {
+                panelSuperior.classList.add('tema-retiro-header');
                 tituloSuperior.innerText = 'MONTO POR RETIRAR';
-            } else {
-                modoSecundario = 'recibo';
-                panelSecundario.className = 'panel-total total-recibo';
-                tituloSecundario.innerText = 'RECIBO';
+                cajaSup.classList.add('tema-retiro-bg');
 
-                panelSuperior.className = 'panel-total total-efectivo';
-                tituloSuperior.innerText = 'EFECTIVO';
+                panelSecundario.classList.add('tema-retiro-header');
+                tituloSecundario.innerText = 'EFECTIVO RETIRADO';
+                cajaInf.classList.add('tema-retiro-bg');
+
+                badge.innerText = 'RETIRO EN EFECTIVO';
+
+            } else if (modoOperacion === 'deposito') {
+                panelSuperior.classList.add('tema-deposito-header');
+                tituloSuperior.innerText = 'MONTO A DEPOSITAR';
+                cajaSup.classList.add('tema-deposito-bg');
+
+                panelSecundario.classList.add('tema-deposito-header');
+                tituloSecundario.innerText = 'EFECTIVO RECIBIDO';
+                cajaInf.classList.add('tema-deposito-bg');
+
+                badge.innerText = 'DEPÓSITO EN CUENTA';
+            }
+        }
+
+        function gestionarCambioModo(event) {
+            event.preventDefault();
+            guardarValoresPanelSecundario();
+
+            if (modoOperacion === 'recibo') {
+                modoOperacion = 'retiro';
+            } else {
+                modoOperacion = 'recibo';
             }
 
+            actualizarEstiloVisualModo();
+            restaurarValoresPanelSecundario();
+            reaplicarEstiloSincronizacion();
+            calcularTodo();
+            enfocarSiguienteInputVisible('app-caja');
+        }
+
+        function gestionarModoDeposito(event) {
+            event.preventDefault();
+            guardarValoresPanelSecundario();
+
+            if (modoOperacion === 'deposito') {
+                modoOperacion = 'recibo';
+            } else {
+                modoOperacion = 'deposito';
+            }
+
+            actualizarEstiloVisualModo();
             restaurarValoresPanelSecundario();
             reaplicarEstiloSincronizacion();
             calcularTodo();
@@ -535,14 +702,22 @@
         }
 
         function guardarValoresPanelSecundario() {
-            const destino = (modoSecundario === 'recibo') ? datosRecibo : datosRetiro;
+            let destino;
+            if (modoOperacion === 'recibo') destino = datosRecibo;
+            else if (modoOperacion === 'retiro') destino = datosRetiro;
+            else destino = datosDeposito;
+
             for (let i = 1; i <= 8; i++) {
                 destino['p' + i] = document.getElementById('p' + i).value;
             }
         }
 
         function restaurarValoresPanelSecundario() {
-            const origen = (modoSecundario === 'recibo') ? datosRecibo : datosRetiro;
+            let origen;
+            if (modoOperacion === 'recibo') origen = datosRecibo;
+            else if (modoOperacion === 'retiro') origen = datosRetiro;
+            else origen = datosDeposito;
+
             for (let i = 1; i <= 8; i++) {
                 let el = document.getElementById('p' + i);
                 el.value = origen['p' + i] || '';
@@ -550,10 +725,9 @@
             }
         }
 
-        // --- GESTIÓN PERSISTENTE DE SELECCIÓN Y MARCA DE MULTIPLICADOR ---
         function reaplicarEstiloSincronizacion() {
             document.querySelectorAll('#app-caja input').forEach(input => {
-                input.classList.remove('active-sync', 'active-sync-retiro');
+                input.classList.remove('active-sync', 'active-sync-retiro', 'active-sync-deposito');
                 input.readOnly = false;
             });
 
@@ -561,12 +735,16 @@
                 const el = document.getElementById(cuadroVinculado);
                 if (el) {
                     const esSecundario = cuadroVinculado.startsWith('p');
-                    if (esSecundario && modoSecundario === 'recibo') {
+                    if (esSecundario && modoOperacion === 'recibo') {
                         return;
                     }
 
                     if (cuadroVinculado.startsWith('p')) {
-                        el.classList.add('active-sync-retiro');
+                        if (modoOperacion === 'deposito') {
+                            el.classList.add('active-sync-deposito');
+                        } else {
+                            el.classList.add('active-sync-retiro');
+                        }
                     } else {
                         el.classList.add('active-sync');
                     }
@@ -575,7 +753,6 @@
             }
         }
 
-        // --- NAVEGACIÓN PRINCIPAL ---
         function switchMainApp(appId) {
             document.querySelectorAll('.main-app-container').forEach(screen => screen.classList.remove('active-app'));
             document.getElementById(appId).classList.add('active-app');
@@ -586,11 +763,10 @@
             }
         }
 
-        // --- MANEJO DEL FOCO Y TECLADO VIVO ---
         function enfocarSiguienteInputVisible(containerId) {
             let selector = `#${containerId} input:not([readonly])`;
 
-            if (containerId === 'app-caja' && modoSecundario === 'retiro') {
+            if (containerId === 'app-caja' && (modoOperacion === 'retiro' || modoOperacion === 'deposito')) {
                 selector = `#swipeRecibo input:not([readonly])`;
             }
 
@@ -634,7 +810,6 @@
             changeQty(type, denom, delta);
         }
 
-        // --- GESTOS Y BOTONES TOGGLE ---
         let startX = 0;
         let startY = 0;
 
@@ -702,7 +877,6 @@
         setupProfileToggle('btn-toggle-caja');
         setupProfileToggle('btn-toggle-multi');
 
-        // --- CÁLCULOS INTEGRADOS (MODO RECIBO VS RETIRO) ---
         const getVal = (id) => parseFloat(document.getElementById(id).value.replace(/,/g, '')) || 0;
 
         function formatInput(input) {
@@ -742,22 +916,22 @@
             var texto = document.getElementById('textoFinal');
             var monto = document.getElementById('montoFinal');
 
-            if (modoSecundario === 'recibo') {
+            if (modoOperacion === 'recibo') {
                 var diferencia = totalSuperior - totalInferior;
 
                 if (totalInferior === 0 && totalSuperior === 0) {
                     panel.className = "panel-resultado estado-esperando";
-                    texto.innerText = "ESPERANDO..."; monto.innerText = "0.00";
+                    texto.innerText = "ESPERANDO MONTOS..."; monto.innerText = "0.00";
                 } else if (totalInferior === 0 && totalSuperior > 0) {
                     panel.className = "panel-resultado estado-proceso";
-                    texto.innerText = "DEPÓSITO / EN PROCESO"; monto.innerText = formatoSoles(totalSuperior);
+                    texto.innerText = "EFECTIVO RECIBIDO"; monto.innerText = formatoSoles(totalSuperior);
                 } else if (totalInferior > 0 && totalSuperior === 0) {
                     panel.className = "panel-resultado estado-cobrar";
                     texto.innerText = "POR COBRAR"; monto.innerText = formatoSoles(totalInferior);
                 } else {
                     if (diferencia < 0) {
                         panel.className = "panel-resultado estado-faltante";
-                        texto.innerText = "FALTANTE"; monto.innerText = formatoSoles(Math.abs(diferencia));
+                        texto.innerText = "FALTANTE POR COBRAR"; monto.innerText = formatoSoles(Math.abs(diferencia));
                     } else if (diferencia === 0) {
                         panel.className = "panel-resultado estado-exacto";
                         texto.innerText = "PAGO EXACTO"; monto.innerText = formatoSoles(0);
@@ -766,13 +940,13 @@
                         texto.innerText = "VUELTO A ENTREGAR"; monto.innerText = formatoSoles(diferencia);
                     }
                 }
-            } else {
+            } else if (modoOperacion === 'retiro') {
                 if (totalInferior === 0 && totalSuperior === 0) {
                     panel.className = "panel-resultado estado-esperando";
-                    texto.innerText = "ESPERANDO..."; monto.innerText = "0.00";
+                    texto.innerText = "ESPERANDO RETIRO..."; monto.innerText = "0.00";
                 } else if (totalInferior > 0 && totalSuperior === 0) {
                     panel.className = "panel-resultado estado-retiro";
-                    texto.innerText = "RETIRO POR ENTREGAR"; monto.innerText = formatoSoles(totalInferior);
+                    texto.innerText = "EFECTIVO ENTREGADO"; monto.innerText = formatoSoles(totalInferior);
                 } else if (totalSuperior > 0 && totalInferior === 0) {
                     panel.className = "panel-resultado estado-proceso";
                     texto.innerText = "MONTO POR RETIRAR"; monto.innerText = formatoSoles(totalSuperior);
@@ -783,10 +957,45 @@
                         texto.innerText = "RETIRO EXACTO"; monto.innerText = formatoSoles(0);
                     } else if (difRetiro > 0) {
                         panel.className = "panel-resultado estado-faltante";
-                        texto.innerText = "FALTA COMPLETAR"; monto.innerText = formatoSoles(difRetiro);
+                        texto.innerText = "FALTA COMPLETAR ENTREGA"; monto.innerText = formatoSoles(difRetiro);
                     } else {
                         panel.className = "panel-resultado estado-cobrar";
-                        texto.innerText = "RETIRO EXCEDIDO"; monto.innerText = formatoSoles(Math.abs(difRetiro));
+                        texto.innerText = "RETIRO EXCEDIDO (SOBRANTE)"; monto.innerText = formatoSoles(Math.abs(difRetiro));
+                    }
+                }
+            } else {
+                if (totalInferior === 0 && totalSuperior === 0) {
+                    panel.className = "panel-resultado estado-esperando";
+                    texto.innerText = "ESPERANDO DEPÓSITO..."; 
+                    monto.innerText = "0.00";
+
+                } else if (totalSuperior > 0 && totalInferior === 0) {
+                    panel.className = "panel-resultado estado-exacto";
+                    texto.innerText = "DEPÓSITO DIRECTO (SIN VUELTO)"; 
+                    monto.innerText = formatoSoles(totalSuperior);
+
+                } else if (totalSuperior === 0 && totalInferior > 0) {
+                    panel.className = "panel-resultado estado-deposito";
+                    texto.innerText = "EFECTIVO EN MANO CONTADO"; 
+                    monto.innerText = formatoSoles(totalInferior);
+
+                } else {
+                    var balanceDeposito = totalInferior - totalSuperior;
+
+                    if (balanceDeposito === 0) {
+                        panel.className = "panel-resultado estado-exacto";
+                        texto.innerText = "MONTO EXACTO RECIBIDO"; 
+                        monto.innerText = formatoSoles(0);
+
+                    } else if (balanceDeposito > 0) {
+                        panel.className = "panel-resultado estado-vuelto";
+                        texto.innerText = "VUELTO AL CLIENTE"; 
+                        monto.innerText = formatoSoles(balanceDeposito);
+
+                    } else {
+                        panel.className = "panel-resultado estado-faltante";
+                        texto.innerText = "FALTA RECIBIR DEL CLIENTE"; 
+                        monto.innerText = formatoSoles(Math.abs(balanceDeposito));
                     }
                 }
             }
@@ -796,16 +1005,16 @@
             clearAllData(); 
             document.querySelectorAll('#app-caja input').forEach(i => { 
                 i.value = ''; 
-                i.classList.remove('active-sync', 'active-sync-retiro');
+                i.classList.remove('active-sync', 'active-sync-retiro', 'active-sync-deposito');
                 i.readOnly = false;
             });
             datosRecibo = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
             datosRetiro = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
+            datosDeposito = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
             cuadroVinculado = null;
             calcularTodo();
         }
 
-        // --- LÓGICA DEL MULTIPLICADOR CON SINCRONIZACIÓN PERSISTENTE ---
         const denominacionesBilletes = [200, 100, 50, 20, 10];
         const denominacionesMonedas = [5.00, 2.00, 1.00, 0.50, 0.20, 0.10];
         let cantidadesBilletes = {}; let cantidadesMonedas = {};
@@ -887,7 +1096,7 @@
             document.getElementById('txtGranTotal').innerHTML = soloNumero;
 
             if(granTotalNumerico > 0) {
-                const listaOpciones = (modoSecundario === 'retiro') 
+                const listaOpciones = (modoOperacion === 'retiro' || modoOperacion === 'deposito') 
                     ? ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8'] 
                     : ['b1', 'b2', 'b3', 'b4'];
 
@@ -895,7 +1104,7 @@
                     if (cuadroVinculado) {
                         let prev = document.getElementById(cuadroVinculado);
                         if (prev) {
-                            prev.classList.remove('active-sync', 'active-sync-retiro');
+                            prev.classList.remove('active-sync', 'active-sync-retiro', 'active-sync-deposito');
                             prev.readOnly = false;
                         }
                     }
@@ -914,8 +1123,10 @@
                 targetInput.value = granTotalNumerico.toFixed(2);
                 formatInput(targetInput);
                 
-                if (modoSecundario === 'retiro') {
+                if (modoOperacion === 'retiro') {
                     datosRetiro[cuadroVinculado] = targetInput.value;
+                } else if (modoOperacion === 'deposito') {
+                    datosDeposito[cuadroVinculado] = targetInput.value;
                 }
 
                 reaplicarEstiloSincronizacion();
@@ -925,11 +1136,13 @@
                     let targetInput = document.getElementById(cuadroVinculado);
                     if (targetInput) {
                         targetInput.value = '';
-                        targetInput.classList.remove('active-sync', 'active-sync-retiro');
+                        targetInput.classList.remove('active-sync', 'active-sync-retiro', 'active-sync-deposito');
                         targetInput.readOnly = false;
                     }
-                    if (modoSecundario === 'retiro') {
+                    if (modoOperacion === 'retiro') {
                         datosRetiro[cuadroVinculado] = '';
+                    } else if (modoOperacion === 'deposito') {
+                        datosDeposito[cuadroVinculado] = '';
                     }
                     cuadroVinculado = null;
                 }
