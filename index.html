@@ -597,16 +597,16 @@
                         <!-- Página 1 -->
                         <div class="pagina-deslizable">
                             <div class="grid-2">
-                                <input type="text" id="b1" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
-                                <input type="text" id="b2" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b1" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b2" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                             </div>
                         </div>
                         <!-- Página 2 -->
                         <div class="pagina-deslizable pagina-secundaria">
                             <span class="badge-pagina-dos">PÁG. 2</span>
                             <div class="grid-2">
-                                <input type="text" id="b3" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
-                                <input type="text" id="b4" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b3" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b4" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                             </div>
                         </div>
                     </div>
@@ -629,20 +629,20 @@
                         <!-- Página 1 -->
                         <div class="pagina-deslizable">
                             <div class="grid-2">
-                                <input type="text" id="p1" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
-                                <input type="text" id="p2" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
-                                <input type="text" id="p3" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
-                                <input type="text" id="p4" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p1" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p2" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p3" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p4" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                             </div>
                         </div>
                         <!-- Página 2 -->
                         <div class="pagina-deslizable pagina-secundaria">
                             <span class="badge-pagina-dos">PÁG. 2</span>
                             <div class="grid-2">
-                                <input type="text" id="p5" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
-                                <input type="text" id="p6" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
-                                <input type="text" id="p7" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
-                                <input type="text" id="p8" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p5" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p6" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p7" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p8" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                             </div>
                         </div>
                     </div>
@@ -706,6 +706,15 @@
         let datosRecibo = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
         let datosRetiro = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
         let datosDeposito = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
+
+        // Memoria del último casillero activo para evitar saltos involuntarios
+        let ultimoInputCajaActivo = null;
+
+        function registrarFocoCaja(input) {
+            if (input && !input.readOnly) {
+                ultimoInputCajaActivo = input.id;
+            }
+        }
 
         function actualizarEstiloVisualModo() {
             const panelSecundario = document.getElementById('panelModoSecundario');
@@ -776,6 +785,7 @@
                 modoOperacion = 'recibo';
             }
 
+            ultimoInputCajaActivo = null; // Reinicia para enfocar el panel correcto del nuevo modo
             actualizarEstiloVisualModo();
             restaurarValoresPanelSecundario();
             reaplicarEstiloSincronizacion();
@@ -793,6 +803,7 @@
                 modoOperacion = 'deposito';
             }
 
+            ultimoInputCajaActivo = null; // Reinicia para enfocar el panel correcto del nuevo modo
             actualizarEstiloVisualModo();
             restaurarValoresPanelSecundario();
             reaplicarEstiloSincronizacion();
@@ -875,28 +886,51 @@
             }
         }
 
-        // --- ENFOQUE INTELIGENTE ADAPTADO AL FLUJO REAL DE TRABAJO ---
+        // --- ENFOQUE RESPETUOSO: NO SALTA SI YA ESTABAS TRABAJANDO EN UN CASILLERO ---
         function enfocarSiguienteInputVisible(containerId) {
-            let selector = `#${containerId} input:not([readonly])`;
-
             if (containerId === 'app-caja') {
+                // 1. Si ya estabas trabajando en un casillero específico, quédate ahí
+                if (ultimoInputCajaActivo) {
+                    const inputRecordado = document.getElementById(ultimoInputCajaActivo);
+                    if (inputRecordado && !inputRecordado.readOnly) {
+                        inputRecordado.focus();
+                        return;
+                    }
+                }
+
+                // 2. Si no había casillero previo, utiliza la prioridad de entrada de cada modo
+                let selector;
                 if (modoOperacion === 'recibo') {
-                    // Primero se digitan los recibos por pagar (abajo)
                     selector = `#swipeRecibo input:not([readonly])`;
-                } else if (modoOperacion === 'retiro' || modoOperacion === 'deposito') {
-                    // Primero se digita el monto por retirar o depositar (arriba)
+                } else {
                     selector = `#swipeEfectivo input:not([readonly])`;
                 }
-            }
 
-            let inputs = document.querySelectorAll(selector);
-            for (let i = 0; i < inputs.length; i++) {
-                if (inputs[i].value === '' || inputs[i].value === '0') {
-                    inputs[i].focus();
+                let inputsPrioridad = document.querySelectorAll(selector);
+                for (let i = 0; i < inputsPrioridad.length; i++) {
+                    if (inputsPrioridad[i].value === '' || inputsPrioridad[i].value === '0') {
+                        inputsPrioridad[i].focus();
+                        ultimoInputCajaActivo = inputsPrioridad[i].id;
+                        return;
+                    }
+                }
+
+                if (inputsPrioridad.length > 0) {
+                    inputsPrioridad[0].focus();
+                    ultimoInputCajaActivo = inputsPrioridad[0].id;
                     return;
                 }
             }
-            if (inputs.length > 0) inputs[0].focus();
+
+            // Para el multiplicador
+            let inputsGenerales = document.querySelectorAll(`#${containerId} input:not([readonly])`);
+            for (let i = 0; i < inputsGenerales.length; i++) {
+                if (inputsGenerales[i].value === '' || inputsGenerales[i].value === '0') {
+                    inputsGenerales[i].focus();
+                    return;
+                }
+            }
+            if (inputsGenerales.length > 0) inputsGenerales[0].focus();
         }
 
         function gestionarLimpiarCaja(event) {
@@ -968,15 +1002,13 @@
             let diffY = endY - startY;
 
             if (Math.abs(diffX) > Math.abs(diffY)) {
-                const isTyping = document.activeElement && document.activeElement.tagName === 'INPUT';
                 let appCajaActiva = document.getElementById('app-caja').classList.contains('active-app');
                 
                 if (diffX < -60 && appCajaActiva) {
                     switchMainApp('app-multiplicador');
-                    if (isTyping) enfocarSiguienteInputVisible('app-multiplicador');
                 } else if (diffX > 60 && !appCajaActiva) {
                     switchMainApp('app-caja');
-                    if (isTyping) enfocarSiguienteInputVisible('app-caja');
+                    enfocarSiguienteInputVisible('app-caja');
                 }
             }
             startX = 0;
@@ -1021,6 +1053,7 @@
 
         function handleInput(input) { 
             formatInput(input); 
+            registrarFocoCaja(input);
             guardarValoresPanelSecundario();
             calcularTodo(); 
         }
@@ -1042,6 +1075,7 @@
 
             input.value = val;
             formatInput(input);
+            registrarFocoCaja(input);
             guardarValoresPanelSecundario();
             calcularTodo();
         }
@@ -1158,6 +1192,7 @@
             datosRetiro = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
             datosDeposito = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
             cuadroVinculado = null; 
+            ultimoInputCajaActivo = null;
             
             document.getElementById('swipeEfectivo').scrollTo({ left: 0, behavior: 'instant' });
             document.getElementById('swipeRecibo').scrollTo({ left: 0, behavior: 'instant' });
