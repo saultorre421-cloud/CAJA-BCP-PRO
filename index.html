@@ -157,7 +157,7 @@
             border-radius: 9px; 
             cursor: pointer; 
             text-transform: uppercase; 
-            text-align: center;
+            text-align: center; 
             box-shadow: 0 3px 6px rgba(16, 185, 129, 0.25);
             transition: background-color 0.1s, transform 0.1s;
         }
@@ -166,7 +166,7 @@
             transform: scale(0.98); 
         }
 
-        /* Paneles interactivos de totales (Optimizados en altura) */
+        /* Paneles interactivos de totales */
         .panel-total { 
             display: flex; 
             justify-content: space-between; 
@@ -189,7 +189,7 @@
             gap: 8px;
         }
 
-        /* Puntos de paginación integrados en el título (0px de altura extra) */
+        /* Puntos de paginación limpios y estéticos */
         .header-dots {
             display: inline-flex;
             align-items: center;
@@ -202,11 +202,11 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.4);
             transition: all 0.2s ease;
         }
         .tema-recibo-header .h-dot {
-            background-color: rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.25);
         }
         .h-dot.active {
             background-color: #ffffff !important;
@@ -214,14 +214,6 @@
         }
         .tema-recibo-header .h-dot.active {
             background-color: #000000 !important;
-        }
-        .h-dot.warn-hidden {
-            background-color: #ef4444 !important;
-            animation: pulseWarn 1s infinite alternate;
-        }
-        @keyframes pulseWarn {
-            from { transform: scale(1); opacity: 0.8; }
-            to { transform: scale(1.5); opacity: 1; }
         }
 
         .panel-total span:nth-child(2) {
@@ -244,7 +236,7 @@
             color: var(--retiro-header-text) !important; 
         }
 
-        /* Contenedores con color de fondo envolvente unificado (Compactados) */
+        /* Contenedores con color de fondo envolvente */
         .caja-contenedor { 
             padding: 4px 6px 5px 6px; 
             border-radius: 0 0 10px 10px; 
@@ -288,10 +280,6 @@
             position: relative;
         }
 
-        /* =========================================
-           DIFERENCIADOR VISUAL DE PÁGINA 2
-           LÍNEAS VERTICALES LIMPIAS + BADGE AL RAS
-           ========================================= */
         .pagina-deslizable.pagina-secundaria {
             background-image: repeating-linear-gradient(
                 90deg,
@@ -304,7 +292,6 @@
             padding: 3px 2px;
         }
 
-        /* Etiqueta PÁG. 2 exactamente al ras del límite entre cabecera y fondo */
         .badge-pagina-dos {
             position: absolute;
             top: -4px;
@@ -323,7 +310,6 @@
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
-        /* Cápsulas de entrada: Compactas y nítidas */
         .caja-contenedor input { 
             width: 100%; 
             height: 48px; 
@@ -349,7 +335,6 @@
             font-weight: normal; 
         }
 
-        /* Resaltados de Sincronización Automática */
         .caja-contenedor input.active-sync {
             background-color: #fefce8 !important; 
             border: 2px dashed #ca8a04 !important; 
@@ -367,7 +352,7 @@
         }
 
         /* =========================================
-           PANEL DE RESULTADO: ALTO ULTRA OPTIMIZADO
+           PANEL DE RESULTADO
            ========================================= */
         .panel-resultado { 
             padding: 0 8px 6px 8px;
@@ -584,126 +569,132 @@
 <body>
 
     <div id="app-caja" class="main-app-container active-app">
-        <div class="caja-wrapper">
-            <!-- CABECERA CAJA -->
-            <div class="caja-header-row">
-                <button class="btn-limpiar-top" onmousedown="gestionarLimpiarCaja(event)" ontouchstart="gestionarLimpiarCaja(event)">🧹 LIMPIAR CAJA</button>
-                <div class="profile-toggle" id="btn-toggle-caja" style="border-color: #10b981;">
-                    <span class="toggle-icon">💵</span>
+        <!-- Formulario Caja: enterkeyhint="send" (Avioncito) -> Borra toda la Caja -->
+        <form id="formCaja" onsubmit="ejecutarAccionTecladoCaja(event)" action="javascript:void(0);">
+            <div class="caja-wrapper">
+                <!-- CABECERA CAJA -->
+                <div class="caja-header-row">
+                    <button type="button" class="btn-limpiar-top" onmousedown="gestionarLimpiarCaja(event)" ontouchstart="gestionarLimpiarCaja(event)">🧹 LIMPIAR CAJA</button>
+                    <div class="profile-toggle" id="btn-toggle-caja" style="border-color: #10b981;">
+                        <span class="toggle-icon">💵</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- PANEL SUPERIOR: EFECTIVO RECIBIDO / MONTO POR RETIRAR / MONTO A DEPOSITAR -->
-            <div class="panel-total tema-recibo-header" id="panelSuperior" onmousedown="gestionarModoDeposito(event)" ontouchstart="gestionarModoDeposito(event)">
-                <div class="panel-title-area">
-                    <span id="lblTituloSuperior">EFECTIVO RECIBIDO</span>
-                    <div class="header-dots">
-                        <div class="h-dot active" id="dot-sup-1"></div>
-                        <div class="h-dot" id="dot-sup-2"></div>
-                    </div>
-                </div>
-                <span id="lblEfectivo">0.00</span>
-            </div>
-            
-            <div class="caja-contenedor tema-recibo-bg" id="cajaSuperiorContenedor">
-                <div class="contenedor-deslizable" id="swipeEfectivo" onscroll="handleScrollIndicators('swipeEfectivo', 'dot-sup-1', 'dot-sup-2')">
-                    <!-- Página 1 -->
-                    <div class="pagina-deslizable">
-                        <div class="grid-2">
-                            <input type="text" id="b1" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                            <input type="text" id="b2" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                <!-- PANEL SUPERIOR: EFECTIVO RECIBIDO / MONTO POR RETIRAR / MONTO A DEPOSITAR -->
+                <div class="panel-total tema-recibo-header" id="panelSuperior" onmousedown="gestionarModoDeposito(event)" ontouchstart="gestionarModoDeposito(event)">
+                    <div class="panel-title-area">
+                        <span id="lblTituloSuperior">EFECTIVO RECIBIDO</span>
+                        <div class="header-dots">
+                            <div class="h-dot active" id="dot-sup-1"></div>
+                            <div class="h-dot" id="dot-sup-2"></div>
                         </div>
                     </div>
-                    <!-- Página 2: Con trama de seguridad y etiqueta al ras -->
-                    <div class="pagina-deslizable pagina-secundaria">
-                        <span class="badge-pagina-dos">PÁG. 2</span>
-                        <div class="grid-2">
-                            <input type="text" id="b3" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                            <input type="text" id="b4" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                    <span id="lblEfectivo">0.00</span>
+                </div>
+                
+                <div class="caja-contenedor tema-recibo-bg" id="cajaSuperiorContenedor">
+                    <div class="contenedor-deslizable" id="swipeEfectivo" onscroll="handleScrollIndicators('swipeEfectivo', 'dot-sup-1', 'dot-sup-2')">
+                        <!-- Página 1 -->
+                        <div class="pagina-deslizable">
+                            <div class="grid-2">
+                                <input type="text" id="b1" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b2" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                            </div>
+                        </div>
+                        <!-- Página 2 -->
+                        <div class="pagina-deslizable pagina-secundaria">
+                            <span class="badge-pagina-dos">PÁG. 2</span>
+                            <div class="grid-2">
+                                <input type="text" id="b3" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b4" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- PANEL INFERIOR: RECIBO POR PAGAR / EFECTIVO RETIRADO / EFECTIVO RECIBIDO -->
-            <div class="panel-total tema-recibo-header" id="panelModoSecundario" onmousedown="gestionarCambioModo(event)" ontouchstart="gestionarCambioModo(event)">
-                <div class="panel-title-area">
-                    <span id="lblTituloModo">RECIBO POR PAGAR</span>
-                    <div class="header-dots">
-                        <div class="h-dot active" id="dot-inf-1"></div>
-                        <div class="h-dot" id="dot-inf-2"></div>
-                    </div>
-                </div>
-                <span id="lblRecibo">0.00</span>
-            </div>
-            
-            <div class="caja-contenedor tema-recibo-bg" id="cajaInferiorContenedor">
-                <div class="contenedor-deslizable" id="swipeRecibo" onscroll="handleScrollIndicators('swipeRecibo', 'dot-inf-1', 'dot-inf-2')">
-                    <!-- Página 1 -->
-                    <div class="pagina-deslizable">
-                        <div class="grid-2">
-                            <input type="text" id="p1" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                            <input type="text" id="p2" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                            <input type="text" id="p3" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                            <input type="text" id="p4" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                <!-- PANEL INFERIOR: RECIBO POR PAGAR / EFECTIVO RETIRADO / EFECTIVO RECIBIDO -->
+                <div class="panel-total tema-recibo-header" id="panelModoSecundario" onmousedown="gestionarCambioModo(event)" ontouchstart="gestionarCambioModo(event)">
+                    <div class="panel-title-area">
+                        <span id="lblTituloModo">RECIBO POR PAGAR</span>
+                        <div class="header-dots">
+                            <div class="h-dot active" id="dot-inf-1"></div>
+                            <div class="h-dot" id="dot-inf-2"></div>
                         </div>
                     </div>
-                    <!-- Página 2: Con trama de seguridad y etiqueta al ras -->
-                    <div class="pagina-deslizable pagina-secundaria">
-                        <span class="badge-pagina-dos">PÁG. 2</span>
-                        <div class="grid-2">
-                            <input type="text" id="p5" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                            <input type="text" id="p6" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                            <input type="text" id="p7" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
-                            <input type="text" id="p8" inputmode="decimal" oninput="handleInput(this)" placeholder="0.00">
+                    <span id="lblRecibo">0.00</span>
+                </div>
+                
+                <div class="caja-contenedor tema-recibo-bg" id="cajaInferiorContenedor">
+                    <div class="contenedor-deslizable" id="swipeRecibo" onscroll="handleScrollIndicators('swipeRecibo', 'dot-inf-1', 'dot-inf-2')">
+                        <!-- Página 1 -->
+                        <div class="pagina-deslizable">
+                            <div class="grid-2">
+                                <input type="text" id="p1" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p2" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p3" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p4" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                            </div>
+                        </div>
+                        <!-- Página 2 -->
+                        <div class="pagina-deslizable pagina-secundaria">
+                            <span class="badge-pagina-dos">PÁG. 2</span>
+                            <div class="grid-2">
+                                <input type="text" id="p5" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p6" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p7" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="p8" inputmode="decimal" enterkeyhint="send" oninput="handleInput(this)" placeholder="0.00">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- PANEL INFORMATIVO DE RESULTADO (VISIBLE Y PROTEGIDO DEL TECLADO) -->
-            <div class="panel-resultado estado-esperando" id="panelFinal">
-                <div class="badge-operacion" id="badgeOperacion">PAGO DE SERVICIOS</div>
-                <div id="textoFinal">ESPERANDO MONTOS...</div>
-                <span class="monto-final" id="montoFinal">0.00</span>
+                <!-- PANEL INFORMATIVO DE RESULTADO -->
+                <div class="panel-resultado estado-esperando" id="panelFinal">
+                    <div class="badge-operacion" id="badgeOperacion">PAGO DE SERVICIOS</div>
+                    <div id="textoFinal">ESPERANDO MONTOS...</div>
+                    <span class="monto-final" id="montoFinal">0.00</span>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 
 
     <div id="app-multiplicador" class="main-app-container">
-        <div class="multiplicador-wrapper">
-            
-            <!-- CABECERA MULTIPLICADOR -->
-            <div class="sticky-header">
-                <div class="header-left-controls">
-                    <button class="btn-clear-compact" onmousedown="gestionarLimpiarMultiplicador(event)" ontouchstart="gestionarLimpiarMultiplicador(event)">
-                        <span>🧹</span> Limpiar
-                    </button>
-                    <div class="header-divider"></div>
-                    <div class="profile-toggle" id="btn-toggle-multi">
-                        <span class="toggle-icon">🛒</span>
+        <!-- Formulario Multiplicador: enterkeyhint="done" (Aspa / Check) -> Limpia solo Multiplicador -->
+        <form id="formMultiplicador" onsubmit="ejecutarAccionTecladoMulti(event)" action="javascript:void(0);">
+            <div class="multiplicador-wrapper">
+                
+                <!-- CABECERA MULTIPLICADOR -->
+                <div class="sticky-header">
+                    <div class="header-left-controls">
+                        <button type="button" class="btn-clear-compact" onmousedown="gestionarLimpiarMultiplicador(event)" ontouchstart="gestionarLimpiarMultiplicador(event)">
+                            <span>🧹</span> Limpiar
+                        </button>
+                        <div class="header-divider"></div>
+                        <div class="profile-toggle" id="btn-toggle-multi">
+                            <span class="toggle-icon">🛒</span>
+                        </div>
+                    </div>
+                    <div class="header-info">
+                        <div class="main-total" id="txtGranTotal">0.00</div>
                     </div>
                 </div>
-                <div class="header-info">
-                    <div class="main-total" id="txtGranTotal">0.00</div>
+
+                <div class="tabs-container-sub">
+                    <button type="button" id="tab-btn-billetes" class="sub-tab-btn active" onmousedown="gestionarPestanaMultiplicador(event, 'tab-billetes', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-billetes', this)">💵 Billetes</button>
+                    <button type="button" id="tab-btn-monedas" class="sub-tab-btn" onmousedown="gestionarPestanaMultiplicador(event, 'tab-monedas', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-monedas', this)">🪙 Monedas</button>
                 </div>
-            </div>
 
-            <div class="tabs-container-sub">
-                <button id="tab-btn-billetes" class="sub-tab-btn active" onmousedown="gestionarPestanaMultiplicador(event, 'tab-billetes', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-billetes', this)">💵 Billetes</button>
-                <button id="tab-btn-monedas" class="sub-tab-btn" onmousedown="gestionarPestanaMultiplicador(event, 'tab-monedas', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-monedas', this)">🪙 Monedas</button>
-            </div>
+                <div id="tab-billetes" class="view-content active">
+                    <div id="containerBilletes"></div>
+                </div>
+                
+                <div id="tab-monedas" class="view-content">
+                    <div id="containerMonedas"></div>
+                </div>
 
-            <div id="tab-billetes" class="view-content active">
-                <div id="containerBilletes"></div>
             </div>
-            
-            <div id="tab-monedas" class="view-content">
-                <div id="containerMonedas"></div>
-            </div>
-
-        </div>
+        </form>
     </div>
 
 
@@ -766,35 +757,13 @@
             }
         }
 
-        // --- INDICADORES INTEGRADOS EN TÍTULO Y ALERTA SILENCIOSA DE DINERO OCULTO ---
+        // --- INDICADORES LIMPIOS DE PÁGINA ---
         function handleScrollIndicators(scrollId, dot1Id, dot2Id) {
             const el = document.getElementById(scrollId);
             if (!el) return;
             const esPagina2 = el.scrollLeft > (el.clientWidth / 2);
             document.getElementById(dot1Id).classList.toggle('active', !esPagina2);
             document.getElementById(dot2Id).classList.toggle('active', esPagina2);
-            actualizarAlertasDeOcultos();
-        }
-
-        function actualizarAlertasDeOcultos() {
-            // Superior: si está en pág 1 y hay datos en b3 o b4 -> dot 2 parpadea
-            const swipeSup = document.getElementById('swipeEfectivo');
-            const enPag1Sup = swipeSup.scrollLeft <= (swipeSup.clientWidth / 2);
-            const hayPlataOcultaSup = (document.getElementById('b3').value.trim() !== '' || document.getElementById('b4').value.trim() !== '');
-            const dotSup2 = document.getElementById('dot-sup-2');
-            dotSup2.classList.toggle('warn-hidden', enPag1Sup && hayPlataOcultaSup);
-
-            // Inferior: si está en pág 1 y hay datos en p5..p8 -> dot 2 parpadea
-            const swipeInf = document.getElementById('swipeRecibo');
-            const enPag1Inf = swipeInf.scrollLeft <= (swipeInf.clientWidth / 2);
-            const hayPlataOcultaInf = (
-                document.getElementById('p5').value.trim() !== '' ||
-                document.getElementById('p6').value.trim() !== '' ||
-                document.getElementById('p7').value.trim() !== '' ||
-                document.getElementById('p8').value.trim() !== ''
-            );
-            const dotInf2 = document.getElementById('dot-inf-2');
-            dotInf2.classList.toggle('warn-hidden', enPag1Inf && hayPlataOcultaInf);
         }
 
         function gestionarCambioModo(event) {
@@ -811,7 +780,6 @@
             restaurarValoresPanelSecundario();
             reaplicarEstiloSincronizacion();
             calcularTodo();
-            actualizarAlertasDeOcultos();
             enfocarSiguienteInputVisible('app-caja');
         }
 
@@ -829,7 +797,6 @@
             restaurarValoresPanelSecundario();
             reaplicarEstiloSincronizacion();
             calcularTodo();
-            actualizarAlertasDeOcultos();
             enfocarSiguienteInputVisible('app-caja');
         }
 
@@ -892,15 +859,34 @@
 
             if (appId === 'app-caja') {
                 reaplicarEstiloSincronizacion();
-                actualizarAlertasDeOcultos();
             }
         }
 
+        function alternarPantallas() {
+            const isCajaActive = document.getElementById('app-caja').classList.contains('active-app');
+            if (isCajaActive) {
+                switchMainApp('app-multiplicador');
+                const tabActiva = document.querySelector('.sub-tab-btn.active');
+                let tabTarget = (tabActiva && tabActiva.innerText.includes('Billetes')) ? 'tab-billetes' : 'tab-monedas';
+                enfocarSiguienteInputVisible(tabTarget);
+            } else {
+                switchMainApp('app-caja');
+                enfocarSiguienteInputVisible('app-caja');
+            }
+        }
+
+        // --- ENFOQUE INTELIGENTE ADAPTADO AL FLUJO REAL DE TRABAJO ---
         function enfocarSiguienteInputVisible(containerId) {
             let selector = `#${containerId} input:not([readonly])`;
 
-            if (containerId === 'app-caja' && (modoOperacion === 'retiro' || modoOperacion === 'deposito')) {
-                selector = `#swipeRecibo input:not([readonly])`;
+            if (containerId === 'app-caja') {
+                if (modoOperacion === 'recibo') {
+                    // Primero se digitan los recibos por pagar (abajo)
+                    selector = `#swipeRecibo input:not([readonly])`;
+                } else if (modoOperacion === 'retiro' || modoOperacion === 'deposito') {
+                    // Primero se digita el monto por retirar o depositar (arriba)
+                    selector = `#swipeEfectivo input:not([readonly])`;
+                }
             }
 
             let inputs = document.querySelectorAll(selector);
@@ -910,17 +896,27 @@
                     return;
                 }
             }
-            if(inputs.length > 0) inputs[0].focus();
+            if (inputs.length > 0) inputs[0].focus();
         }
 
         function gestionarLimpiarCaja(event) {
-            event.preventDefault(); 
+            if (event) event.preventDefault(); 
             limpiarCaja(); 
             enfocarSiguienteInputVisible('app-caja'); 
         }
 
+        function ejecutarAccionTecladoCaja(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            limpiarCaja();
+            enfocarSiguienteInputVisible('app-caja');
+            return false;
+        }
+
         function gestionarLimpiarMultiplicador(event) {
-            event.preventDefault(); 
+            if (event) event.preventDefault(); 
             clearAllData(); 
             const tabActiva = document.querySelector('.sub-tab-btn.active');
             if (tabActiva) {
@@ -929,8 +925,17 @@
             }
         }
 
+        function ejecutarAccionTecladoMulti(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            gestionarLimpiarMultiplicador(null);
+            return false;
+        }
+
         function gestionarPestanaMultiplicador(event, tabId, element) {
-            event.preventDefault(); 
+            if (event) event.preventDefault(); 
             document.querySelectorAll('#app-multiplicador .view-content').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
@@ -939,7 +944,7 @@
         }
 
         function gestionarStep(event, type, denom, delta) {
-            event.preventDefault(); 
+            if (event) event.preventDefault(); 
             changeQty(type, denom, delta);
         }
 
@@ -984,23 +989,9 @@
 
             const handleInteraccion = (e) => {
                 e.preventDefault(); 
-                const isTyping = document.activeElement && document.activeElement.tagName === 'INPUT';
-                
                 el.style.transform = "scale(0.85)";
                 setTimeout(() => { el.style.transform = "scale(1)"; }, 150);
-                
-                const isCajaActive = document.getElementById('app-caja').classList.contains('active-app');
-                if (isCajaActive) {
-                    switchMainApp('app-multiplicador');
-                    const tabActiva = document.querySelector('.sub-tab-btn.active');
-                    if (isTyping && tabActiva) {
-                        let tabTarget = tabActiva.innerText.includes('Billetes') ? 'tab-billetes' : 'tab-monedas';
-                        enfocarSiguienteInputVisible(tabTarget);
-                    }
-                } else {
-                    switchMainApp('app-caja');
-                    if (isTyping) enfocarSiguienteInputVisible('app-caja');
-                }
+                alternarPantallas();
             };
 
             el.addEventListener('mousedown', handleInteraccion, { passive: false });
@@ -1032,7 +1023,27 @@
             formatInput(input); 
             guardarValoresPanelSecundario();
             calcularTodo(); 
-            actualizarAlertasDeOcultos();
+        }
+
+        function insertarDobleCero(input) {
+            if (!input || input.readOnly) return;
+            let val = input.value.replace(/,/g, '').trim();
+
+            if (val === '' || val === '0') {
+                val = '00';
+            } else if (!val.includes('.')) {
+                val = val + '00';
+            } else {
+                let partes = val.split('.');
+                if (partes[1].length === 0) partes[1] = '00';
+                else if (partes[1].length === 1) partes[1] = partes[1] + '0';
+                val = partes[0] + '.' + partes[1].substring(0, 2);
+            }
+
+            input.value = val;
+            formatInput(input);
+            guardarValoresPanelSecundario();
+            calcularTodo();
         }
 
         function calcularTodo() {
@@ -1146,7 +1157,7 @@
             datosRecibo = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
             datosRetiro = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
             datosDeposito = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
-            cuadroVinculado = null;
+            cuadroVinculado = null; 
             
             document.getElementById('swipeEfectivo').scrollTo({ left: 0, behavior: 'instant' });
             document.getElementById('swipeRecibo').scrollTo({ left: 0, behavior: 'instant' });
@@ -1156,7 +1167,6 @@
             document.getElementById('dot-inf-1').classList.add('active');
             document.getElementById('dot-inf-2').classList.remove('active');
 
-            actualizarAlertasDeOcultos();
             calcularTodo();
         }
 
@@ -1176,9 +1186,9 @@
                         <span class="item-subtotal" id="sub-b-${denom}">0.00</span>
                     </div>
                     <div class="stepper-control">
-                        <button class="btn-step" onmousedown="gestionarStep(event, 'billete', ${denom}, -1)" ontouchstart="gestionarStep(event, 'billete', ${denom}, -1)">-</button>
-                        <input type="number" class="input-qty" id="input-b-${denom}" placeholder="0" oninput="updateQty('billete', ${denom}, this.value)">
-                        <button class="btn-step" onmousedown="gestionarStep(event, 'billete', ${denom}, 1)" ontouchstart="gestionarStep(event, 'billete', ${denom}, 1)">+</button>
+                        <button type="button" class="btn-step" onmousedown="gestionarStep(event, 'billete', ${denom}, -1)" ontouchstart="gestionarStep(event, 'billete', ${denom}, -1)">-</button>
+                        <input type="text" inputmode="numeric" class="input-qty" id="input-b-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('billete', ${denom}, this.value)">
+                        <button type="button" class="btn-step" onmousedown="gestionarStep(event, 'billete', ${denom}, 1)" ontouchstart="gestionarStep(event, 'billete', ${denom}, 1)">+</button>
                     </div>
                 </div>`;
         });
@@ -1192,9 +1202,9 @@
                         <span class="item-subtotal" id="sub-m-${denom}">0.00</span>
                     </div>
                     <div class="stepper-control">
-                        <button class="btn-step" onmousedown="gestionarStep(event, 'moneda', ${denom}, -1)" ontouchstart="gestionarStep(event, 'moneda', ${denom}, -1)">-</button>
-                        <input type="number" class="input-qty" id="input-m-${denom}" placeholder="0" oninput="updateQty('moneda', ${denom}, this.value)">
-                        <button class="btn-step" onmousedown="gestionarStep(event, 'moneda', ${denom}, 1)" ontouchstart="gestionarStep(event, 'moneda', ${denom}, 1)">+</button>
+                        <button type="button" class="btn-step" onmousedown="gestionarStep(event, 'moneda', ${denom}, -1)" ontouchstart="gestionarStep(event, 'moneda', ${denom}, -1)">-</button>
+                        <input type="text" inputmode="numeric" class="input-qty" id="input-m-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('moneda', ${denom}, this.value)">
+                        <button type="button" class="btn-step" onmousedown="gestionarStep(event, 'moneda', ${denom}, 1)" ontouchstart="gestionarStep(event, 'moneda', ${denom}, 1)">+</button>
                     </div>
                 </div>`;
         });
@@ -1293,8 +1303,69 @@
                 }
             }
             calcularTodo(); 
-            actualizarAlertasDeOcultos();
         }
+
+        // =======================================================
+        // INTEGRACIÓN DE TECLADO NATIVO (-, ,, ACCIONES ENTER)
+        // =======================================================
+        function procesarTeclasEspeciales(e) {
+            if (e.key === '-' || e.key === 'Minus' || e.code === 'NumpadSubtract' || e.code === 'Minus') {
+                e.preventDefault();
+                e.stopPropagation();
+                alternarPantallas();
+                return;
+            }
+
+            if (e.key === ',' || e.code === 'Comma') {
+                const el = document.activeElement;
+                if (el && el.tagName === 'INPUT' && !el.readOnly) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    insertarDobleCero(el);
+                    return;
+                }
+            }
+
+            const esEnterOAccion = (
+                e.key === 'Enter' || 
+                e.keyCode === 13 || 
+                e.which === 13 ||
+                e.code === 'Enter' || 
+                e.code === 'NumpadEnter' || 
+                e.key === 'ArrowRight'
+            );
+
+            if (esEnterOAccion) {
+                const isCajaActiva = document.getElementById('app-caja').classList.contains('active-app');
+                if (isCajaActiva) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    limpiarCaja();
+                    enfocarSiguienteInputVisible('app-caja');
+                } else {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    gestionarLimpiarMultiplicador(null);
+                }
+            }
+        }
+
+        document.addEventListener('keydown', procesarTeclasEspeciales, true);
+
+        document.addEventListener('beforeinput', (e) => {
+            if (e.data === '-') {
+                e.preventDefault();
+                e.stopPropagation();
+                alternarPantallas();
+            } else if (e.data === ',') {
+                const el = document.activeElement;
+                if (el && el.tagName === 'INPUT' && !el.readOnly) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    insertarDobleCero(el);
+                }
+            }
+        }, true);
     </script>
 </body>
 </html>
