@@ -61,7 +61,7 @@
         body { 
             background-color: var(--app-bg); 
             color: #0f172a;
-            padding-bottom: 15px;
+            padding-bottom: 10px;
             overflow-x: hidden;
         }
 
@@ -86,84 +86,10 @@
         }
 
         /* =========================================
-           DIVISORES Y BOTONES DE NAVEGACIÓN
-           ========================================= */
-        .header-left-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-shrink: 0; 
-        }
-
-        .header-divider {
-            width: 2px;
-            height: 36px;
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 2px;
-            margin: 0 4px;
-        }
-
-        .profile-toggle {
-            width: 50px;
-            height: 50px;
-            background-color: var(--card-bg);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-            border: 3px solid var(--bcp-orange);
-            touch-action: none;
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
-            user-select: none;
-            flex-shrink: 0;
-            cursor: pointer;
-        }
-        .profile-toggle:active {
-            background-color: #f0f0f0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .toggle-icon {
-            font-size: 26px;
-            line-height: 1;
-            pointer-events: none;
-        }
-
-        /* =========================================
-           CAJA PRINCIPAL COMPACTADA
+           CAJA PRINCIPAL: ESTRUCTURA Y TEXTOS
            ========================================= */
         .caja-wrapper {
-            padding: 8px 10px 4px 10px;
-        }
-
-        .caja-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            gap: 10px;
-        }
-
-        .btn-limpiar-top { 
-            flex: 1;
-            max-width: 78%; 
-            background-color: #10b981; 
-            color: white; 
-            height: 50px; 
-            padding: 0 8px; 
-            font-size: 16px; 
-            font-weight: 800; 
-            border: none; 
-            border-radius: 9px; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            text-align: center; 
-            box-shadow: 0 3px 6px rgba(16, 185, 129, 0.25);
-            transition: background-color 0.1s, transform 0.1s;
-        }
-        .btn-limpiar-top:active { 
-            background-color: #059669; 
-            transform: scale(0.98); 
+            padding: 5px 10px 4px 10px;
         }
 
         /* Paneles interactivos de totales */
@@ -171,12 +97,12 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 6px 12px; 
+            padding: 5px 12px; 
             border-radius: 9px 9px 0 0; 
-            font-size: 16px; 
+            font-size: 17.5px; 
             font-weight: 900; 
             text-transform: uppercase; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
             user-select: none;
             cursor: pointer;
             transition: background-color 0.2s ease, transform 0.05s, color 0.2s ease;
@@ -189,13 +115,13 @@
             gap: 8px;
         }
 
-        /* Puntos de paginación limpios y estéticos */
+        /* Puntos de paginación */
         .header-dots {
             display: inline-flex;
             align-items: center;
             gap: 4px;
             background: rgba(0, 0, 0, 0.12);
-            padding: 3px 6px;
+            padding: 2px 6px;
             border-radius: 10px;
         }
         .h-dot {
@@ -217,7 +143,7 @@
         }
 
         .panel-total span:nth-child(2) {
-            font-size: 26px;
+            font-size: 29px;
             font-weight: 900;
             letter-spacing: -0.5px;
         }
@@ -240,7 +166,7 @@
         .caja-contenedor { 
             padding: 4px 6px 5px 6px; 
             border-radius: 0 0 10px 10px; 
-            margin-bottom: 8px; 
+            margin-bottom: 7px; 
             border-bottom: 3px solid; 
             border-left: 2px solid; 
             border-right: 2px solid; 
@@ -289,7 +215,7 @@
                 transparent 12px
             );
             border: 1px dashed rgba(0, 0, 0, 0.25);
-            padding: 3px 2px;
+            padding: 2px 2px;
         }
 
         .badge-pagina-dos {
@@ -298,9 +224,9 @@
             right: 4px;
             background-color: #0f172a;
             color: #ffffff;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 900;
-            padding: 1px 6px;
+            padding: 1px 5px;
             border-radius: 3px;
             letter-spacing: 0.5px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.3);
@@ -308,12 +234,12 @@
             z-index: 10;
         }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
 
         .caja-contenedor input { 
             width: 100%; 
-            height: 48px; 
-            font-size: 32px; 
+            height: 46px; 
+            font-size: 30px; 
             font-weight: 900; 
             border: 2px solid #94a3b8; 
             border-radius: 7px; 
@@ -321,7 +247,7 @@
             text-align: center; 
             color: #0f172a; 
             background-color: #ffffff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             transition: border-color 0.2s, background-color 0.2s, color 0.2s;
         }
         .caja-contenedor input:focus { 
@@ -331,7 +257,7 @@
         }
         .caja-contenedor input::placeholder { 
             color: #94a3b8; 
-            font-size: 17px; 
+            font-size: 16px; 
             font-weight: normal; 
         }
 
@@ -352,17 +278,17 @@
         }
 
         /* =========================================
-           PANEL DE RESULTADO
+           PANEL DE RESULTADO AMPLIADO
            ========================================= */
         .panel-resultado { 
             padding: 0 8px 6px 8px;
             border-radius: 10px; 
             text-align: center; 
             font-weight: bold; 
-            margin-bottom: 4px; 
+            margin-bottom: 2px; 
             border: 3px solid; 
             transition: all 0.2s; 
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
             position: relative;
             overflow: hidden;
         }
@@ -376,24 +302,24 @@
             letter-spacing: 0.8px;
             text-transform: uppercase;
             margin-top: 0;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             background: rgba(0, 0, 0, 0.11);
             line-height: 1.2;
         }
 
         #textoFinal {
-            font-size: clamp(16px, 4.2vw, 20px);
+            font-size: clamp(17px, 4.8vw, 22px);
             font-weight: 900;
             letter-spacing: 0.8px;
             line-height: 1.1;
             text-transform: uppercase;
-            margin-top: 1px;
+            margin-top: 2px;
             margin-bottom: 2px;
         }
 
         .monto-final { 
             display: block; 
-            font-size: clamp(52px, 13vw, 68px); 
+            font-size: clamp(54px, 14vw, 70px); 
             font-weight: 900; 
             margin-top: 1px; 
             line-height: 0.95; 
@@ -410,57 +336,55 @@
         .estado-deposito { background-color: #ccfbf1; border-color: var(--deposito-header); color: #0f766e; }
 
         /* =========================================
-           MULTIPLICADOR
+           MULTIPLICADOR: ESCALA DE ELEMENTOS
            ========================================= */
         .multiplicador-wrapper {
             background-color: var(--bg-light);
             min-height: 100vh;
         }
 
-        .sticky-header {
-            position: sticky; top: 0; background: linear-gradient(135deg, var(--bcp-blue) 0%, #001F6B 100%); color: white;
-            padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15); z-index: 1000;
-        }
-
-        .header-info { 
+        .sticky-header-compact {
+            position: sticky; 
+            top: 0; 
+            background: linear-gradient(135deg, var(--bcp-blue) 0%, #001F6B 100%); 
+            color: white;
+            padding: 6px 12px; 
             display: flex; 
-            flex-direction: column; 
-            align-items: flex-end; 
-            min-width: 0; 
-            flex: 1; 
-            margin-left: 10px;
+            justify-content: center; 
+            align-items: center;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15); 
+            z-index: 1000;
         }
         
-        .main-total { 
-            font-size: clamp(30px, 8.5vw, 48px); 
+        .main-total-centered { 
+            font-size: clamp(40px, 10.5vw, 54px); 
             font-weight: 900; 
             line-height: 1; 
-            letter-spacing: -1px; 
-            white-space: nowrap; 
+            letter-spacing: -1.2px; 
+            text-align: center;
+            width: 100%;
         }
-        
-        .btn-clear-compact {
-            background-color: var(--danger-color); color: white; border: none; border-radius: 9px;
-            height: 50px; 
-            padding: 0 16px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            transition: transform 0.1s;
-        }
-        .btn-clear-compact:active { background-color: #B71C1C; transform: scale(0.96); }
 
         .tabs-container-sub { 
             background: white; 
             display: flex; 
             border-bottom: 1px solid var(--border-color); 
             position: sticky; 
-            top: 70px; 
+            top: 52px; 
             z-index: 999;
         }
         
         .sub-tab-btn {
-            flex: 1; padding: 10px 2px; text-align: center; background: none; border: none; font-size: 15px;
-            font-weight: 700; color: var(--text-muted); cursor: pointer; border-bottom: 4px solid transparent;
+            flex: 1; 
+            padding: 8px 2px; 
+            text-align: center; 
+            background: none; 
+            border: none; 
+            font-size: 16px;
+            font-weight: 700; 
+            color: var(--text-muted); 
+            cursor: pointer; 
+            border-bottom: 4px solid transparent;
             transition: all 0.2s ease;
             touch-action: manipulation;
         }
@@ -479,7 +403,7 @@
             font-weight: 900;
         }
 
-        .view-content { display: none; padding: 12px; max-width: 500px; margin: 0 auto; }
+        .view-content { display: none; padding: 8px 12px; max-width: 500px; margin: 0 auto; }
         .view-content.active { display: block; animation: fadeInScreen 0.2s; }
 
         #tab-billetes {
@@ -487,7 +411,7 @@
             border-bottom: 3px solid var(--border-billetes);
             border-left: 2px solid var(--border-billetes);
             border-right: 2px solid var(--border-billetes);
-            border-radius: 0 0 16px 16px;
+            border-radius: 0 0 14px 14px;
         }
 
         #tab-monedas {
@@ -495,14 +419,14 @@
             border-bottom: 3px solid var(--border-monedas);
             border-left: 2px solid var(--border-monedas);
             border-right: 2px solid var(--border-monedas);
-            border-radius: 0 0 16px 16px;
+            border-radius: 0 0 14px 14px;
         }
 
         .item-card {
             background: var(--card-bg); 
             border-radius: 9px; 
             padding: 10px 8px; 
-            margin-bottom: 8px;
+            margin-bottom: 7px;
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
@@ -510,41 +434,69 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
         
-        #tab-monedas .item-card { 
-            padding: 8px 8px; 
-            margin-bottom: 7px; 
-        }
-        #tab-monedas .item-denomination { font-size: 26px; } 
-        #tab-monedas .input-qty { height: 44px; font-size: 30px; }
-        #tab-monedas .btn-step { width: 40px; height: 40px; font-size: 34px; padding-bottom: 4px; }
-
         .item-info { 
             display: flex; 
             flex-direction: column; 
-            width: 125px; 
+            width: 130px; 
             justify-content: center;
             gap: 2px; 
         }
-        .item-denomination { 
-            font-size: 30px; 
+
+        /* --- ESCALA MAYOR PARA BILLETES --- */
+        #tab-billetes .item-card {
+            padding: 10px 9px;
+            margin-bottom: 7px;
+        }
+        #tab-billetes .item-denomination { 
+            font-size: 33px; 
             font-weight: 900; 
             color: var(--bcp-blue); 
             line-height: 1; 
             letter-spacing: -0.5px;
         }
-        .item-subtotal { 
-            font-size: 19px; 
+        #tab-billetes .item-subtotal { 
+            font-size: 21px; 
             color: #16A34A; 
             font-weight: 800; 
             line-height: 1; 
         }
-        
+        #tab-billetes .btn-step {
+            width: 44px; height: 44px; border-radius: 8px; font-size: 36px;
+        }
+        #tab-billetes .input-qty {
+            width: 86px; height: 48px; font-size: 36px; border-radius: 8px;
+        }
+
+        /* --- ESCALA PARA MONEDAS (IGUAL A LA DE BILLETES ANTERIOR) --- */
+        #tab-monedas .item-card { 
+            padding: 8px 8px; 
+            margin-bottom: 6px; 
+        }
+        #tab-monedas .item-denomination { 
+            font-size: 28px; 
+            font-weight: 900; 
+            color: var(--bcp-blue); 
+            line-height: 1; 
+            letter-spacing: -0.5px;
+        } 
+        #tab-monedas .item-subtotal { 
+            font-size: 18px; 
+            color: #16A34A; 
+            font-weight: 800; 
+            line-height: 1; 
+        }
+        #tab-monedas .btn-step { 
+            width: 40px; height: 40px; border-radius: 7px; font-size: 32px; 
+        }
+        #tab-monedas .input-qty { 
+            width: 80px; height: 44px; font-size: 32px; border-radius: 7px;
+        }
+
         .stepper-control { display: flex; align-items: center; gap: 5px; }
         
         .btn-step {
-            width: 42px; height: 42px; border-radius: 8px; border: 1px solid var(--border-color);
+            border: 1px solid var(--border-color);
             background-color: #F8FAFC; 
-            font-size: 34px; 
             font-weight: 500; 
             display: flex; align-items: center; justify-content: center;
             line-height: 0; 
@@ -554,9 +506,8 @@
         .btn-step:active { background-color: #E2E8F0; }
         
         .input-qty {
-            width: 85px; height: 46px; border: 2px solid var(--border-color); border-radius: 8px;
+            border: 2px solid var(--border-color);
             text-align: center; 
-            font-size: 34px; 
             font-weight: 900; 
             color: var(--bcp-blue); background-color: #FAFAFA;
         }
@@ -568,19 +519,12 @@
 </head>
 <body>
 
+    <!-- APLICACIÓN CAJA -->
     <div id="app-caja" class="main-app-container active-app">
-        <!-- Formulario Caja: enterkeyhint="send" (Avioncito) -> Borra toda la Caja -->
         <form id="formCaja" onsubmit="ejecutarAccionTecladoCaja(event)" action="javascript:void(0);">
             <div class="caja-wrapper">
-                <!-- CABECERA CAJA -->
-                <div class="caja-header-row">
-                    <button type="button" class="btn-limpiar-top" onmousedown="gestionarLimpiarCaja(event)" ontouchstart="gestionarLimpiarCaja(event)">🧹 LIMPIAR CAJA</button>
-                    <div class="profile-toggle" id="btn-toggle-caja" style="border-color: #10b981;">
-                        <span class="toggle-icon">💵</span>
-                    </div>
-                </div>
-
-                <!-- PANEL SUPERIOR: EFECTIVO RECIBIDO / MONTO POR RETIRAR / MONTO A DEPOSITAR -->
+                
+                <!-- PANEL SUPERIOR: 4 VISIBLES + 4 AL DESLIZAR (8 TOTAL) -->
                 <div class="panel-total tema-recibo-header" id="panelSuperior" onmousedown="gestionarModoDeposito(event)" ontouchstart="gestionarModoDeposito(event)">
                     <div class="panel-title-area">
                         <span id="lblTituloSuperior">EFECTIVO RECIBIDO</span>
@@ -594,25 +538,29 @@
                 
                 <div class="caja-contenedor tema-recibo-bg" id="cajaSuperiorContenedor">
                     <div class="contenedor-deslizable" id="swipeEfectivo" onscroll="handleScrollIndicators('swipeEfectivo', 'dot-sup-1', 'dot-sup-2')">
-                        <!-- Página 1 -->
+                        <!-- Página 1 (4 casilleros) -->
                         <div class="pagina-deslizable">
                             <div class="grid-2">
                                 <input type="text" id="b1" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                                 <input type="text" id="b2" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b3" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b4" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                             </div>
                         </div>
-                        <!-- Página 2 -->
+                        <!-- Página 2 (4 casilleros adicionales) -->
                         <div class="pagina-deslizable pagina-secundaria">
                             <span class="badge-pagina-dos">PÁG. 2</span>
                             <div class="grid-2">
-                                <input type="text" id="b3" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
-                                <input type="text" id="b4" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b5" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b6" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b7" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
+                                <input type="text" id="b8" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- PANEL INFERIOR: RECIBO POR PAGAR / EFECTIVO RETIRADO / EFECTIVO RECIBIDO -->
+                <!-- PANEL INFERIOR: 4 VISIBLES + 4 AL DESLIZAR (8 TOTAL) -->
                 <div class="panel-total tema-recibo-header" id="panelModoSecundario" onmousedown="gestionarCambioModo(event)" ontouchstart="gestionarCambioModo(event)">
                     <div class="panel-title-area">
                         <span id="lblTituloModo">RECIBO POR PAGAR</span>
@@ -626,7 +574,7 @@
                 
                 <div class="caja-contenedor tema-recibo-bg" id="cajaInferiorContenedor">
                     <div class="contenedor-deslizable" id="swipeRecibo" onscroll="handleScrollIndicators('swipeRecibo', 'dot-inf-1', 'dot-inf-2')">
-                        <!-- Página 1 -->
+                        <!-- Página 1 (4 casilleros) -->
                         <div class="pagina-deslizable">
                             <div class="grid-2">
                                 <input type="text" id="p1" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
@@ -635,7 +583,7 @@
                                 <input type="text" id="p4" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                             </div>
                         </div>
-                        <!-- Página 2 -->
+                        <!-- Página 2 (4 casilleros adicionales) -->
                         <div class="pagina-deslizable pagina-secundaria">
                             <span class="badge-pagina-dos">PÁG. 2</span>
                             <div class="grid-2">
@@ -648,7 +596,7 @@
                     </div>
                 </div>
 
-                <!-- PANEL INFORMATIVO DE RESULTADO -->
+                <!-- PANEL INFORMATIVO DE RESULTADO AMPLIADO -->
                 <div class="panel-resultado estado-esperando" id="panelFinal">
                     <div class="badge-operacion" id="badgeOperacion">PAGO DE SERVICIOS</div>
                     <div id="textoFinal">ESPERANDO MONTOS...</div>
@@ -658,28 +606,17 @@
         </form>
     </div>
 
-
+    <!-- APLICACIÓN MULTIPLICADOR -->
     <div id="app-multiplicador" class="main-app-container">
-        <!-- Formulario Multiplicador: enterkeyhint="done" (Aspa / Check) -> Limpia solo Multiplicador -->
         <form id="formMultiplicador" onsubmit="ejecutarAccionTecladoMulti(event)" action="javascript:void(0);">
             <div class="multiplicador-wrapper">
                 
-                <!-- CABECERA MULTIPLICADOR -->
-                <div class="sticky-header">
-                    <div class="header-left-controls">
-                        <button type="button" class="btn-clear-compact" onmousedown="gestionarLimpiarMultiplicador(event)" ontouchstart="gestionarLimpiarMultiplicador(event)">
-                            <span>🧹</span> Limpiar
-                        </button>
-                        <div class="header-divider"></div>
-                        <div class="profile-toggle" id="btn-toggle-multi">
-                            <span class="toggle-icon">🛒</span>
-                        </div>
-                    </div>
-                    <div class="header-info">
-                        <div class="main-total" id="txtGranTotal">0.00</div>
-                    </div>
+                <!-- CABECERA AZUL COMPACTA CON RESULTADO MAYOR -->
+                <div class="sticky-header-compact">
+                    <div class="main-total-centered" id="txtGranTotal">0.00</div>
                 </div>
 
+                <!-- TABS DE NAVEGACIÓN -->
                 <div class="tabs-container-sub">
                     <button type="button" id="tab-btn-billetes" class="sub-tab-btn active" onmousedown="gestionarPestanaMultiplicador(event, 'tab-billetes', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-billetes', this)">💵 Billetes</button>
                     <button type="button" id="tab-btn-monedas" class="sub-tab-btn" onmousedown="gestionarPestanaMultiplicador(event, 'tab-monedas', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-monedas', this)">🪙 Monedas</button>
@@ -697,22 +634,47 @@
         </form>
     </div>
 
-
     <script>
         const formatoSoles = (num) => num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
-        // --- CONTROL DE MODOS E INDEPENDENCIA DE DATOS ---
         let modoOperacion = 'recibo'; 
-        let datosRecibo = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
-        let datosRetiro = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
-        let datosDeposito = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
+        
+        let datosSuperior = {
+            recibo: { b1: '', b2: '', b3: '', b4: '', b5: '', b6: '', b7: '', b8: '' },
+            retiro: { b1: '', b2: '', b3: '', b4: '', b5: '', b6: '', b7: '', b8: '' },
+            deposito: { b1: '', b2: '', b3: '', b4: '', b5: '', b6: '', b7: '', b8: '' }
+        };
 
-        // Memoria del último casillero activo para evitar saltos involuntarios
+        let datosInferior = {
+            recibo: { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' },
+            retiro: { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' },
+            deposito: { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' }
+        };
+
         let ultimoInputCajaActivo = null;
 
         function registrarFocoCaja(input) {
             if (input && !input.readOnly) {
                 ultimoInputCajaActivo = input.id;
+            }
+        }
+
+        function guardarValoresModoActual() {
+            for (let i = 1; i <= 8; i++) {
+                datosSuperior[modoOperacion]['b' + i] = document.getElementById('b' + i).value;
+                datosInferior[modoOperacion]['p' + i] = document.getElementById('p' + i).value;
+            }
+        }
+
+        function restaurarValoresModoActual() {
+            for (let i = 1; i <= 8; i++) {
+                let elB = document.getElementById('b' + i);
+                elB.value = datosSuperior[modoOperacion]['b' + i] || '';
+                formatInput(elB);
+
+                let elP = document.getElementById('p' + i);
+                elP.value = datosInferior[modoOperacion]['p' + i] || '';
+                formatInput(elP);
             }
         }
 
@@ -766,7 +728,6 @@
             }
         }
 
-        // --- INDICADORES LIMPIOS DE PÁGINA ---
         function handleScrollIndicators(scrollId, dot1Id, dot2Id) {
             const el = document.getElementById(scrollId);
             if (!el) return;
@@ -775,9 +736,29 @@
             document.getElementById(dot2Id).classList.toggle('active', esPagina2);
         }
 
+        // ROTACIÓN SECUENCIAL INTELIGENTE CON ESPACIO: RECIBO -> RETIRO -> DEPÓSITO -> RECIBO
+        function ciclarSiguienteModo() {
+            guardarValoresModoActual();
+
+            if (modoOperacion === 'recibo') {
+                modoOperacion = 'retiro';
+            } else if (modoOperacion === 'retiro') {
+                modoOperacion = 'deposito';
+            } else {
+                modoOperacion = 'recibo';
+            }
+
+            ultimoInputCajaActivo = null; 
+            actualizarEstiloVisualModo();
+            restaurarValoresModoActual();
+            reaplicarEstiloSincronizacion();
+            calcularTodo();
+            enfocarSiguienteInputVisible('app-caja');
+        }
+
         function gestionarCambioModo(event) {
             event.preventDefault();
-            guardarValoresPanelSecundario();
+            guardarValoresModoActual();
 
             if (modoOperacion === 'recibo') {
                 modoOperacion = 'retiro';
@@ -785,9 +766,9 @@
                 modoOperacion = 'recibo';
             }
 
-            ultimoInputCajaActivo = null; // Reinicia para enfocar el panel correcto del nuevo modo
+            ultimoInputCajaActivo = null; 
             actualizarEstiloVisualModo();
-            restaurarValoresPanelSecundario();
+            restaurarValoresModoActual();
             reaplicarEstiloSincronizacion();
             calcularTodo();
             enfocarSiguienteInputVisible('app-caja');
@@ -795,7 +776,7 @@
 
         function gestionarModoDeposito(event) {
             event.preventDefault();
-            guardarValoresPanelSecundario();
+            guardarValoresModoActual();
 
             if (modoOperacion === 'deposito') {
                 modoOperacion = 'recibo';
@@ -803,36 +784,12 @@
                 modoOperacion = 'deposito';
             }
 
-            ultimoInputCajaActivo = null; // Reinicia para enfocar el panel correcto del nuevo modo
+            ultimoInputCajaActivo = null; 
             actualizarEstiloVisualModo();
-            restaurarValoresPanelSecundario();
+            restaurarValoresModoActual();
             reaplicarEstiloSincronizacion();
             calcularTodo();
             enfocarSiguienteInputVisible('app-caja');
-        }
-
-        function guardarValoresPanelSecundario() {
-            let destino;
-            if (modoOperacion === 'recibo') destino = datosRecibo;
-            else if (modoOperacion === 'retiro') destino = datosRetiro;
-            else destino = datosDeposito;
-
-            for (let i = 1; i <= 8; i++) {
-                destino['p' + i] = document.getElementById('p' + i).value;
-            }
-        }
-
-        function restaurarValoresPanelSecundario() {
-            let origen;
-            if (modoOperacion === 'recibo') origen = datosRecibo;
-            else if (modoOperacion === 'retiro') origen = datosRetiro;
-            else origen = datosDeposito;
-
-            for (let i = 1; i <= 8; i++) {
-                let el = document.getElementById('p' + i);
-                el.value = origen['p' + i] || '';
-                formatInput(el);
-            }
         }
 
         function reaplicarEstiloSincronizacion() {
@@ -886,10 +843,8 @@
             }
         }
 
-        // --- ENFOQUE RESPETUOSO: NO SALTA SI YA ESTABAS TRABAJANDO EN UN CASILLERO ---
         function enfocarSiguienteInputVisible(containerId) {
             if (containerId === 'app-caja') {
-                // 1. Si ya estabas trabajando en un casillero específico, quédate ahí
                 if (ultimoInputCajaActivo) {
                     const inputRecordado = document.getElementById(ultimoInputCajaActivo);
                     if (inputRecordado && !inputRecordado.readOnly) {
@@ -898,13 +853,7 @@
                     }
                 }
 
-                // 2. Si no había casillero previo, utiliza la prioridad de entrada de cada modo
-                let selector;
-                if (modoOperacion === 'recibo') {
-                    selector = `#swipeRecibo input:not([readonly])`;
-                } else {
-                    selector = `#swipeEfectivo input:not([readonly])`;
-                }
+                let selector = (modoOperacion === 'recibo') ? `#swipeRecibo input:not([readonly])` : `#swipeEfectivo input:not([readonly])`;
 
                 let inputsPrioridad = document.querySelectorAll(selector);
                 for (let i = 0; i < inputsPrioridad.length; i++) {
@@ -922,7 +871,6 @@
                 }
             }
 
-            // Para el multiplicador
             let inputsGenerales = document.querySelectorAll(`#${containerId} input:not([readonly])`);
             for (let i = 0; i < inputsGenerales.length; i++) {
                 if (inputsGenerales[i].value === '' || inputsGenerales[i].value === '0') {
@@ -931,12 +879,6 @@
                 }
             }
             if (inputsGenerales.length > 0) inputsGenerales[0].focus();
-        }
-
-        function gestionarLimpiarCaja(event) {
-            if (event) event.preventDefault(); 
-            limpiarCaja(); 
-            enfocarSiguienteInputVisible('app-caja'); 
         }
 
         function ejecutarAccionTecladoCaja(e) {
@@ -949,8 +891,7 @@
             return false;
         }
 
-        function gestionarLimpiarMultiplicador(event) {
-            if (event) event.preventDefault(); 
+        function gestionarLimpiarMultiplicador() {
             clearAllData(); 
             const tabActiva = document.querySelector('.sub-tab-btn.active');
             if (tabActiva) {
@@ -964,7 +905,7 @@
                 e.preventDefault();
                 e.stopPropagation();
             }
-            gestionarLimpiarMultiplicador(null);
+            gestionarLimpiarMultiplicador();
             return false;
         }
 
@@ -987,7 +928,6 @@
 
         document.addEventListener('touchstart', (e) => {
             if(e.target.closest('.contenedor-deslizable')) return;
-            if(e.target.closest('.profile-toggle')) return; 
             if(e.target.closest('.sub-tab-btn')) return; 
             if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
             startX = e.touches[0].clientX;
@@ -1015,24 +955,6 @@
             startY = 0;
         }, {passive: true});
 
-        function setupProfileToggle(elementId) {
-            const el = document.getElementById(elementId);
-            if (!el) return;
-
-            const handleInteraccion = (e) => {
-                e.preventDefault(); 
-                el.style.transform = "scale(0.85)";
-                setTimeout(() => { el.style.transform = "scale(1)"; }, 150);
-                alternarPantallas();
-            };
-
-            el.addEventListener('mousedown', handleInteraccion, { passive: false });
-            el.addEventListener('touchstart', handleInteraccion, { passive: false });
-        }
-
-        setupProfileToggle('btn-toggle-caja');
-        setupProfileToggle('btn-toggle-multi');
-
         const getVal = (id) => parseFloat(document.getElementById(id).value.replace(/,/g, '')) || 0;
 
         function formatInput(input) {
@@ -1054,7 +976,7 @@
         function handleInput(input) { 
             formatInput(input); 
             registrarFocoCaja(input);
-            guardarValoresPanelSecundario();
+            guardarValoresModoActual();
             calcularTodo(); 
         }
 
@@ -1076,17 +998,16 @@
             input.value = val;
             formatInput(input);
             registrarFocoCaja(input);
-            guardarValoresPanelSecundario();
+            guardarValoresModoActual();
             calcularTodo();
         }
 
         function calcularTodo() {
-            var b1 = getVal('b1'); var b2 = getVal('b2'); var b3 = getVal('b3'); var b4 = getVal('b4');
-            var totalSuperior = b1 + b2 + b3 + b4;
+            var totalSuperior = 0;
+            for (let i = 1; i <= 8; i++) totalSuperior += getVal('b' + i);
             
-            var p1 = getVal('p1'); var p2 = getVal('p2'); var p3 = getVal('p3'); var p4 = getVal('p4'); 
-            var p5 = getVal('p5'); var p6 = getVal('p6'); var p7 = getVal('p7'); var p8 = getVal('p8');
-            var totalInferior = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8;
+            var totalInferior = 0;
+            for (let i = 1; i <= 8; i++) totalInferior += getVal('p' + i);
 
             document.getElementById('lblEfectivo').innerText = formatoSoles(totalSuperior);
             document.getElementById('lblRecibo').innerText = formatoSoles(totalInferior);
@@ -1143,7 +1064,6 @@
                     }
                 }
             } else {
-                // Modo Depósito
                 if (totalInferior === 0 && totalSuperior === 0) {
                     panel.className = "panel-resultado estado-esperando";
                     texto.innerText = "ESPERANDO DEPÓSITO..."; 
@@ -1188,9 +1108,14 @@
                 i.classList.remove('active-sync', 'active-sync-retiro', 'active-sync-deposito');
                 i.readOnly = false;
             });
-            datosRecibo = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
-            datosRetiro = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
-            datosDeposito = { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', p7: '', p8: '' };
+
+            ['recibo', 'retiro', 'deposito'].forEach(m => {
+                for (let i = 1; i <= 8; i++) {
+                    datosSuperior[m]['b' + i] = '';
+                    datosInferior[m]['p' + i] = '';
+                }
+            });
+
             cuadroVinculado = null; 
             ultimoInputCajaActivo = null;
             
@@ -1288,7 +1213,7 @@
             if(granTotalNumerico > 0) {
                 const listaOpciones = (modoOperacion === 'retiro' || modoOperacion === 'deposito') 
                     ? ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8'] 
-                    : ['b1', 'b2', 'b3', 'b4'];
+                    : ['b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8'];
 
                 if (!cuadroVinculado || !listaOpciones.includes(cuadroVinculado)) {
                     if (cuadroVinculado) {
@@ -1314,9 +1239,11 @@
                 formatInput(targetInput);
                 
                 if (modoOperacion === 'retiro') {
-                    datosRetiro[cuadroVinculado] = targetInput.value;
+                    datosInferior.retiro[cuadroVinculado] = targetInput.value;
                 } else if (modoOperacion === 'deposito') {
-                    datosDeposito[cuadroVinculado] = targetInput.value;
+                    datosInferior.deposito[cuadroVinculado] = targetInput.value;
+                } else {
+                    datosSuperior.recibo[cuadroVinculado] = targetInput.value;
                 }
 
                 reaplicarEstiloSincronizacion();
@@ -1330,9 +1257,11 @@
                         targetInput.readOnly = false;
                     }
                     if (modoOperacion === 'retiro') {
-                        datosRetiro[cuadroVinculado] = '';
+                        datosInferior.retiro[cuadroVinculado] = '';
                     } else if (modoOperacion === 'deposito') {
-                        datosDeposito[cuadroVinculado] = '';
+                        datosInferior.deposito[cuadroVinculado] = '';
+                    } else {
+                        datosSuperior.recibo[cuadroVinculado] = '';
                     }
                     cuadroVinculado = null;
                 }
@@ -1341,9 +1270,10 @@
         }
 
         // =======================================================
-        // INTEGRACIÓN DE TECLADO NATIVO (-, ,, ACCIONES ENTER)
+        // INTEGRACIÓN DE TECLADO NATIVO (-, ESPACIO, ,, ENTER)
         // =======================================================
         function procesarTeclasEspeciales(e) {
+            // Tecla Guion (-): Alterna de inmediato entre Caja y Multiplicador
             if (e.key === '-' || e.key === 'Minus' || e.code === 'NumpadSubtract' || e.code === 'Minus') {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1351,6 +1281,18 @@
                 return;
             }
 
+            // Tecla Espacio: Rota entre Pago de Servicios -> Retiro -> Depósito
+            if (e.key === ' ' || e.code === 'Space' || e.keyCode === 32) {
+                const isCajaActiva = document.getElementById('app-caja').classList.contains('active-app');
+                if (isCajaActiva) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    ciclarSiguienteModo();
+                    return;
+                }
+            }
+
+            // Tecla Coma (,): Inserta 00
             if (e.key === ',' || e.code === 'Comma') {
                 const el = document.activeElement;
                 if (el && el.tagName === 'INPUT' && !el.readOnly) {
@@ -1361,6 +1303,7 @@
                 }
             }
 
+            // Tecla Enter / Enviar / Siguiente
             const esEnterOAccion = (
                 e.key === 'Enter' || 
                 e.keyCode === 13 || 
@@ -1380,18 +1323,26 @@
                 } else {
                     e.preventDefault();
                     e.stopPropagation();
-                    gestionarLimpiarMultiplicador(null);
+                    gestionarLimpiarMultiplicador();
                 }
             }
         }
 
         document.addEventListener('keydown', procesarTeclasEspeciales, true);
 
+        // Captura directa para teclados móviles que disparan beforeinput
         document.addEventListener('beforeinput', (e) => {
             if (e.data === '-') {
                 e.preventDefault();
                 e.stopPropagation();
                 alternarPantallas();
+            } else if (e.data === ' ') {
+                const isCajaActiva = document.getElementById('app-caja').classList.contains('active-app');
+                if (isCajaActiva) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    ciclarSiguienteModo();
+                }
             } else if (e.data === ',') {
                 const el = document.activeElement;
                 if (el && el.tagName === 'INPUT' && !el.readOnly) {
