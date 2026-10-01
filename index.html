@@ -467,7 +467,7 @@
             width: 86px; height: 48px; font-size: 36px; border-radius: 8px;
         }
 
-        /* --- ESCALA PARA MONEDAS (IGUAL A LA DE BILLETES ANTERIOR) --- */
+        /* --- ESCALA PARA MONEDAS --- */
         #tab-monedas .item-card { 
             padding: 8px 8px; 
             margin-bottom: 6px; 
@@ -736,7 +736,6 @@
             document.getElementById(dot2Id).classList.toggle('active', esPagina2);
         }
 
-        // ROTACIÓN SECUENCIAL INTELIGENTE CON ESPACIO: RECIBO -> RETIRO -> DEPÓSITO -> RECIBO
         function ciclarSiguienteModo() {
             guardarValoresModoActual();
 
@@ -955,7 +954,12 @@
             startY = 0;
         }, {passive: true});
 
-        const getVal = (id) => parseFloat(document.getElementById(id).value.replace(/,/g, '')) || 0;
+        // Conversión a céntimos enteros (Evita bugs de coma flotante)
+        const getValCentimos = (id) => {
+            const raw = document.getElementById(id).value.replace(/,/g, '').trim();
+            const num = parseFloat(raw);
+            return isNaN(num) ? 0 : Math.round(num * 100);
+        };
 
         function formatInput(input) {
             let original = input.value;
@@ -1002,12 +1006,16 @@
             calcularTodo();
         }
 
+        // MOTOR DE CÁLCULO BLINDADO CON ENTEROS (CÉNTIMOS)
         function calcularTodo() {
-            var totalSuperior = 0;
-            for (let i = 1; i <= 8; i++) totalSuperior += getVal('b' + i);
+            var centimosSuperior = 0;
+            for (let i = 1; i <= 8; i++) centimosSuperior += getValCentimos('b' + i);
             
-            var totalInferior = 0;
-            for (let i = 1; i <= 8; i++) totalInferior += getVal('p' + i);
+            var centimosInferior = 0;
+            for (let i = 1; i <= 8; i++) centimosInferior += getValCentimos('p' + i);
+
+            var totalSuperior = centimosSuperior / 100;
+            var totalInferior = centimosInferior / 100;
 
             document.getElementById('lblEfectivo').innerText = formatoSoles(totalSuperior);
             document.getElementById('lblRecibo').innerText = formatoSoles(totalInferior);
@@ -1017,85 +1025,92 @@
             var monto = document.getElementById('montoFinal');
 
             if (modoOperacion === 'recibo') {
-                var diferencia = totalSuperior - totalInferior;
+                var difCentimos = centimosSuperior - centimosInferior;
 
-                if (totalInferior === 0 && totalSuperior === 0) {
+                if (centimosInferior === 0 && centimosSuperior === 0) {
                     panel.className = "panel-resultado estado-esperando";
-                    texto.innerText = "ESPERANDO MONTOS..."; monto.innerText = "0.00";
-                } else if (totalInferior === 0 && totalSuperior > 0) {
+                    texto.innerText = "ESPERANDO MONTOS..."; 
+                    monto.innerText = "0.00";
+                } else if (centimosInferior === 0 && centimosSuperior > 0) {
                     panel.className = "panel-resultado estado-proceso";
-                    texto.innerText = "EFECTIVO RECIBIDO"; monto.innerText = formatoSoles(totalSuperior);
-                } else if (totalInferior > 0 && totalSuperior === 0) {
+                    texto.innerText = "EFECTIVO RECIBIDO"; 
+                    monto.innerText = formatoSoles(totalSuperior);
+                } else if (centimosInferior > 0 && centimosSuperior === 0) {
                     panel.className = "panel-resultado estado-cobrar";
-                    texto.innerText = "FALTA QUE TE PAGUE"; monto.innerText = formatoSoles(totalInferior);
+                    texto.innerText = "FALTA QUE TE PAGUE"; 
+                    monto.innerText = formatoSoles(totalInferior);
                 } else {
-                    if (diferencia < 0) {
-                        panel.className = "panel-resultado estado-faltante";
-                        texto.innerText = "FALTA QUE TE PAGUE"; monto.innerText = formatoSoles(Math.abs(diferencia));
-                    } else if (diferencia === 0) {
+                    if (difCentimos === 0) {
                         panel.className = "panel-resultado estado-exacto";
-                        texto.innerText = "PAGO EXACTO CONFORME"; monto.innerText = formatoSoles(0);
+                        texto.innerText = "PAGO EXACTO CONFORME"; 
+                        monto.innerText = formatoSoles(0);
+                    } else if (difCentimos < 0) {
+                        panel.className = "panel-resultado estado-faltante";
+                        texto.innerText = "FALTA QUE TE PAGUE"; 
+                        monto.innerText = formatoSoles(Math.abs(difCentimos) / 100);
                     } else {
                         panel.className = "panel-resultado estado-vuelto";
-                        texto.innerText = "VUELTO PARA EL CLIENTE"; monto.innerText = formatoSoles(diferencia);
+                        texto.innerText = "VUELTO PARA EL CLIENTE"; 
+                        monto.innerText = formatoSoles(difCentimos / 100);
                     }
                 }
             } else if (modoOperacion === 'retiro') {
-                if (totalInferior === 0 && totalSuperior === 0) {
+                if (centimosInferior === 0 && centimosSuperior === 0) {
                     panel.className = "panel-resultado estado-esperando";
-                    texto.innerText = "ESPERANDO RETIRO..."; monto.innerText = "0.00";
-                } else if (totalInferior > 0 && totalSuperior === 0) {
+                    texto.innerText = "ESPERANDO RETIRO..."; 
+                    monto.innerText = "0.00";
+                } else if (centimosInferior > 0 && centimosSuperior === 0) {
                     panel.className = "panel-resultado estado-retiro";
-                    texto.innerText = "DINERO CONTADO EN MANO"; monto.innerText = formatoSoles(totalInferior);
-                } else if (totalSuperior > 0 && totalInferior === 0) {
+                    texto.innerText = "DINERO CONTADO EN MANO"; 
+                    monto.innerText = formatoSoles(totalInferior);
+                } else if (centimosSuperior > 0 && centimosInferior === 0) {
                     panel.className = "panel-resultado estado-proceso";
-                    texto.innerText = "MONTO POR ENTREGAR"; monto.innerText = formatoSoles(totalSuperior);
+                    texto.innerText = "MONTO POR ENTREGAR"; 
+                    monto.innerText = formatoSoles(totalSuperior);
                 } else {
-                    var difRetiro = totalSuperior - totalInferior;
-                    if (difRetiro === 0) {
+                    var difRetiroCentimos = centimosSuperior - centimosInferior;
+                    if (difRetiroCentimos === 0) {
                         panel.className = "panel-resultado estado-exacto";
-                        texto.innerText = "MONTO EXACTO A ENTREGAR"; monto.innerText = formatoSoles(0);
-                    } else if (difRetiro > 0) {
+                        texto.innerText = "MONTO EXACTO A ENTREGAR"; 
+                        monto.innerText = formatoSoles(0);
+                    } else if (difRetiroCentimos > 0) {
                         panel.className = "panel-resultado estado-faltante";
-                        texto.innerText = "FALTA ENTREGAR AL CLIENTE"; monto.innerText = formatoSoles(difRetiro);
+                        texto.innerText = "FALTA ENTREGAR AL CLIENTE"; 
+                        monto.innerText = formatoSoles(difRetiroCentimos / 100);
                     } else {
                         panel.className = "panel-resultado estado-cobrar";
-                        texto.innerText = "¡CUIDADO! DAS DE MÁS"; monto.innerText = formatoSoles(Math.abs(difRetiro));
+                        texto.innerText = "¡CUIDADO! DAS DE MÁS"; 
+                        monto.innerText = formatoSoles(Math.abs(difRetiroCentimos) / 100);
                     }
                 }
             } else {
-                if (totalInferior === 0 && totalSuperior === 0) {
+                if (centimosInferior === 0 && centimosSuperior === 0) {
                     panel.className = "panel-resultado estado-esperando";
                     texto.innerText = "ESPERANDO DEPÓSITO..."; 
                     monto.innerText = "0.00";
-
-                } else if (totalSuperior > 0 && totalInferior === 0) {
+                } else if (centimosSuperior > 0 && centimosInferior === 0) {
                     panel.className = "panel-resultado estado-exacto";
                     texto.innerText = "DEPÓSITO DIRECTO (SIN VUELTO)"; 
                     monto.innerText = formatoSoles(totalSuperior);
-
-                } else if (totalSuperior === 0 && totalInferior > 0) {
+                } else if (centimosSuperior === 0 && centimosInferior > 0) {
                     panel.className = "panel-resultado estado-deposito";
                     texto.innerText = "DINERO CONTADO EN MANO"; 
                     monto.innerText = formatoSoles(totalInferior);
-
                 } else {
-                    var balanceDeposito = totalInferior - totalSuperior;
+                    var balanceDepositoCentimos = centimosInferior - centimosSuperior;
 
-                    if (balanceDeposito === 0) {
+                    if (balanceDepositoCentimos === 0) {
                         panel.className = "panel-resultado estado-exacto";
                         texto.innerText = "DEPÓSITO EXACTO CONFORME"; 
                         monto.innerText = formatoSoles(0);
-
-                    } else if (balanceDeposito > 0) {
+                    } else if (balanceDepositoCentimos > 0) {
                         panel.className = "panel-resultado estado-vuelto";
                         texto.innerText = "VUELTO PARA EL CLIENTE"; 
-                        monto.innerText = formatoSoles(balanceDeposito);
-
+                        monto.innerText = formatoSoles(balanceDepositoCentimos / 100);
                     } else {
                         panel.className = "panel-resultado estado-faltante";
                         texto.innerText = "FALTA QUE TE PAGUE"; 
-                        monto.innerText = formatoSoles(Math.abs(balanceDeposito));
+                        monto.innerText = formatoSoles(Math.abs(balanceDepositoCentimos) / 100);
                     }
                 }
             }
@@ -1195,20 +1210,20 @@
         let cuadroVinculado = null; 
 
         function calculateAllCounter() {
-            let tBilletes = 0, tMonedas = 0;
+            let centimosBilletes = 0, centimosMonedas = 0;
             denominacionesBilletes.forEach(d => { 
-                const sub = d * cantidadesBilletes[d]; tBilletes += sub; 
-                document.getElementById(`sub-b-${d}`).innerText = formatter.format(sub).replace(/S\/\s*/, ''); 
+                const subCentimos = Math.round(d * 100) * (cantidadesBilletes[d] || 0); 
+                centimosBilletes += subCentimos; 
+                document.getElementById(`sub-b-${d}`).innerText = formatoSoles(subCentimos / 100); 
             });
             denominacionesMonedas.forEach(d => { 
-                const sub = d * cantidadesMonedas[d]; tMonedas += sub; 
-                document.getElementById(`sub-m-${d}`).innerText = formatter.format(sub).replace(/S\/\s*/, ''); 
+                const subCentimos = Math.round(d * 100) * (cantidadesMonedas[d] || 0); 
+                centimosMonedas += subCentimos; 
+                document.getElementById(`sub-m-${d}`).innerText = formatoSoles(subCentimos / 100); 
             });
 
-            let granTotalNumerico = tBilletes + tMonedas;
-            let totalFormateado = formatter.format(granTotalNumerico);
-            let soloNumero = totalFormateado.replace(/S\/\s*/, '');
-            document.getElementById('txtGranTotal').innerHTML = soloNumero;
+            let granTotalNumerico = (centimosBilletes + centimosMonedas) / 100;
+            document.getElementById('txtGranTotal').innerText = formatoSoles(granTotalNumerico);
 
             if(granTotalNumerico > 0) {
                 const listaOpciones = (modoOperacion === 'retiro' || modoOperacion === 'deposito') 
@@ -1273,7 +1288,6 @@
         // INTEGRACIÓN DE TECLADO NATIVO (-, ESPACIO, ,, ENTER)
         // =======================================================
         function procesarTeclasEspeciales(e) {
-            // Tecla Guion (-): Alterna de inmediato entre Caja y Multiplicador
             if (e.key === '-' || e.key === 'Minus' || e.code === 'NumpadSubtract' || e.code === 'Minus') {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1281,7 +1295,6 @@
                 return;
             }
 
-            // Tecla Espacio: Rota entre Pago de Servicios -> Retiro -> Depósito
             if (e.key === ' ' || e.code === 'Space' || e.keyCode === 32) {
                 const isCajaActiva = document.getElementById('app-caja').classList.contains('active-app');
                 if (isCajaActiva) {
@@ -1292,7 +1305,6 @@
                 }
             }
 
-            // Tecla Coma (,): Inserta 00
             if (e.key === ',' || e.code === 'Comma') {
                 const el = document.activeElement;
                 if (el && el.tagName === 'INPUT' && !el.readOnly) {
@@ -1303,7 +1315,6 @@
                 }
             }
 
-            // Tecla Enter / Enviar / Siguiente
             const esEnterOAccion = (
                 e.key === 'Enter' || 
                 e.keyCode === 13 || 
@@ -1330,7 +1341,6 @@
 
         document.addEventListener('keydown', procesarTeclasEspeciales, true);
 
-        // Captura directa para teclados móviles que disparan beforeinput
         document.addEventListener('beforeinput', (e) => {
             if (e.data === '-') {
                 e.preventDefault();
