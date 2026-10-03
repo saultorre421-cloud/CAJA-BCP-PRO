@@ -104,10 +104,8 @@
             text-transform: uppercase; 
             box-shadow: 0 2px 4px rgba(0,0,0,0.06);
             user-select: none;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.05s, color 0.2s ease;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
-        .panel-total:active { transform: scale(0.99); }
         
         .panel-title-area {
             display: flex;
@@ -285,7 +283,7 @@
             border-radius: 10px; 
             text-align: center; 
             font-weight: bold; 
-            margin-bottom: 2px; 
+            margin-bottom: 7px; /* Distancia uniforme hacia los selectores */
             border: 3px solid; 
             transition: all 0.2s; 
             box-shadow: 0 2px 6px rgba(0,0,0,0.06);
@@ -334,6 +332,76 @@
         .estado-exacto { background-color: #dcfce7; border-color: #16a34a; color: #15803d; }
         .estado-retiro { background-color: #FFF1F2; border-color: var(--retiro-header); color: #9F1239; }
         .estado-deposito { background-color: #ccfbf1; border-color: var(--deposito-header); color: #0f766e; }
+
+        /* =========================================
+           BOTONERA DE MODOS INTEGRADA (3 COLUMNAS)
+           ========================================= */
+        .selector-modos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
+            margin-bottom: 4px;
+        }
+
+        .btn-modo-operacion {
+            height: 46px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease-in-out;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .btn-modo-operacion:active {
+            transform: scale(0.97);
+        }
+
+        /* 1. Botón Depósito (Izquierda) */
+        #btn-modo-deposito {
+            background-color: #e6fffa;
+            color: #0d9488;
+            border-color: #99f6e4;
+        }
+        #btn-modo-deposito.active-modo {
+            background-color: var(--deposito-header) !important;
+            color: #ffffff !important;
+            border-color: #0f766e !important;
+            box-shadow: 0 3px 8px rgba(13, 148, 136, 0.4);
+        }
+
+        /* 2. Botón Servicio / Recibo (Centro) */
+        #btn-modo-servicio {
+            background-color: #fefce8;
+            color: #a16207;
+            border-color: #fef08a;
+        }
+        #btn-modo-servicio.active-modo {
+            background-color: var(--recibo-header) !important;
+            color: #000000 !important;
+            border-color: #ca8a04 !important;
+            box-shadow: 0 3px 8px rgba(234, 179, 8, 0.4);
+        }
+
+        /* 3. Botón Retiro (Derecha) */
+        #btn-modo-retiro {
+            background-color: #fff1f2;
+            color: #e11d48;
+            border-color: #fecdd3;
+        }
+        #btn-modo-retiro.active-modo {
+            background-color: var(--retiro-header) !important;
+            color: #ffffff !important;
+            border-color: #be123c !important;
+            box-shadow: 0 3px 8px rgba(225, 29, 72, 0.4);
+        }
 
         /* =========================================
            MULTIPLICADOR: ESCALA DE ELEMENTOS
@@ -442,7 +510,6 @@
             gap: 2px; 
         }
 
-        /* --- ESCALA MAYOR PARA BILLETES --- */
         #tab-billetes .item-card {
             padding: 10px 9px;
             margin-bottom: 7px;
@@ -467,7 +534,6 @@
             width: 86px; height: 48px; font-size: 36px; border-radius: 8px;
         }
 
-        /* --- ESCALA PARA MONEDAS --- */
         #tab-monedas .item-card { 
             padding: 8px 8px; 
             margin-bottom: 6px; 
@@ -525,7 +591,7 @@
             <div class="caja-wrapper">
                 
                 <!-- PANEL SUPERIOR: 4 VISIBLES + 4 AL DESLIZAR (8 TOTAL) -->
-                <div class="panel-total tema-recibo-header" id="panelSuperior" onmousedown="gestionarModoDeposito(event)" ontouchstart="gestionarModoDeposito(event)">
+                <div class="panel-total tema-recibo-header" id="panelSuperior">
                     <div class="panel-title-area">
                         <span id="lblTituloSuperior">EFECTIVO RECIBIDO</span>
                         <div class="header-dots">
@@ -561,7 +627,7 @@
                 </div>
 
                 <!-- PANEL INFERIOR: 4 VISIBLES + 4 AL DESLIZAR (8 TOTAL) -->
-                <div class="panel-total tema-recibo-header" id="panelModoSecundario" onmousedown="gestionarCambioModo(event)" ontouchstart="gestionarCambioModo(event)">
+                <div class="panel-total tema-recibo-header" id="panelModoSecundario">
                     <div class="panel-title-area">
                         <span id="lblTituloModo">RECIBO POR PAGAR</span>
                         <div class="header-dots">
@@ -602,6 +668,20 @@
                     <div id="textoFinal">ESPERANDO MONTOS...</div>
                     <span class="monto-final" id="montoFinal">0.00</span>
                 </div>
+
+                <!-- SELECTOR PROFESIONAL DE MODOS EN ORDEN DIRECTO (3 COLUMNAS) -->
+                <div class="selector-modos-grid">
+                    <button type="button" class="btn-modo-operacion" id="btn-modo-deposito" onmousedown="seleccionarModoDirecto(event, 'deposito')" ontouchstart="seleccionarModoDirecto(event, 'deposito')">
+                        DEPÓSITO
+                    </button>
+                    <button type="button" class="btn-modo-operacion active-modo" id="btn-modo-servicio" onmousedown="seleccionarModoDirecto(event, 'recibo')" ontouchstart="seleccionarModoDirecto(event, 'recibo')">
+                        SERVICIO
+                    </button>
+                    <button type="button" class="btn-modo-operacion" id="btn-modo-retiro" onmousedown="seleccionarModoDirecto(event, 'retiro')" ontouchstart="seleccionarModoDirecto(event, 'retiro')">
+                        RETIRO
+                    </button>
+                </div>
+
             </div>
         </form>
     </div>
@@ -693,6 +773,14 @@
             cajaSup.className = 'caja-contenedor';
             cajaInf.className = 'caja-contenedor';
 
+            const btnDep = document.getElementById('btn-modo-deposito');
+            const btnSer = document.getElementById('btn-modo-servicio');
+            const btnRet = document.getElementById('btn-modo-retiro');
+
+            btnDep.classList.remove('active-modo');
+            btnSer.classList.remove('active-modo');
+            btnRet.classList.remove('active-modo');
+
             if (modoOperacion === 'recibo') {
                 panelSuperior.classList.add('tema-recibo-header');
                 tituloSuperior.innerText = 'EFECTIVO RECIBIDO';
@@ -703,6 +791,7 @@
                 cajaInf.classList.add('tema-recibo-bg');
 
                 badge.innerText = 'PAGO DE SERVICIOS / RECIBO';
+                btnSer.classList.add('active-modo');
 
             } else if (modoOperacion === 'retiro') {
                 panelSuperior.classList.add('tema-retiro-header');
@@ -714,6 +803,7 @@
                 cajaInf.classList.add('tema-retiro-bg');
 
                 badge.innerText = 'RETIRO EN EFECTIVO';
+                btnRet.classList.add('active-modo');
 
             } else if (modoOperacion === 'deposito') {
                 panelSuperior.classList.add('tema-deposito-header');
@@ -725,6 +815,7 @@
                 cajaInf.classList.add('tema-deposito-bg');
 
                 badge.innerText = 'DEPÓSITO EN CUENTA';
+                btnDep.classList.add('active-modo');
             }
         }
 
@@ -736,54 +827,21 @@
             document.getElementById(dot2Id).classList.toggle('active', esPagina2);
         }
 
-        function ciclarSiguienteModo() {
-            guardarValoresModoActual();
-
-            if (modoOperacion === 'recibo') {
-                modoOperacion = 'retiro';
-            } else if (modoOperacion === 'retiro') {
-                modoOperacion = 'deposito';
-            } else {
-                modoOperacion = 'recibo';
+        // Selección directa e instantánea mediante la botonera
+        function seleccionarModoDirecto(event, nuevoModo) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            if (modoOperacion === nuevoModo) {
+                enfocarSiguienteInputVisible('app-caja');
+                return;
             }
 
-            ultimoInputCajaActivo = null; 
-            actualizarEstiloVisualModo();
-            restaurarValoresModoActual();
-            reaplicarEstiloSincronizacion();
-            calcularTodo();
-            enfocarSiguienteInputVisible('app-caja');
-        }
-
-        function gestionarCambioModo(event) {
-            event.preventDefault();
             guardarValoresModoActual();
+            modoOperacion = nuevoModo;
+            ultimoInputCajaActivo = null;
 
-            if (modoOperacion === 'recibo') {
-                modoOperacion = 'retiro';
-            } else {
-                modoOperacion = 'recibo';
-            }
-
-            ultimoInputCajaActivo = null; 
-            actualizarEstiloVisualModo();
-            restaurarValoresModoActual();
-            reaplicarEstiloSincronizacion();
-            calcularTodo();
-            enfocarSiguienteInputVisible('app-caja');
-        }
-
-        function gestionarModoDeposito(event) {
-            event.preventDefault();
-            guardarValoresModoActual();
-
-            if (modoOperacion === 'deposito') {
-                modoOperacion = 'recibo';
-            } else {
-                modoOperacion = 'deposito';
-            }
-
-            ultimoInputCajaActivo = null; 
             actualizarEstiloVisualModo();
             restaurarValoresModoActual();
             reaplicarEstiloSincronizacion();
@@ -928,6 +986,7 @@
         document.addEventListener('touchstart', (e) => {
             if(e.target.closest('.contenedor-deslizable')) return;
             if(e.target.closest('.sub-tab-btn')) return; 
+            if(e.target.closest('.selector-modos-grid')) return;
             if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
@@ -1006,7 +1065,7 @@
             calcularTodo();
         }
 
-        // MOTOR DE CÁLCULO BLINDADO CON ENTEROS (CÉNTIMOS)
+        // MOTOR DE CÁLCULO
         function calcularTodo() {
             var centimosSuperior = 0;
             for (let i = 1; i <= 8; i++) centimosSuperior += getValCentimos('b' + i);
@@ -1150,7 +1209,6 @@
         let cantidadesBilletes = {}; let cantidadesMonedas = {};
         denominacionesBilletes.forEach(d => cantidadesBilletes[d] = 0);
         denominacionesMonedas.forEach(d => cantidadesMonedas[d] = 0);
-        const formatter = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN', minimumFractionDigits: 2 });
 
         const containerBilletes = document.getElementById('containerBilletes');
         denominacionesBilletes.forEach(denom => {
@@ -1285,7 +1343,7 @@
         }
 
         // =======================================================
-        // INTEGRACIÓN DE TECLADO NATIVO (-, ESPACIO, ,, ENTER)
+        // INTEGRACIÓN DE TECLADO NATIVO (-, ,, ENTER)
         // =======================================================
         function procesarTeclasEspeciales(e) {
             if (e.key === '-' || e.key === 'Minus' || e.code === 'NumpadSubtract' || e.code === 'Minus') {
@@ -1293,16 +1351,6 @@
                 e.stopPropagation();
                 alternarPantallas();
                 return;
-            }
-
-            if (e.key === ' ' || e.code === 'Space' || e.keyCode === 32) {
-                const isCajaActiva = document.getElementById('app-caja').classList.contains('active-app');
-                if (isCajaActiva) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    ciclarSiguienteModo();
-                    return;
-                }
             }
 
             if (e.key === ',' || e.code === 'Comma') {
@@ -1346,13 +1394,6 @@
                 e.preventDefault();
                 e.stopPropagation();
                 alternarPantallas();
-            } else if (e.data === ' ') {
-                const isCajaActiva = document.getElementById('app-caja').classList.contains('active-app');
-                if (isCajaActiva) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    ciclarSiguienteModo();
-                }
             } else if (e.data === ',') {
                 const el = document.activeElement;
                 if (el && el.tagName === 'INPUT' && !el.readOnly) {
