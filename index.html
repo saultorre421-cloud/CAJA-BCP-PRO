@@ -89,15 +89,14 @@
            CAJA PRINCIPAL: ESTRUCTURA Y TEXTOS
            ========================================= */
         .caja-wrapper {
-            padding: 2px 4px 6px 4px; /* Pegado arriba al ras y extendido a los bordes laterales */
+            padding: 2px 4px 6px 4px;
         }
 
-        /* Paneles interactivos de totales */
         .panel-total { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 4px 8px 4px 6px; /* Pegado más a la izquierda */
+            padding: 4px 8px 4px 6px;
             border-radius: 9px 9px 0 0; 
             font-size: 16px; 
             font-weight: 900; 
@@ -122,7 +121,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Puntos de paginación */
         .header-dots {
             display: inline-flex;
             align-items: center;
@@ -159,7 +157,6 @@
             text-align: right;
         }
 
-        /* Clases cromáticas unificadas para cabeceras */
         .tema-recibo-header { 
             background-color: var(--recibo-header) !important; 
             color: var(--recibo-header-text) !important; 
@@ -173,7 +170,6 @@
             color: var(--retiro-header-text) !important; 
         }
 
-        /* Contenedores con color de fondo envolvente */
         .caja-contenedor { 
             padding: 4px 5px 5px 5px; 
             border-radius: 0 0 10px 10px; 
@@ -217,32 +213,31 @@
             position: relative;
         }
 
+        /* Ambas páginas tienen idéntica altura y márgenes */
         .pagina-deslizable.pagina-secundaria {
-            background-image: repeating-linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0.65),
-                rgba(255, 255, 255, 0.65) 5px,
-                transparent 5px,
-                transparent 12px
-            );
-            border: 1px dashed rgba(0, 0, 0, 0.25);
-            padding: 2px 2px;
+            padding: 0;
+            background: transparent;
+            border: none;
         }
 
+        /* Etiqueta PÁG. 2: Asentada limpia y centrada en la base inferior */
         .badge-pagina-dos {
             position: absolute;
-            top: -4px;
-            right: 4px;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
             background-color: #0f172a;
             color: #ffffff;
             font-size: 8px;
             font-weight: 900;
-            padding: 1px 5px;
+            padding: 1.5px 8px;
             border-radius: 3px;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.3);
             pointer-events: none;
-            z-index: 10;
+            z-index: 5;
+            text-transform: uppercase;
+            line-height: 1;
         }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
@@ -377,7 +372,6 @@
             transform: scale(0.97);
         }
 
-        /* 1. Botón Depósito (Izquierda) */
         #btn-modo-deposito {
             background-color: #e6fffa;
             color: #0d9488;
@@ -390,7 +384,6 @@
             box-shadow: 0 3px 8px rgba(13, 148, 136, 0.4);
         }
 
-        /* 2. Botón Servicio / Recibo (Centro) */
         #btn-modo-servicio {
             background-color: #fefce8;
             color: #a16207;
@@ -403,7 +396,6 @@
             box-shadow: 0 3px 8px rgba(234, 179, 8, 0.4);
         }
 
-        /* 3. Botón Retiro (Derecha) */
         #btn-modo-retiro {
             background-color: #fff1f2;
             color: #e11d48;
@@ -417,7 +409,7 @@
         }
 
         /* =========================================
-           MULTIPLICADOR: ESCALA DE ELEMENTOS
+           MULTIPLICADOR: ESCALA DE ELEMENTOS Y SWIPE
            ========================================= */
         .multiplicador-wrapper {
             background-color: var(--bg-light);
@@ -484,8 +476,30 @@
             font-weight: 900;
         }
 
-        .view-content { display: none; padding: 8px 10px; max-width: 500px; margin: 0 auto; }
-        .view-content.active { display: block; animation: fadeInScreen 0.2s; }
+        /* Contenedor con Scroll-Snap para deslizar Billetes y Monedas */
+        .multiplicador-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            width: 100%;
+        }
+        .multiplicador-slider::-webkit-scrollbar { 
+            display: none; 
+        }
+
+        .view-content { 
+            flex: 0 0 100%;
+            min-width: 100%;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            padding: 8px 10px; 
+            max-width: 500px; 
+            margin: 0 auto; 
+            box-sizing: border-box;
+        }
 
         #tab-billetes {
             background-color: var(--bg-billetes);
@@ -628,13 +642,13 @@
                         </div>
                         <!-- Página 2 (4 casilleros adicionales) -->
                         <div class="pagina-deslizable pagina-secundaria">
-                            <span class="badge-pagina-dos">PÁG. 2</span>
                             <div class="grid-2">
                                 <input type="text" id="b5" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                                 <input type="text" id="b6" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                                 <input type="text" id="b7" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                                 <input type="text" id="b8" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                             </div>
+                            <span class="badge-pagina-dos">PÁG. 2</span>
                         </div>
                     </div>
                 </div>
@@ -664,13 +678,13 @@
                         </div>
                         <!-- Página 2 (4 casilleros adicionales) -->
                         <div class="pagina-deslizable pagina-secundaria">
-                            <span class="badge-pagina-dos">PÁG. 2</span>
                             <div class="grid-2">
                                 <input type="text" id="p5" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                                 <input type="text" id="p6" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                                 <input type="text" id="p7" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                                 <input type="text" id="p8" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                             </div>
+                            <span class="badge-pagina-dos">PÁG. 2</span>
                         </div>
                     </div>
                 </div>
@@ -715,12 +729,15 @@
                     <button type="button" id="tab-btn-monedas" class="sub-tab-btn" onmousedown="gestionarPestanaMultiplicador(event, 'tab-monedas', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-monedas', this)">🪙 Monedas</button>
                 </div>
 
-                <div id="tab-billetes" class="view-content active">
-                    <div id="containerBilletes"></div>
-                </div>
-                
-                <div id="tab-monedas" class="view-content">
-                    <div id="containerMonedas"></div>
+                <!-- CONTENEDOR DESLIZABLE HORIZONTAL -->
+                <div class="multiplicador-slider" id="sliderMultiplicador" onscroll="handleScrollMultiplicador()">
+                    <div id="tab-billetes" class="view-content">
+                        <div id="containerBilletes"></div>
+                    </div>
+                    
+                    <div id="tab-monedas" class="view-content">
+                        <div id="containerMonedas"></div>
+                    </div>
                 </div>
 
             </div>
@@ -840,7 +857,6 @@
             document.getElementById(dot2Id).classList.toggle('active', esPagina2);
         }
 
-        // Selección directa e instantánea mediante la botonera
         function seleccionarModoDirecto(event, nuevoModo) {
             if (event) {
                 event.preventDefault();
@@ -979,13 +995,61 @@
             return false;
         }
 
+        let scrollTimeoutMulti = null;
+
         function gestionarPestanaMultiplicador(event, tabId, element) {
             if (event) event.preventDefault(); 
-            document.querySelectorAll('#app-multiplicador .view-content').forEach(v => v.classList.remove('active'));
+            const slider = document.getElementById('sliderMultiplicador');
+            const targetEl = document.getElementById(tabId);
+            
             document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            element.classList.add('active');
-            enfocarSiguienteInputVisible(tabId);
+            if (element) {
+                element.classList.add('active');
+            } else {
+                const btnId = (tabId === 'tab-billetes') ? 'tab-btn-billetes' : 'tab-btn-monedas';
+                document.getElementById(btnId).classList.add('active');
+            }
+
+            if (slider && targetEl) {
+                slider.scrollTo({
+                    left: targetEl.offsetLeft,
+                    behavior: 'smooth'
+                });
+            }
+            
+            setTimeout(() => {
+                enfocarSiguienteInputVisible(tabId);
+            }, 250);
+        }
+
+        function handleScrollMultiplicador() {
+            const slider = document.getElementById('sliderMultiplicador');
+            if (!slider) return;
+            
+            const btnBilletes = document.getElementById('tab-btn-billetes');
+            const btnMonedas = document.getElementById('tab-btn-monedas');
+            const mitad = slider.clientWidth / 2;
+
+            if (slider.scrollLeft > mitad) {
+                if (!btnMonedas.classList.contains('active')) {
+                    btnBilletes.classList.remove('active');
+                    btnMonedas.classList.add('active');
+                }
+            } else {
+                if (!btnBilletes.classList.contains('active')) {
+                    btnMonedas.classList.remove('active');
+                    btnBilletes.classList.add('active');
+                }
+            }
+
+            clearTimeout(scrollTimeoutMulti);
+            scrollTimeoutMulti = setTimeout(() => {
+                const tabActiva = slider.scrollLeft > mitad ? 'tab-monedas' : 'tab-billetes';
+                const elFoco = document.activeElement;
+                if (!elFoco || elFoco.tagName !== 'INPUT') {
+                    enfocarSiguienteInputVisible(tabActiva);
+                }
+            }, 150);
         }
 
         function gestionarStep(event, type, denom, delta) {
@@ -1014,19 +1078,25 @@
 
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 let appCajaActiva = document.getElementById('app-caja').classList.contains('active-app');
+                let appMultiActiva = document.getElementById('app-multiplicador').classList.contains('active-app');
                 
                 if (diffX < -60 && appCajaActiva) {
                     switchMainApp('app-multiplicador');
-                } else if (diffX > 60 && !appCajaActiva) {
+                } else if (diffX > 60 && !appCajaActiva && !e.target.closest('#sliderMultiplicador')) {
                     switchMainApp('app-caja');
                     enfocarSiguienteInputVisible('app-caja');
+                } else if (appMultiActiva && e.target.closest('#sliderMultiplicador')) {
+                    if (diffX < -50) {
+                        gestionarPestanaMultiplicador(null, 'tab-monedas');
+                    } else if (diffX > 50) {
+                        gestionarPestanaMultiplicador(null, 'tab-billetes');
+                    }
                 }
             }
             startX = 0;
             startY = 0;
         }, {passive: true});
 
-        // Conversión a céntimos enteros (Evita bugs de coma flotante)
         const getValCentimos = (id) => {
             const raw = document.getElementById(id).value.replace(/,/g, '').trim();
             const num = parseFloat(raw);
@@ -1078,7 +1148,6 @@
             calcularTodo();
         }
 
-        // MOTOR DE CÁLCULO
         function calcularTodo() {
             var centimosSuperior = 0;
             for (let i = 1; i <= 8; i++) centimosSuperior += getValCentimos('b' + i);
