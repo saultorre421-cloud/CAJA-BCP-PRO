@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <title>Sistema Ágil Integrado - Agente BCP</title>
     <style>
-        /* =========================================
-           VARIABLES Y ESTILOS GLOBALES
-           ========================================= */
         :root {
             --bcp-blue: #002A8D;
             --bcp-orange: #FF6A00;
@@ -19,31 +16,24 @@
             --danger-color: #D32F2F;
             --app-bg: #f1f5f9;
 
-            /* Multiplicador */
-            --bg-billetes: #dcfce7;
-            --border-billetes: #86efac;
-            --accent-billetes: #059669;
+            /* Multiplicador: Fondos neutros de alto contraste */
+            --bg-neutral-tab: #f1f5f9;
+            --border-neutral-tab: #cbd5e1;
+            --accent-tab-active: #002A8D;
 
-            --bg-monedas: #fef08a;
-            --border-monedas: #fde047;
-            --accent-monedas: #d97706;
-
-            /* =========================================
-               SISTEMA DE COLORES UNIFICADO POR OPERACIÓN
-               ========================================= */
-            /* 1. MODO RECIBO / PAGO DE SERVICIOS (AMARILLO / ÁMBAR) */
+            /* 1. MODO RECIBO / PAGO DE SERVICIOS */
             --recibo-header: #eab308;
             --recibo-header-text: #000000;
             --recibo-caja-bg: #fef9c3;
             --recibo-caja-border: #facc15;
 
-            /* 2. MODO DEPÓSITO EN CUENTA (VERDE ESMERALDA / TEAL) */
+            /* 2. MODO DEPÓSITO EN CUENTA */
             --deposito-header: #0d9488;
             --deposito-header-text: #ffffff;
             --deposito-caja-bg: #ccfbf1;
             --deposito-caja-border: #2dd4bf;
 
-            /* 3. MODO RETIRO EN EFECTIVO (ROJO RUBÍ BCP) */
+            /* 3. MODO RETIRO EN EFECTIVO */
             --retiro-header: #e11d48;
             --retiro-header-text: #ffffff;
             --retiro-caja-bg: #ffe4e6;
@@ -60,20 +50,17 @@
 
         body { 
             background-color: var(--app-bg); 
-            color: #0f172a;
-            padding-bottom: 6px;
+            color: #0f172a; 
+            padding-bottom: 4px;
             overflow-x: hidden;
+            font-variant-numeric: tabular-nums;
         }
 
-        /* =========================================
-           ESTRUCTURA DE APLICACIONES PRINCIPALES
-           ========================================= */
         .main-app-container {
             display: none;
             opacity: 0;
-            transition: opacity 0.25s ease-in-out;
             width: 100%;
-            animation: fadeInScreen 0.3s forwards;
+            animation: fadeInScreen 0.2s forwards;
         }
 
         .main-app-container.active-app {
@@ -81,27 +68,24 @@
         }
 
         @keyframes fadeInScreen {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(3px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* =========================================
-           CAJA PRINCIPAL: ESTRUCTURA Y TEXTOS
-           ========================================= */
         .caja-wrapper {
-            padding: 2px 4px 6px 4px;
+            padding: 2px 4px 4px 4px;
         }
 
         .panel-total { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 4px 8px 4px 6px;
+            padding: 4px 8px 4px 6px; 
             border-radius: 9px 9px 0 0; 
-            font-size: 16px; 
+            font-size: 15px; 
             font-weight: 900; 
             text-transform: uppercase; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06); 
             user-select: none;
             transition: background-color 0.2s ease, color 0.2s ease;
             gap: 6px;
@@ -124,17 +108,18 @@
         .header-dots {
             display: inline-flex;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
             background: rgba(0, 0, 0, 0.12);
-            padding: 2px 5px;
+            padding: 2px 6px;
             border-radius: 10px;
             flex-shrink: 0;
         }
         .h-dot {
-            width: 6px;
-            height: 6px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             background-color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
             transition: all 0.2s ease;
         }
         .tema-recibo-header .h-dot {
@@ -173,7 +158,7 @@
         .caja-contenedor { 
             padding: 4px 5px 5px 5px; 
             border-radius: 0 0 10px 10px; 
-            margin-bottom: 6px; 
+            margin-bottom: 5px; 
             border-bottom: 3px solid; 
             border-left: 2px solid; 
             border-right: 2px solid; 
@@ -203,6 +188,7 @@
             scrollbar-width: none; 
             -ms-overflow-style: none;
             padding: 1px 0;
+            touch-action: pan-x pan-y;
         }
         .contenedor-deslizable::-webkit-scrollbar { display: none; }
         
@@ -213,14 +199,12 @@
             position: relative;
         }
 
-        /* Ambas páginas tienen idéntica altura y márgenes */
         .pagina-deslizable.pagina-secundaria {
             padding: 0;
             background: transparent;
             border: none;
         }
 
-        /* Etiqueta PÁG. 2: Asentada limpia y centrada en la base inferior */
         .badge-pagina-dos {
             position: absolute;
             bottom: -2px;
@@ -252,9 +236,9 @@
             box-sizing: border-box; 
             text-align: center; 
             color: #0f172a; 
-            background-color: #ffffff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+            background-color: #ffffff; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+            transition: border-color 0.15s, background-color 0.15s, color 0.15s;
         }
         .caja-contenedor input:focus { 
             outline: none; 
@@ -283,18 +267,15 @@
             color: var(--retiro-header) !important;
         }
 
-        /* =========================================
-           PANEL DE RESULTADO AMPLIADO
-           ========================================= */
         .panel-resultado { 
             padding: 0 6px 5px 6px;
             border-radius: 10px; 
             text-align: center; 
             font-weight: bold; 
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             border: 3px solid; 
             transition: all 0.2s; 
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06); 
             position: relative;
             overflow: hidden;
         }
@@ -341,9 +322,6 @@
         .estado-retiro { background-color: #FFF1F2; border-color: var(--retiro-header); color: #9F1239; }
         .estado-deposito { background-color: #ccfbf1; border-color: var(--deposito-header); color: #0f766e; }
 
-        /* =========================================
-           BOTONERA DE MODOS INTEGRADA (3 COLUMNAS)
-           ========================================= */
         .selector-modos-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -409,7 +387,7 @@
         }
 
         /* =========================================
-           MULTIPLICADOR: ESCALA DE ELEMENTOS Y SWIPE
+           MULTIPLICADOR: FONDOS NEUTROS Y RESPIRACIÓN
            ========================================= */
         .multiplicador-wrapper {
             background-color: var(--bg-light);
@@ -423,19 +401,33 @@
             color: white;
             padding: 6px 12px; 
             display: flex; 
-            justify-content: center; 
-            align-items: center;
+            justify-content: space-between; 
+            align-items: center; 
             box-shadow: 0 3px 8px rgba(0,0,0,0.15); 
             z-index: 1000;
         }
         
         .main-total-centered { 
-            font-size: clamp(38px, 10vw, 54px); 
+            font-size: clamp(36px, 9.5vw, 52px); 
             font-weight: 900; 
             line-height: 1; 
             letter-spacing: -1.2px; 
-            text-align: center;
-            width: 100%;
+            text-align: center; 
+            flex-grow: 1;
+        }
+
+        .btn-config-fotos {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .tabs-container-sub { 
@@ -449,165 +441,340 @@
         
         .sub-tab-btn {
             flex: 1; 
-            padding: 8px 2px; 
+            padding: 9px 4px; 
             text-align: center; 
             background: none; 
             border: none; 
-            font-size: 16px;
-            font-weight: 700; 
+            font-size: 15px;
+            font-weight: 800; 
             color: var(--text-muted); 
             cursor: pointer; 
             border-bottom: 4px solid transparent;
-            transition: all 0.2s ease;
+            transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
             touch-action: manipulation;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
         
-        .sub-tab-btn#tab-btn-billetes.active {
-            color: #065f46;
-            background-color: #d1fae5;
-            border-bottom: 4px solid var(--accent-billetes);
+        .sub-tab-btn.active {
+            color: var(--bcp-blue);
+            background-color: #edf2f7;
+            border-bottom: 4px solid var(--bcp-blue);
             font-weight: 900;
         }
 
-        .sub-tab-btn#tab-btn-monedas.active {
-            color: #92400e;
-            background-color: #fef3c7;
-            border-bottom: 4px solid var(--accent-monedas);
+        .tab-badge-subtotal {
+            font-size: 12px;
             font-weight: 900;
+            color: var(--bcp-blue);
+            background: rgba(0, 42, 141, 0.09);
+            padding: 2px 8px;
+            border-radius: 10px;
         }
 
-        /* Contenedor con Scroll-Snap para deslizar Billetes y Monedas */
         .multiplicador-slider {
             display: flex;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
             scrollbar-width: none;
             -ms-overflow-style: none;
             width: 100%;
+            touch-action: pan-x pan-y;
+            -webkit-overflow-scrolling: touch;
         }
-        .multiplicador-slider::-webkit-scrollbar { 
-            display: none; 
-        }
+        .multiplicador-slider::-webkit-scrollbar { display: none; }
 
         .view-content { 
             flex: 0 0 100%;
             min-width: 100%;
             scroll-snap-align: start;
             scroll-snap-stop: always;
-            padding: 8px 10px; 
+            box-sizing: border-box;
             max-width: 500px; 
             margin: 0 auto; 
-            box-sizing: border-box;
         }
 
+        /* FONDO NEUTRO LIMPIO: RESALTE TOTAL DE BILLETES Y MONEDAS */
         #tab-billetes {
-            background-color: var(--bg-billetes);
-            border-bottom: 3px solid var(--border-billetes);
-            border-left: 2px solid var(--border-billetes);
-            border-right: 2px solid var(--border-billetes);
+            background-color: var(--bg-neutral-tab);
+            border-bottom: 3px solid var(--border-neutral-tab);
+            border-left: 2px solid var(--border-neutral-tab);
+            border-right: 2px solid var(--border-neutral-tab);
             border-radius: 0 0 14px 14px;
+            padding: 9px 5px 6px 5px;
         }
 
         #tab-monedas {
-            background-color: var(--bg-monedas);
-            border-bottom: 3px solid var(--border-monedas);
-            border-left: 2px solid var(--border-monedas);
-            border-right: 2px solid var(--border-monedas);
+            background-color: var(--bg-neutral-tab);
+            border-bottom: 3px solid var(--border-neutral-tab);
+            border-left: 2px solid var(--border-neutral-tab);
+            border-right: 2px solid var(--border-neutral-tab);
             border-radius: 0 0 14px 14px;
+            padding: 4px 4px 4px 4px;
         }
 
         .item-card {
             background: var(--card-bg); 
-            border-radius: 9px; 
-            padding: 10px 8px; 
-            margin-bottom: 7px;
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+            overflow: hidden; 
         }
-        
-        .item-info { 
-            display: flex; 
-            flex-direction: column; 
-            width: 130px; 
+
+        /* BILLETES: ESQUINAS CUADRADAS A LA IZQUIERDA PARA NO RECORTAR EL BILLETE */
+        #containerBilletes .item-card {
+            height: 70px;
+            margin-bottom: 9px;
+            border-radius: 0 12px 12px 0;
+            padding: 0 6px 0 0;
+            gap: 6px;
+        }
+
+        #containerBilletes .billete-container {
+            width: 136px;
+            height: 100%;
+            position: relative;
+            flex-shrink: 0;
+            background: #cbd5e1;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 2px; 
+            border-right: 1.5px solid rgba(0, 0, 0, 0.1);
+            border-radius: 0;
         }
 
-        #tab-billetes .item-card {
-            padding: 10px 9px;
-            margin-bottom: 7px;
+        #containerBilletes .btn-step {
+            width: 38px;
+            height: 52px;
+            font-size: 30px;
+            border-radius: 7px;
         }
-        #tab-billetes .item-denomination { 
-            font-size: 33px; 
-            font-weight: 900; 
-            color: var(--bcp-blue); 
-            line-height: 1; 
+
+        #containerBilletes .input-qty {
+            width: 66px;
+            height: 52px;
+            font-size: 28px;
+            border-radius: 7px;
+        }
+
+        /* MONEDAS: CÁPSULA REDONDEADA ORIGINAL */
+        #containerMonedas .item-card {
+            height: 62px;
+            margin-bottom: 6px;
+            border-radius: 10px;
+            padding: 0 5px 0 0;
+            gap: 4px;
+        }
+
+        #containerMonedas .moneda-real-frame {
+            width: 66px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.02);
+            border-right: 1.5px solid rgba(0, 0, 0, 0.06);
+        }
+
+        #containerMonedas .btn-step {
+            width: 35px;
+            height: 48px;
+            font-size: 28px;
+            border-radius: 6px;
+        }
+
+        #containerMonedas .input-qty {
+            width: 62px;
+            height: 48px;
+            font-size: 27px;
+            border-radius: 6px;
+        }
+
+        .billete-real-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .moneda-real-img {
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            box-shadow: 
+                inset 0 1px 2px rgba(255, 255, 255, 0.65),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.4),
+                0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .moneda-500 { width: 54px; height: 54px; }
+        .moneda-200 { width: 49px; height: 49px; }
+        .moneda-100 { width: 56px; height: 56px; }
+        .moneda-050 { width: 48px; height: 48px; }
+        .moneda-020 { width: 50px; height: 50px; }
+        .moneda-010 { width: 44px; height: 44px; }
+
+        .fallback-badge {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 18px;
+            color: #ffffff;
             letter-spacing: -0.5px;
         }
-        #tab-billetes .item-subtotal { 
-            font-size: 21px; 
-            color: #16A34A; 
-            font-weight: 800; 
-            line-height: 1; 
-        }
-        #tab-billetes .btn-step {
-            width: 44px; height: 44px; border-radius: 8px; font-size: 36px;
-        }
-        #tab-billetes .input-qty {
-            width: 86px; height: 48px; font-size: 36px; border-radius: 8px;
+
+        .item-visual-area {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+            flex: 1;
+            min-width: 0;
+            height: 100%;
         }
 
-        #tab-monedas .item-card { 
-            padding: 8px 8px; 
-            margin-bottom: 6px; 
+        /* =========================================
+           SUBTOTALES: ALTO IMPACTO Y MÁXIMA LECTURA
+           ========================================= */
+        .item-data-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            flex: 1;
+            min-width: 0;
+            padding-left: 5px;
         }
-        #tab-monedas .item-denomination { 
-            font-size: 28px; 
-            font-weight: 900; 
-            color: var(--bcp-blue); 
-            line-height: 1; 
+
+        .subtotal-tag {
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            color: #64748b;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+
+        .subtotal-valor-box {
+            display: flex;
+            align-items: baseline;
+            width: 100%;
+            overflow: hidden;
+            line-height: 1;
+        }
+
+        .item-subtotal {
+            color: var(--bcp-blue);
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        #containerBilletes .item-subtotal {
+            font-size: clamp(22px, 5.8vw, 27px);
             letter-spacing: -0.5px;
-        } 
-        #tab-monedas .item-subtotal { 
-            font-size: 18px; 
-            color: #16A34A; 
-            font-weight: 800; 
-            line-height: 1; 
-        }
-        #tab-monedas .btn-step { 
-            width: 40px; height: 40px; border-radius: 7px; font-size: 32px; 
-        }
-        #tab-monedas .input-qty { 
-            width: 80px; height: 44px; font-size: 32px; border-radius: 7px;
         }
 
-        .stepper-control { display: flex; align-items: center; gap: 5px; }
+        #containerMonedas .item-subtotal {
+            font-size: clamp(20px, 5.2vw, 25px);
+            letter-spacing: -0.8px;
+        }
+
+        /* STEPPERS GENERALES */
+        .stepper-control { 
+            display: flex; 
+            align-items: center; 
+            gap: 3px; 
+            flex-shrink: 0;
+        }
         
         .btn-step {
             border: 1px solid var(--border-color);
             background-color: #F8FAFC; 
-            font-weight: 500; 
-            display: flex; align-items: center; justify-content: center;
-            line-height: 0; 
-            padding-bottom: 4px; 
-            cursor: pointer; color: var(--text-dark); transition: background 0.1s;
+            font-weight: 700; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            color: var(--text-dark); 
+            user-select: none;
+            transition: background 0.1s, transform 0.08s ease;
+            touch-action: manipulation;
         }
-        .btn-step:active { background-color: #E2E8F0; }
+        .btn-step:active { background-color: #E2E8F0; transform: scale(0.95); }
         
         .input-qty {
             border: 2px solid var(--border-color);
             text-align: center; 
             font-weight: 900; 
-            color: var(--bcp-blue); background-color: #FAFAFA;
+            color: var(--bcp-blue); 
+            background-color: #FAFAFA;
         }
         .input-qty:focus { outline: none; border-color: var(--bcp-orange); background-color: white; }
 
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
+        /* MODAL DE FOTOS */
+        .modal-config {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.85);
+            z-index: 2000;
+            padding: 15px;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-config.active { display: flex; }
+        .modal-card {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        .modal-header h3 { font-size: 16px; font-weight: 900; color: #002A8D; }
+        .btn-close-modal {
+            background: none; border: none; font-size: 20px; font-weight: 900; cursor: pointer; color: #64748b;
+        }
+        .fila-upload {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .fila-upload input[type="file"] { display: none; }
+        .btn-examinar {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 800;
+            color: #002A8D;
+        }
     </style>
 </head>
 <body>
@@ -617,13 +784,12 @@
         <form id="formCaja" onsubmit="ejecutarAccionTecladoCaja(event)" action="javascript:void(0);">
             <div class="caja-wrapper">
                 
-                <!-- PANEL SUPERIOR: 4 VISIBLES + 4 AL DESLIZAR (8 TOTAL) -->
                 <div class="panel-total tema-recibo-header" id="panelSuperior">
                     <div class="panel-title-area">
                         <span id="lblTituloSuperior">EFECTIVO RECIBIDO</span>
                         <div class="header-dots">
-                            <div class="h-dot active" id="dot-sup-1"></div>
-                            <div class="h-dot" id="dot-sup-2"></div>
+                            <div class="h-dot active" id="dot-sup-1" onclick="scrollPaginacionDirecta('swipeEfectivo', 1)"></div>
+                            <div class="h-dot" id="dot-sup-2" onclick="scrollPaginacionDirecta('swipeEfectivo', 2)"></div>
                         </div>
                     </div>
                     <span id="lblEfectivo">0.00</span>
@@ -631,7 +797,6 @@
                 
                 <div class="caja-contenedor tema-recibo-bg" id="cajaSuperiorContenedor">
                     <div class="contenedor-deslizable" id="swipeEfectivo" onscroll="handleScrollIndicators('swipeEfectivo', 'dot-sup-1', 'dot-sup-2')">
-                        <!-- Página 1 (4 casilleros) -->
                         <div class="pagina-deslizable">
                             <div class="grid-2">
                                 <input type="text" id="b1" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
@@ -640,7 +805,6 @@
                                 <input type="text" id="b4" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                             </div>
                         </div>
-                        <!-- Página 2 (4 casilleros adicionales) -->
                         <div class="pagina-deslizable pagina-secundaria">
                             <div class="grid-2">
                                 <input type="text" id="b5" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
@@ -653,13 +817,12 @@
                     </div>
                 </div>
 
-                <!-- PANEL INFERIOR: 4 VISIBLES + 4 AL DESLIZAR (8 TOTAL) -->
                 <div class="panel-total tema-recibo-header" id="panelModoSecundario">
                     <div class="panel-title-area">
                         <span id="lblTituloModo">RECIBO POR PAGAR</span>
                         <div class="header-dots">
-                            <div class="h-dot active" id="dot-inf-1"></div>
-                            <div class="h-dot" id="dot-inf-2"></div>
+                            <div class="h-dot active" id="dot-inf-1" onclick="scrollPaginacionDirecta('swipeRecibo', 1)"></div>
+                            <div class="h-dot" id="dot-inf-2" onclick="scrollPaginacionDirecta('swipeRecibo', 2)"></div>
                         </div>
                     </div>
                     <span id="lblRecibo">0.00</span>
@@ -667,7 +830,6 @@
                 
                 <div class="caja-contenedor tema-recibo-bg" id="cajaInferiorContenedor">
                     <div class="contenedor-deslizable" id="swipeRecibo" onscroll="handleScrollIndicators('swipeRecibo', 'dot-inf-1', 'dot-inf-2')">
-                        <!-- Página 1 (4 casilleros) -->
                         <div class="pagina-deslizable">
                             <div class="grid-2">
                                 <input type="text" id="p1" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
@@ -676,7 +838,6 @@
                                 <input type="text" id="p4" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
                             </div>
                         </div>
-                        <!-- Página 2 (4 casilleros adicionales) -->
                         <div class="pagina-deslizable pagina-secundaria">
                             <div class="grid-2">
                                 <input type="text" id="p5" inputmode="decimal" enterkeyhint="send" onfocus="registrarFocoCaja(this)" oninput="handleInput(this)" placeholder="0.00">
@@ -689,22 +850,20 @@
                     </div>
                 </div>
 
-                <!-- PANEL INFORMATIVO DE RESULTADO AMPLIADO -->
                 <div class="panel-resultado estado-esperando" id="panelFinal">
                     <div class="badge-operacion" id="badgeOperacion">PAGO DE SERVICIOS</div>
                     <div id="textoFinal">ESPERANDO MONTOS...</div>
                     <span class="monto-final" id="montoFinal">0.00</span>
                 </div>
 
-                <!-- SELECTOR PROFESIONAL DE MODOS EN ORDEN DIRECTO (3 COLUMNAS) -->
                 <div class="selector-modos-grid">
-                    <button type="button" class="btn-modo-operacion" id="btn-modo-deposito" onmousedown="seleccionarModoDirecto(event, 'deposito')" ontouchstart="seleccionarModoDirecto(event, 'deposito')">
+                    <button type="button" class="btn-modo-operacion" id="btn-modo-deposito" onclick="seleccionarModoDirecto(event, 'deposito')">
                         DEPÓSITO
                     </button>
-                    <button type="button" class="btn-modo-operacion active-modo" id="btn-modo-servicio" onmousedown="seleccionarModoDirecto(event, 'recibo')" ontouchstart="seleccionarModoDirecto(event, 'recibo')">
+                    <button type="button" class="btn-modo-operacion active-modo" id="btn-modo-servicio" onclick="seleccionarModoDirecto(event, 'recibo')">
                         SERVICIO
                     </button>
-                    <button type="button" class="btn-modo-operacion" id="btn-modo-retiro" onmousedown="seleccionarModoDirecto(event, 'retiro')" ontouchstart="seleccionarModoDirecto(event, 'retiro')">
+                    <button type="button" class="btn-modo-operacion" id="btn-modo-retiro" onclick="seleccionarModoDirecto(event, 'retiro')">
                         RETIRO
                     </button>
                 </div>
@@ -718,18 +877,22 @@
         <form id="formMultiplicador" onsubmit="ejecutarAccionTecladoMulti(event)" action="javascript:void(0);">
             <div class="multiplicador-wrapper">
                 
-                <!-- CABECERA AZUL COMPACTA CON RESULTADO MAYOR -->
                 <div class="sticky-header-compact">
                     <div class="main-total-centered" id="txtGranTotal">0.00</div>
+                    <button type="button" class="btn-config-fotos" onclick="abrirModalFotos()" title="Configurar fotos">⚙️</button>
                 </div>
 
-                <!-- TABS DE NAVEGACIÓN -->
                 <div class="tabs-container-sub">
-                    <button type="button" id="tab-btn-billetes" class="sub-tab-btn active" onmousedown="gestionarPestanaMultiplicador(event, 'tab-billetes', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-billetes', this)">💵 Billetes</button>
-                    <button type="button" id="tab-btn-monedas" class="sub-tab-btn" onmousedown="gestionarPestanaMultiplicador(event, 'tab-monedas', this)" ontouchstart="gestionarPestanaMultiplicador(event, 'tab-monedas', this)">🪙 Monedas</button>
+                    <button type="button" id="tab-btn-billetes" class="sub-tab-btn active" onclick="gestionarPestanaMultiplicador(event, 'tab-billetes')">
+                        <span>💵 Billetes</span>
+                        <span class="tab-badge-subtotal" id="badgeTotalBilletes">S/ 0</span>
+                    </button>
+                    <button type="button" id="tab-btn-monedas" class="sub-tab-btn" onclick="gestionarPestanaMultiplicador(event, 'tab-monedas')">
+                        <span>🪙 Monedas</span>
+                        <span class="tab-badge-subtotal" id="badgeTotalMonedas">S/ 0.00</span>
+                    </button>
                 </div>
 
-                <!-- CONTENEDOR DESLIZABLE HORIZONTAL -->
                 <div class="multiplicador-slider" id="sliderMultiplicador" onscroll="handleScrollMultiplicador()">
                     <div id="tab-billetes" class="view-content">
                         <div id="containerBilletes"></div>
@@ -744,8 +907,24 @@
         </form>
     </div>
 
+    <!-- MODAL DE CARGA MANUAL DE FOTOS -->
+    <div class="modal-config" id="modalFotos">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Vincular Fotos Reales</h3>
+                <button type="button" class="btn-close-modal" onclick="cerrarModalFotos()">✕</button>
+            </div>
+            <p style="font-size: 11px; color: #64748b; margin-bottom: 10px;">
+                Selecciona la foto de cada denominación desde tu galería. Se guardarán en el teléfono y no volverán a desaparecer.
+            </p>
+            <div id="listaSubidaBilletes"></div>
+            <div id="listaSubidaMonedas" style="margin-top: 10px;"></div>
+        </div>
+    </div>
+
     <script>
         const formatoSoles = (num) => num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        const formatoEntero = (num) => Math.round(num).toLocaleString('en-US');
         
         let modoOperacion = 'recibo'; 
         
@@ -762,6 +941,16 @@
         };
 
         let ultimoInputCajaActivo = null;
+        let cuadroVinculado = null; 
+
+        let esTransicionClickTab = false;
+        let timerFinTransicion = null;
+
+        function vibrarRapido() {
+            if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                navigator.vibrate(12);
+            }
+        }
 
         function registrarFocoCaja(input) {
             if (input && !input.readOnly) {
@@ -857,11 +1046,22 @@
             document.getElementById(dot2Id).classList.toggle('active', esPagina2);
         }
 
+        function scrollPaginacionDirecta(scrollContainerId, pageNum) {
+            const el = document.getElementById(scrollContainerId);
+            if (!el) return;
+            el.scrollTo({
+                left: pageNum === 1 ? 0 : el.clientWidth,
+                behavior: 'smooth'
+            });
+            vibrarRapido();
+        }
+
         function seleccionarModoDirecto(event, nuevoModo) {
             if (event) {
                 event.preventDefault();
                 event.stopPropagation();
             }
+            vibrarRapido();
             if (modoOperacion === nuevoModo) {
                 enfocarSiguienteInputVisible('app-caja');
                 return;
@@ -888,9 +1088,7 @@
                 const el = document.getElementById(cuadroVinculado);
                 if (el) {
                     const esSecundario = cuadroVinculado.startsWith('p');
-                    if (esSecundario && modoOperacion === 'recibo') {
-                        return;
-                    }
+                    if (esSecundario && modoOperacion === 'recibo') return;
 
                     if (cuadroVinculado.startsWith('p')) {
                         if (modoOperacion === 'deposito') {
@@ -914,6 +1112,7 @@
             if (appId === 'app-caja') {
                 reaplicarEstiloSincronizacion();
             }
+            vibrarRapido();
         }
 
         function alternarPantallas() {
@@ -921,7 +1120,7 @@
             if (isCajaActive) {
                 switchMainApp('app-multiplicador');
                 const tabActiva = document.querySelector('.sub-tab-btn.active');
-                let tabTarget = (tabActiva && tabActiva.innerText.includes('Billetes')) ? 'tab-billetes' : 'tab-monedas';
+                let tabTarget = (tabActiva && tabActiva.id === 'tab-btn-billetes') ? 'tab-billetes' : 'tab-monedas';
                 enfocarSiguienteInputVisible(tabTarget);
             } else {
                 switchMainApp('app-caja');
@@ -981,9 +1180,10 @@
             clearAllData(); 
             const tabActiva = document.querySelector('.sub-tab-btn.active');
             if (tabActiva) {
-                let tabTarget = tabActiva.innerText.includes('Billetes') ? 'tab-billetes' : 'tab-monedas';
+                let tabTarget = (tabActiva.id === 'tab-btn-billetes') ? 'tab-billetes' : 'tab-monedas';
                 enfocarSiguienteInputVisible(tabTarget);
             }
+            vibrarRapido();
         }
 
         function ejecutarAccionTecladoMulti(e) {
@@ -995,107 +1195,61 @@
             return false;
         }
 
-        let scrollTimeoutMulti = null;
-
-        function gestionarPestanaMultiplicador(event, tabId, element) {
-            if (event) event.preventDefault(); 
+        function gestionarPestanaMultiplicador(event, tabId) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
             const slider = document.getElementById('sliderMultiplicador');
-            const targetEl = document.getElementById(tabId);
-            
-            document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
-            if (element) {
-                element.classList.add('active');
-            } else {
-                const btnId = (tabId === 'tab-billetes') ? 'tab-btn-billetes' : 'tab-btn-monedas';
-                document.getElementById(btnId).classList.add('active');
-            }
+            if (!slider) return;
 
-            if (slider && targetEl) {
-                slider.scrollTo({
-                    left: targetEl.offsetLeft,
-                    behavior: 'smooth'
-                });
-            }
-            
-            setTimeout(() => {
-                enfocarSiguienteInputVisible(tabId);
-            }, 250);
+            vibrarRapido();
+            esTransicionClickTab = true;
+            clearTimeout(timerFinTransicion);
+
+            const esBilletes = (tabId === 'tab-billetes');
+            const btnBilletes = document.getElementById('tab-btn-billetes');
+            const btnMonedas = document.getElementById('tab-btn-monedas');
+
+            btnBilletes.classList.toggle('active', esBilletes);
+            btnMonedas.classList.toggle('active', !esBilletes);
+
+            const targetPos = esBilletes ? 0 : slider.clientWidth;
+
+            slider.scrollTo({
+                left: targetPos,
+                behavior: 'smooth'
+            });
+
+            timerFinTransicion = setTimeout(() => {
+                esTransicionClickTab = false;
+            }, 260);
         }
 
         function handleScrollMultiplicador() {
+            if (esTransicionClickTab) return;
+
             const slider = document.getElementById('sliderMultiplicador');
             if (!slider) return;
-            
+
+            const mitad = slider.clientWidth / 2;
+            const esMonedas = slider.scrollLeft > mitad;
+
             const btnBilletes = document.getElementById('tab-btn-billetes');
             const btnMonedas = document.getElementById('tab-btn-monedas');
-            const mitad = slider.clientWidth / 2;
 
-            if (slider.scrollLeft > mitad) {
-                if (!btnMonedas.classList.contains('active')) {
-                    btnBilletes.classList.remove('active');
-                    btnMonedas.classList.add('active');
-                }
-            } else {
-                if (!btnBilletes.classList.contains('active')) {
-                    btnMonedas.classList.remove('active');
-                    btnBilletes.classList.add('active');
-                }
-            }
-
-            clearTimeout(scrollTimeoutMulti);
-            scrollTimeoutMulti = setTimeout(() => {
-                const tabActiva = slider.scrollLeft > mitad ? 'tab-monedas' : 'tab-billetes';
-                const elFoco = document.activeElement;
-                if (!elFoco || elFoco.tagName !== 'INPUT') {
-                    enfocarSiguienteInputVisible(tabActiva);
-                }
-            }, 150);
+            btnBilletes.classList.toggle('active', !esMonedas);
+            btnMonedas.classList.toggle('active', esMonedas);
         }
 
         function gestionarStep(event, type, denom, delta) {
-            if (event) event.preventDefault(); 
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            vibrarRapido();
             changeQty(type, denom, delta);
         }
-
-        let startX = 0;
-        let startY = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            if(e.target.closest('.contenedor-deslizable')) return;
-            if(e.target.closest('.sub-tab-btn')) return; 
-            if(e.target.closest('.selector-modos-grid')) return;
-            if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-        }, {passive: true});
-
-        document.addEventListener('touchend', (e) => {
-            if(startX === 0) return;
-            let endX = e.changedTouches[0].clientX;
-            let endY = e.changedTouches[0].clientY;
-            let diffX = endX - startX;
-            let diffY = endY - startY;
-
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                let appCajaActiva = document.getElementById('app-caja').classList.contains('active-app');
-                let appMultiActiva = document.getElementById('app-multiplicador').classList.contains('active-app');
-                
-                if (diffX < -60 && appCajaActiva) {
-                    switchMainApp('app-multiplicador');
-                } else if (diffX > 60 && !appCajaActiva && !e.target.closest('#sliderMultiplicador')) {
-                    switchMainApp('app-caja');
-                    enfocarSiguienteInputVisible('app-caja');
-                } else if (appMultiActiva && e.target.closest('#sliderMultiplicador')) {
-                    if (diffX < -50) {
-                        gestionarPestanaMultiplicador(null, 'tab-monedas');
-                    } else if (diffX > 50) {
-                        gestionarPestanaMultiplicador(null, 'tab-billetes');
-                    }
-                }
-            }
-            startX = 0;
-            startY = 0;
-        }, {passive: true});
 
         const getValCentimos = (id) => {
             const raw = document.getElementById(id).value.replace(/,/g, '').trim();
@@ -1284,46 +1438,189 @@
             document.getElementById('dot-inf-2').classList.remove('active');
 
             calcularTodo();
+            vibrarRapido();
         }
 
+        // =======================================================
+        // PERSISTENCIA Y RENDERIZADO VISUAL MAXIMIZADO
+        // =======================================================
         const denominacionesBilletes = [200, 100, 50, 20, 10];
         const denominacionesMonedas = [5.00, 2.00, 1.00, 0.50, 0.20, 0.10];
-        let cantidadesBilletes = {}; let cantidadesMonedas = {};
+        let cantidadesBilletes = {}; 
+        let cantidadesMonedas = {};
         denominacionesBilletes.forEach(d => cantidadesBilletes[d] = 0);
         denominacionesMonedas.forEach(d => cantidadesMonedas[d] = 0);
 
-        const containerBilletes = document.getElementById('containerBilletes');
-        denominacionesBilletes.forEach(denom => {
-            containerBilletes.innerHTML += `
-                <div class="item-card">
-                    <div class="item-info">
-                        <span class="item-denomination">S/ ${denom}</span>
-                        <span class="item-subtotal" id="sub-b-${denom}">0.00</span>
-                    </div>
-                    <div class="stepper-control">
-                        <button type="button" class="btn-step" onmousedown="gestionarStep(event, 'billete', ${denom}, -1)" ontouchstart="gestionarStep(event, 'billete', ${denom}, -1)">-</button>
-                        <input type="text" inputmode="numeric" class="input-qty" id="input-b-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('billete', ${denom}, this.value)">
-                        <button type="button" class="btn-step" onmousedown="gestionarStep(event, 'billete', ${denom}, 1)" ontouchstart="gestionarStep(event, 'billete', ${denom}, 1)">+</button>
-                    </div>
-                </div>`;
-        });
+        const coloresBilletes = {
+            200: '#581c87',
+            100: '#0284c7',
+            50:  '#78350f',
+            20:  '#ea580c',
+            10:  '#059669'
+        };
 
-        const containerMonedas = document.getElementById('containerMonedas');
-        denominacionesMonedas.forEach(denom => {
-            containerMonedas.innerHTML += `
-                <div class="item-card">
-                    <div class="item-info">
-                        <span class="item-denomination">S/ ${denom.toFixed(2)}</span>
-                        <span class="item-subtotal" id="sub-m-${denom}">0.00</span>
-                    </div>
-                    <div class="stepper-control">
-                        <button type="button" class="btn-step" onmousedown="gestionarStep(event, 'moneda', ${denom}, -1)" ontouchstart="gestionarStep(event, 'moneda', ${denom}, -1)">-</button>
-                        <input type="text" inputmode="numeric" class="input-qty" id="input-m-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('moneda', ${denom}, this.value)">
-                        <button type="button" class="btn-step" onmousedown="gestionarStep(event, 'moneda', ${denom}, 1)" ontouchstart="gestionarStep(event, 'moneda', ${denom}, 1)">+</button>
-                    </div>
-                </div>`;
-        });
-        
+        const configMonedas = {
+            5.00: { css: 'moneda-500', color: '#b45309' },
+            2.00: { css: 'moneda-200', color: '#b45309' },
+            1.00: { css: 'moneda-100', color: '#475569' },
+            0.50: { css: 'moneda-050', color: '#475569' },
+            0.20: { css: 'moneda-020', color: '#a16207' },
+            0.10: { css: 'moneda-010', color: '#a16207' }
+        };
+
+        function obtenerSrcFoto(tipo, denom) {
+            const guardada = localStorage.getItem(`foto_${tipo}_${denom}`);
+            if (guardada) return guardada;
+            if (tipo === 'billete') return `img/billete-${denom}.jpg`;
+            const nombreMoneda = denom === 5 ? '5' : denom === 2 ? '2' : denom === 1 ? '1' : denom === 0.5 ? '050' : denom === 0.2 ? '020' : '010';
+            return `img/moneda-${nombreMoneda}.jpg`;
+        }
+
+        function manejarErrorFoto(imgElement, tipo, denom) {
+            imgElement.style.display = 'none';
+            const contenedor = imgElement.parentElement;
+            const badge = document.createElement('div');
+            badge.className = 'fallback-badge';
+            
+            if (tipo === 'billete') {
+                badge.style.backgroundColor = coloresBilletes[denom];
+                badge.innerText = `S/ ${denom}`;
+            } else {
+                badge.style.backgroundColor = configMonedas[denom].color;
+                badge.style.borderRadius = '50%';
+                badge.innerText = denom >= 1 ? `S/ ${denom.toFixed(0)}` : `${(denom * 100).toFixed(0)}¢`;
+                badge.style.fontSize = '12px';
+            }
+            contenedor.appendChild(badge);
+        }
+
+        function renderizarListasVisuales() {
+            const containerBilletes = document.getElementById('containerBilletes');
+            containerBilletes.innerHTML = '';
+            denominacionesBilletes.forEach(denom => {
+                const src = obtenerSrcFoto('billete', denom);
+                containerBilletes.innerHTML += `
+                    <div class="item-card">
+                        <div class="item-visual-area" ondblclick="reiniciarDenominacion('billete', ${denom})" title="Doble toque para reiniciar">
+                            <div class="billete-container">
+                                <img src="${src}" class="billete-real-img" alt="S/ ${denom}" loading="eager" onerror="manejarErrorFoto(this, 'billete', ${denom})">
+                            </div>
+                            <div class="item-data-col">
+                                <span class="subtotal-tag">SUBTOTAL</span>
+                                <div class="subtotal-valor-box">
+                                    <span class="item-subtotal" id="sub-b-${denom}">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stepper-control">
+                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'billete', ${denom}, -1)">−</button>
+                            <input type="text" inputmode="numeric" class="input-qty" id="input-b-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('billete', ${denom}, this.value)">
+                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'billete', ${denom}, 1)">+</button>
+                        </div>
+                    </div>`;
+            });
+
+            const containerMonedas = document.getElementById('containerMonedas');
+            containerMonedas.innerHTML = '';
+            denominacionesMonedas.forEach(denom => {
+                const src = obtenerSrcFoto('moneda', denom);
+                const conf = configMonedas[denom];
+                containerMonedas.innerHTML += `
+                    <div class="item-card">
+                        <div class="item-visual-area" ondblclick="reiniciarDenominacion('moneda', ${denom})" title="Doble toque para reiniciar">
+                            <div class="moneda-real-frame">
+                                <img src="${src}" class="moneda-real-img ${conf.css}" alt="S/ ${denom.toFixed(2)}" loading="eager" onerror="manejarErrorFoto(this, 'moneda', ${denom})">
+                            </div>
+                            <div class="item-data-col">
+                                <span class="subtotal-tag">SUBTOTAL</span>
+                                <div class="subtotal-valor-box">
+                                    <span class="item-subtotal" id="sub-m-${denom}">0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stepper-control">
+                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'moneda', ${denom}, -1)">−</button>
+                            <input type="text" inputmode="numeric" class="input-qty" id="input-m-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('moneda', ${denom}, this.value)">
+                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'moneda', ${denom}, 1)">+</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function abrirModalFotos() {
+            const listB = document.getElementById('listaSubidaBilletes');
+            const listM = document.getElementById('listaSubidaMonedas');
+            listB.innerHTML = '<div style="font-weight:900; color:var(--bcp-blue); margin-bottom:4px;">💵 BILLETES</div>';
+            listM.innerHTML = '<div style="font-weight:900; color:var(--bcp-blue); margin-bottom:4px;">🪙 MONEDAS</div>';
+
+            denominacionesBilletes.forEach(d => {
+                const yaTiene = !!localStorage.getItem(`foto_billete_${d}`);
+                listB.innerHTML += `
+                    <div class="fila-upload">
+                        <span>Billete S/ ${d} ${yaTiene ? '✓' : ''}</span>
+                        <label class="btn-examinar">
+                            ${yaTiene ? 'Cambiar' : 'Elegir'}
+                            <input type="file" accept="image/*" onchange="guardarFotoEnStorage(event, 'billete', ${d})">
+                        </label>
+                    </div>`;
+            });
+
+            denominacionesMonedas.forEach(d => {
+                const yaTiene = !!localStorage.getItem(`foto_moneda_${d}`);
+                listM.innerHTML += `
+                    <div class="fila-upload">
+                        <span>Moneda S/ ${d.toFixed(2)} ${yaTiene ? '✓' : ''}</span>
+                        <label class="btn-examinar">
+                            ${yaTiene ? 'Cambiar' : 'Elegir'}
+                            <input type="file" accept="image/*" onchange="guardarFotoEnStorage(event, 'moneda', ${d})">
+                        </label>
+                    </div>`;
+            });
+
+            document.getElementById('modalFotos').classList.add('active');
+        }
+
+        function cerrarModalFotos() {
+            document.getElementById('modalFotos').classList.remove('active');
+        }
+
+        function guardarFotoEnStorage(event, tipo, denom) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let maxW = (tipo === 'billete') ? 340 : 140;
+                    let scale = maxW / img.width;
+                    canvas.width = maxW;
+                    canvas.height = img.height * scale;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    const optimizada = canvas.toDataURL('image/jpeg', 0.85);
+                    try {
+                        localStorage.setItem(`foto_${tipo}_${denom}`, optimizada);
+                        renderizarListasVisuales();
+                        abrirModalFotos();
+                    } catch(err) {
+                        alert('Memoria llena en el navegador móvil.');
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function reiniciarDenominacion(type, denom) {
+            vibrarRapido();
+            const inputEl = document.getElementById(`input-${type === 'billete' ? 'b' : 'm'}-${denom}`);
+            inputEl.value = '';
+            updateQty(type, denom, 0);
+        }
+
         function changeQty(type, denom, delta) {
             const inputEl = document.getElementById(`input-${type === 'billete' ? 'b' : 'm'}-${denom}`);
             let val = (parseInt(inputEl.value) || 0) + delta;
@@ -1347,14 +1644,12 @@
             calculateAllCounter();
         }
 
-        let cuadroVinculado = null; 
-
         function calculateAllCounter() {
             let centimosBilletes = 0, centimosMonedas = 0;
             denominacionesBilletes.forEach(d => { 
                 const subCentimos = Math.round(d * 100) * (cantidadesBilletes[d] || 0); 
                 centimosBilletes += subCentimos; 
-                document.getElementById(`sub-b-${d}`).innerText = formatoSoles(subCentimos / 100); 
+                document.getElementById(`sub-b-${d}`).innerText = formatoEntero(subCentimos / 100); 
             });
             denominacionesMonedas.forEach(d => { 
                 const subCentimos = Math.round(d * 100) * (cantidadesMonedas[d] || 0); 
@@ -1362,10 +1657,15 @@
                 document.getElementById(`sub-m-${d}`).innerText = formatoSoles(subCentimos / 100); 
             });
 
+            let totalBilletesVal = centimosBilletes / 100;
+            let totalMonedasVal = centimosMonedas / 100;
             let granTotalNumerico = (centimosBilletes + centimosMonedas) / 100;
-            document.getElementById('txtGranTotal').innerText = formatoSoles(granTotalNumerico);
 
-            if(granTotalNumerico > 0) {
+            document.getElementById('txtGranTotal').innerText = formatoSoles(granTotalNumerico);
+            document.getElementById('badgeTotalBilletes').innerText = `S/ ${formatoEntero(totalBilletesVal)}`;
+            document.getElementById('badgeTotalMonedas').innerText = `S/ ${formatoSoles(totalMonedasVal)}`;
+
+            if (granTotalNumerico > 0) {
                 const listaOpciones = (modoOperacion === 'retiro' || modoOperacion === 'deposito') 
                     ? ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8'] 
                     : ['b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8'];
@@ -1424,9 +1724,6 @@
             calcularTodo(); 
         }
 
-        // =======================================================
-        // INTEGRACIÓN DE TECLADO NATIVO (-, ,, ENTER)
-        // =======================================================
         function procesarTeclasEspeciales(e) {
             if (e.key === '-' || e.key === 'Minus' || e.code === 'NumpadSubtract' || e.code === 'Minus') {
                 e.preventDefault();
@@ -1448,7 +1745,7 @@
             const esEnterOAccion = (
                 e.key === 'Enter' || 
                 e.keyCode === 13 || 
-                e.which === 13 ||
+                e.which === 13 || 
                 e.code === 'Enter' || 
                 e.code === 'NumpadEnter' || 
                 e.key === 'ArrowRight'
@@ -1485,6 +1782,8 @@
                 }
             }
         }, true);
+
+        renderizarListasVisuales();
     </script>
 </body>
 </html>
