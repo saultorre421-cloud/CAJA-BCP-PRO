@@ -51,11 +51,21 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body { 
+        /* BLINDAJE VERTICAL COMPLETO: CERO SCROLL ARRIBA/ABAJO */
+        html, body { 
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            overflow: hidden !important; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overscroll-behavior: none !important;
+            touch-action: pan-x !important;
             background-color: var(--app-bg); 
             color: #0f172a; 
-            padding-bottom: 8px;
-            overflow-x: hidden;
             font-variant-numeric: tabular-nums;
         }
 
@@ -63,6 +73,8 @@
             display: none;
             opacity: 0;
             width: 100%;
+            height: 100%;
+            overflow-y: hidden;
             animation: fadeInScreen 0.2s forwards;
         }
 
@@ -77,6 +89,8 @@
 
         .caja-wrapper {
             padding: 2px 4px 4px 4px;
+            height: 100%;
+            overflow-y: hidden;
         }
 
         .panel-total { 
@@ -186,12 +200,13 @@
         .contenedor-deslizable {
             display: flex; 
             overflow-x: auto; 
+            overflow-y: hidden;
             scroll-snap-type: x mandatory; 
             gap: 8px;
             scrollbar-width: none; 
             -ms-overflow-style: none;
             padding: 1px 0;
-            touch-action: pan-x pan-y;
+            touch-action: pan-x;
         }
         .contenedor-deslizable::-webkit-scrollbar { display: none; }
         
@@ -394,7 +409,10 @@
            ========================================= */
         .multiplicador-wrapper {
             background-color: var(--bg-light);
-            min-height: 100vh;
+            height: 100%;
+            overflow-y: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .sticky-header-compact {
@@ -408,6 +426,7 @@
             align-items: center; 
             box-shadow: 0 3px 8px rgba(0,0,0,0.15); 
             z-index: 1000;
+            flex-shrink: 0;
         }
         
         .main-total-centered { 
@@ -440,6 +459,7 @@
             position: sticky; 
             top: 52px; 
             z-index: 999;
+            flex-shrink: 0;
         }
         
         .sub-tab-btn {
@@ -481,11 +501,13 @@
         .multiplicador-slider {
             display: flex;
             overflow-x: auto;
+            overflow-y: hidden;
             scroll-snap-type: x mandatory;
             scrollbar-width: none;
             -ms-overflow-style: none;
             width: 100%;
-            touch-action: pan-x pan-y;
+            flex: 1;
+            touch-action: pan-x;
             -webkit-overflow-scrolling: touch;
         }
         .multiplicador-slider::-webkit-scrollbar { display: none; }
@@ -498,26 +520,26 @@
             box-sizing: border-box;
             max-width: 520px; 
             margin: 0 auto; 
+            overflow-y: hidden;
         }
 
-        /* FONDOS CONTENEDORES */
+        /* FONDOS CONTENEDORES CON AJUSTE ESTÁTICO (SIN PADDING EXCESIVO) */
         #tab-billetes {
             background-color: var(--bg-neutral-tab);
             border-bottom: 3px solid var(--border-neutral-tab);
             border-left: 2px solid var(--border-neutral-tab);
             border-right: 2px solid var(--border-neutral-tab);
             border-radius: 0 0 14px 14px;
-            padding: 8px 3px 80px 3px;
+            padding: 6px 3px 6px 3px;
         }
 
-        /* MONEDAS: PADDING INFERIOR AMPLIO PARA QUE EL TECLADO NUNCA TAPE EL CONTENIDO */
         #tab-monedas {
             background-color: var(--bg-neutral-tab);
             border-bottom: 3px solid var(--border-neutral-tab);
             border-left: 2px solid var(--border-neutral-tab);
             border-right: 2px solid var(--border-neutral-tab);
             border-radius: 0 0 14px 14px;
-            padding: 5px 3px 130px 3px; 
+            padding: 5px 3px 5px 3px; 
         }
 
         /* BILLETES */
@@ -534,7 +556,6 @@
             border: 1.5px solid #cbd5e1;
             box-shadow: 0 3px 7px rgba(15, 23, 42, 0.08);
             overflow: hidden; 
-            scroll-margin-bottom: 110px;
         }
 
         #containerBilletes .billete-container {
@@ -563,10 +584,9 @@
             height: 50px;
             font-size: 28px;
             border-radius: 7px;
-            scroll-margin-bottom: 110px;
         }
 
-        /* MONEDAS: ALTURA PRECISA (68px) Y SEPARACIÓN COMPACTA (4px) */
+        /* MONEDAS: TOTALMENTE CALIBRADAS Y ESTÁTICAS */
         #containerMonedas .item-card {
             background: var(--card-bg); 
             display: flex; 
@@ -580,7 +600,6 @@
             border: 1.5px solid #cbd5e1;
             box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
             overflow: hidden; 
-            scroll-margin-bottom: 130px;
         }
 
         #containerMonedas .item-card:last-child {
@@ -611,7 +630,6 @@
             height: 48px;
             font-size: 26px;
             border-radius: 6px;
-            scroll-margin-bottom: 130px;
         }
 
         .billete-real-img {
@@ -979,13 +997,17 @@
             }
         }
 
-        // Auto-centrado suave para evitar que el teclado cubra el input seleccionado
-        function asegurarVisibilidadInput(el) {
-            if (!el) return;
-            setTimeout(() => {
-                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 160);
+        // CONTROL ESTÁTICO PERMANENTE
+        function mantenerPosicionEstatica() {
+            if (window.scrollY !== 0 || window.scrollX !== 0) {
+                window.scrollTo(0, 0);
+            }
         }
+
+        window.addEventListener('scroll', mantenerPosicionEstatica, { passive: true });
+        document.addEventListener('focusin', () => {
+            window.scrollTo(0, 0);
+        });
 
         function registrarFocoCaja(input) {
             if (input && !input.readOnly) {
@@ -1142,7 +1164,7 @@
         function switchMainApp(appId) {
             document.querySelectorAll('.main-app-container').forEach(screen => screen.classList.remove('active-app'));
             document.getElementById(appId).classList.add('active-app');
-            window.scrollTo({ top: 0, behavior: 'instant' });
+            window.scrollTo(0, 0);
 
             if (appId === 'app-caja') {
                 reaplicarEstiloSincronizacion();
@@ -1168,7 +1190,7 @@
                 if (ultimoInputCajaActivo) {
                     const inputRecordado = document.getElementById(ultimoInputCajaActivo);
                     if (inputRecordado && !inputRecordado.readOnly) {
-                        inputRecordado.focus();
+                        inputRecordado.focus({ preventScroll: true });
                         return;
                     }
                 }
@@ -1178,14 +1200,14 @@
                 let inputsPrioridad = document.querySelectorAll(selector);
                 for (let i = 0; i < inputsPrioridad.length; i++) {
                     if (inputsPrioridad[i].value === '' || inputsPrioridad[i].value === '0') {
-                        inputsPrioridad[i].focus();
+                        inputsPrioridad[i].focus({ preventScroll: true });
                         ultimoInputCajaActivo = inputsPrioridad[i].id;
                         return;
                     }
                 }
 
                 if (inputsPrioridad.length > 0) {
-                    inputsPrioridad[0].focus();
+                    inputsPrioridad[0].focus({ preventScroll: true });
                     ultimoInputCajaActivo = inputsPrioridad[0].id;
                     return;
                 }
@@ -1194,11 +1216,11 @@
             let inputsGenerales = document.querySelectorAll(`#${containerId} input:not([readonly])`);
             for (let i = 0; i < inputsGenerales.length; i++) {
                 if (inputsGenerales[i].value === '' || inputsGenerales[i].value === '0') {
-                    inputsGenerales[i].focus();
+                    inputsGenerales[i].focus({ preventScroll: true });
                     return;
                 }
             }
-            if (inputsGenerales.length > 0) inputsGenerales[0].focus();
+            if (inputsGenerales.length > 0) inputsGenerales[0].focus({ preventScroll: true });
         }
 
         function ejecutarAccionTecladoCaja(e) {
@@ -1564,7 +1586,7 @@
                         </div>
                         <div class="stepper-control">
                             <button type="button" class="btn-step" onclick="gestionarStep(event, 'billete', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
-                            <input type="text" inputmode="numeric" class="input-qty" id="input-b-${denom}" placeholder="0" enterkeyhint="done" onfocus="asegurarVisibilidadInput(this)" oninput="updateQty('billete', ${denom}, this.value)">
+                            <input type="text" inputmode="numeric" class="input-qty" id="input-b-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('billete', ${denom}, this.value)">
                             <button type="button" class="btn-step" onclick="gestionarStep(event, 'billete', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
                         </div>
                         <div class="item-data-col" ondblclick="reiniciarDenominacion('billete', ${denom})" title="Doble toque para reiniciar">
@@ -1588,7 +1610,7 @@
                         </div>
                         <div class="stepper-control">
                             <button type="button" class="btn-step" onclick="gestionarStep(event, 'moneda', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
-                            <input type="text" inputmode="numeric" class="input-qty" id="input-m-${denom}" placeholder="0" enterkeyhint="done" onfocus="asegurarVisibilidadInput(this)" oninput="updateQty('moneda', ${denom}, this.value)">
+                            <input type="text" inputmode="numeric" class="input-qty" id="input-m-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('moneda', ${denom}, this.value)">
                             <button type="button" class="btn-step" onclick="gestionarStep(event, 'moneda', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
                         </div>
                         <div class="item-data-col" ondblclick="reiniciarDenominacion('moneda', ${denom})" title="Doble toque para reiniciar">
