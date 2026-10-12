@@ -16,10 +16,13 @@
             --danger-color: #D32F2F;
             --app-bg: #f1f5f9;
 
-            /* Multiplicador: Fondo contraste neutro */
+            /* Multiplicador: Fondo y contraste */
             --bg-neutral-tab: #e2e8f0;
             --border-neutral-tab: #cbd5e1;
             --accent-tab-active: #002A8D;
+
+            /* Color de destaque para subtotales en multiplicador */
+            --subtotal-color: #7A0C2E;
 
             /* 1. MODO RECIBO / PAGO DE SERVICIOS */
             --recibo-header: #eab308;
@@ -51,7 +54,7 @@
         body { 
             background-color: var(--app-bg); 
             color: #0f172a; 
-            padding-bottom: 4px;
+            padding-bottom: 8px;
             overflow-x: hidden;
             font-variant-numeric: tabular-nums;
         }
@@ -398,7 +401,7 @@
             position: sticky; 
             top: 0; 
             background: linear-gradient(135deg, var(--bcp-blue) 0%, #001F6B 100%); 
-            color: white;
+            color: white; 
             padding: 6px 12px; 
             display: flex; 
             justify-content: space-between; 
@@ -445,11 +448,11 @@
             text-align: center; 
             background: none; 
             border: none; 
-            font-size: 15px;
+            font-size: 15px; 
             font-weight: 800; 
             color: var(--text-muted); 
             cursor: pointer; 
-            border-bottom: 4px solid transparent;
+            border-bottom: 4px solid transparent; 
             transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
             touch-action: manipulation;
             user-select: none;
@@ -493,43 +496,45 @@
             scroll-snap-align: start;
             scroll-snap-stop: always;
             box-sizing: border-box;
-            max-width: 500px; 
+            max-width: 520px; 
             margin: 0 auto; 
         }
 
-        /* FONDOS CONTENEDORES CON ALTO CONTRASTE */
+        /* FONDOS CONTENEDORES */
         #tab-billetes {
             background-color: var(--bg-neutral-tab);
             border-bottom: 3px solid var(--border-neutral-tab);
             border-left: 2px solid var(--border-neutral-tab);
             border-right: 2px solid var(--border-neutral-tab);
             border-radius: 0 0 14px 14px;
-            padding: 9px 6px 6px 6px;
+            padding: 8px 3px 80px 3px;
         }
 
+        /* MONEDAS: PADDING INFERIOR AMPLIO PARA QUE EL TECLADO NUNCA TAPE EL CONTENIDO */
         #tab-monedas {
             background-color: var(--bg-neutral-tab);
             border-bottom: 3px solid var(--border-neutral-tab);
             border-left: 2px solid var(--border-neutral-tab);
             border-right: 2px solid var(--border-neutral-tab);
             border-radius: 0 0 14px 14px;
-            padding: 8px 6px 6px 6px; /* Separación periférica */
+            padding: 5px 3px 130px 3px; 
         }
 
-        /* BILLETES: CÁPSULAS INDEPENDIENTES CON ESQUINAS CUADRADAS A LA IZQUIERDA */
+        /* BILLETES */
         #containerBilletes .item-card {
             background: var(--card-bg); 
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
             height: 70px;
-            margin-bottom: 9px;
+            margin-bottom: 8px;
             border-radius: 0 12px 12px 0;
-            padding: 0 6px 0 0;
+            padding: 0 4px 0 0;
             gap: 6px;
             border: 1.5px solid #cbd5e1;
             box-shadow: 0 3px 7px rgba(15, 23, 42, 0.08);
             overflow: hidden; 
+            scroll-margin-bottom: 110px;
         }
 
         #containerBilletes .billete-container {
@@ -543,62 +548,70 @@
             justify-content: center;
             border-right: 1.5px solid rgba(0, 0, 0, 0.1);
             border-radius: 0;
+            cursor: pointer;
+            overflow: hidden;
         }
 
         #containerBilletes .btn-step {
-            width: 38px;
-            height: 52px;
-            font-size: 30px;
+            width: 36px;
+            height: 50px;
             border-radius: 7px;
         }
 
         #containerBilletes .input-qty {
-            width: 66px;
-            height: 52px;
+            width: 64px;
+            height: 50px;
             font-size: 28px;
             border-radius: 7px;
+            scroll-margin-bottom: 110px;
         }
 
-        /* MONEDAS: CÁPSULAS INDEPENDIENTES Y SEPARADAS (ROMPEMOS EL BLOQUE CONTINUO) */
+        /* MONEDAS: ALTURA PRECISA (68px) Y SEPARACIÓN COMPACTA (4px) */
         #containerMonedas .item-card {
             background: var(--card-bg); 
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
-            height: 68px;
-            margin-bottom: 10px; /* Separación amplia entre cada moneda */
-            border-radius: 12px;  /* Forma de cápsula independiente completa */
-            padding: 0 6px 0 0;
-            gap: 5px;
+            height: 68px; 
+            margin-bottom: 4px; 
+            border-radius: 11px;
+            padding: 0 4px 0 0;
+            gap: 6px;
             border: 1.5px solid #cbd5e1;
-            box-shadow: 0 3px 8px rgba(15, 23, 42, 0.09), 0 1px 3px rgba(15, 23, 42, 0.05); /* Efecto flotante */
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
             overflow: hidden; 
+            scroll-margin-bottom: 130px;
+        }
+
+        #containerMonedas .item-card:last-child {
+            margin-bottom: 0;
         }
 
         #containerMonedas .moneda-real-frame {
-            width: 76px;
+            width: 82px; 
             height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            background: #f8fafc; /* Fondo suave que resalta el metal sin crear un riel continuo */
-            border-radius: 10px 0 0 10px;
-            border-right: 1px solid #e2e8f0; /* Divisor tenue */
+            background: #f8fafc;
+            border-radius: 9px 0 0 9px;
+            border-right: 1px solid #e2e8f0;
+            cursor: pointer;
         }
 
         #containerMonedas .btn-step {
             width: 36px;
-            height: 50px;
-            font-size: 28px;
+            height: 48px;
             border-radius: 6px;
         }
 
         #containerMonedas .input-qty {
             width: 64px;
-            height: 50px;
-            font-size: 28px;
+            height: 48px;
+            font-size: 26px;
             border-radius: 6px;
+            scroll-margin-bottom: 130px;
         }
 
         .billete-real-img {
@@ -619,13 +632,13 @@
                 0 0 0 1px rgba(0, 0, 0, 0.12);
         }
 
-        /* ESCALA PROPORCIONAL AMPLIA BCRP */
-        .moneda-100 { width: 62px; height: 62px; }
-        .moneda-500 { width: 60px; height: 60px; }
-        .moneda-020 { width: 57px; height: 57px; }
-        .moneda-200 { width: 55px; height: 55px; }
-        .moneda-050 { width: 54px; height: 54px; }
-        .moneda-010 { width: 50px; height: 50px; }
+        /* ESCALA MAXIMIZADA BCRP CONSERVADA AL 100% */
+        .moneda-100 { width: 66px; height: 66px; }
+        .moneda-500 { width: 64px; height: 64px; }
+        .moneda-020 { width: 61px; height: 61px; }
+        .moneda-200 { width: 59px; height: 59px; }
+        .moneda-050 { width: 58px; height: 58px; }
+        .moneda-010 { width: 53px; height: 53px; }
 
         .fallback-badge {
             width: 100%;
@@ -639,84 +652,37 @@
             letter-spacing: -0.5px;
         }
 
-        .item-visual-area {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            user-select: none;
-            flex: 1;
-            min-width: 0;
-            height: 100%;
-        }
-
-        /* SUBTOTALES LIMPIOS */
-        .item-data-col {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            flex: 1;
-            min-width: 0;
-            padding-left: 5px;
-        }
-
-        .subtotal-tag {
-            font-size: 9px;
-            font-weight: 900;
-            letter-spacing: 0.8px;
-            color: #64748b;
-            text-transform: uppercase;
-            line-height: 1;
-            margin-bottom: 2px;
-        }
-
-        .subtotal-valor-box {
-            display: flex;
-            align-items: baseline;
-            width: 100%;
-            overflow: hidden;
-            line-height: 1;
-        }
-
-        .item-subtotal {
-            color: var(--bcp-blue);
-            font-weight: 900;
-            white-space: nowrap;
-        }
-
-        #containerBilletes .item-subtotal {
-            font-size: clamp(22px, 5.8vw, 27px);
-            letter-spacing: -0.5px;
-        }
-
-        #containerMonedas .item-subtotal {
-            font-size: clamp(20px, 5.2vw, 25px);
-            letter-spacing: -0.8px;
-        }
-
-        /* STEPPERS */
+        /* STEPPERS CON ICONOS DIRECCIONALES */
         .stepper-control { 
             display: flex; 
             align-items: center; 
             gap: 3px; 
-            flex-shrink: 0;
+            flex-shrink: 0; 
+            user-select: none;
         }
         
         .btn-step {
             border: 1px solid var(--border-color);
             background-color: #F8FAFC; 
-            font-weight: 700; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             cursor: pointer; 
-            color: var(--text-dark); 
+            color: #475569; 
             user-select: none;
-            transition: background 0.1s, transform 0.08s ease;
+            transition: background 0.1s, transform 0.08s ease, color 0.1s;
             touch-action: manipulation;
+            padding: 0;
         }
-        .btn-step:active { background-color: #E2E8F0; transform: scale(0.95); }
+        .btn-step:active { 
+            background-color: #E2E8F0; 
+            color: var(--bcp-blue);
+            transform: scale(0.94); 
+        }
+        .btn-step svg {
+            pointer-events: none;
+            display: block;
+        }
         
         .input-qty {
             border: 2px solid var(--border-color);
@@ -726,6 +692,58 @@
             background-color: #FAFAFA;
         }
         .input-qty:focus { outline: none; border-color: var(--bcp-orange); background-color: white; }
+
+        /* SUBTOTAL */
+        .item-data-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            padding: 5px 6px 4px 2px;
+            text-align: right;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .subtotal-tag {
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.9px;
+            color: #64748b;
+            text-transform: uppercase;
+            line-height: 1;
+            padding-top: 1px;
+            margin-bottom: auto;
+        }
+
+        .subtotal-valor-box {
+            display: flex;
+            align-items: baseline;
+            justify-content: flex-end;
+            width: 100%;
+            overflow: hidden;
+            line-height: 1;
+        }
+
+        .item-subtotal {
+            color: var(--subtotal-color);
+            font-weight: 900;
+            white-space: nowrap;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+        }
+
+        #containerBilletes .item-subtotal {
+            font-size: clamp(25px, 6.8vw, 32px);
+            letter-spacing: -0.8px;
+        }
+
+        #containerMonedas .item-subtotal {
+            font-size: clamp(21px, 5.8vw, 27px);
+            letter-spacing: -0.8px;
+        }
 
         /* MODAL DE FOTOS */
         .modal-config {
@@ -951,10 +969,22 @@
         let esTransicionClickTab = false;
         let timerFinTransicion = null;
 
+        // ÍCONOS DIRECCIONALES PROFESIONALES
+        const ICON_BAJAR = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
+        const ICON_SUBIR = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>`;
+
         function vibrarRapido() {
             if (typeof navigator !== 'undefined' && navigator.vibrate) {
                 navigator.vibrate(12);
             }
+        }
+
+        // Auto-centrado suave para evitar que el teclado cubra el input seleccionado
+        function asegurarVisibilidadInput(el) {
+            if (!el) return;
+            setTimeout(() => {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 160);
         }
 
         function registrarFocoCaja(input) {
@@ -1287,6 +1317,27 @@
 
         function insertarDobleCero(input) {
             if (!input || input.readOnly) return;
+
+            if (input.classList.contains('input-qty') || input.id.startsWith('input-b-') || input.id.startsWith('input-m-')) {
+                let actual = input.value.replace(/[^0-9]/g, '');
+                if (actual === '' || actual === '0') {
+                    actual = '0';
+                    input.value = '';
+                } else {
+                    actual = actual + '00';
+                    input.value = actual;
+                }
+
+                const esBillete = input.id.startsWith('input-b-');
+                const tipo = esBillete ? 'billete' : 'moneda';
+                const denomStr = input.id.replace(esBillete ? 'input-b-' : 'input-m-', '');
+                const denom = parseFloat(denomStr);
+
+                updateQty(tipo, denom, input.value);
+                vibrarRapido();
+                return;
+            }
+
             let val = input.value.replace(/,/g, '').trim();
 
             if (val === '' || val === '0') {
@@ -1305,6 +1356,7 @@
             registrarFocoCaja(input);
             guardarValoresModoActual();
             calcularTodo();
+            vibrarRapido();
         }
 
         function calcularTodo() {
@@ -1447,7 +1499,7 @@
         }
 
         // =======================================================
-        // PERSISTENCIA Y RENDERIZADO VISUAL MAXIMIZADO
+        // PERSISTENCIA Y RENDERIZADO VISUAL
         // =======================================================
         const denominacionesBilletes = [200, 100, 50, 20, 10];
         const denominacionesMonedas = [5.00, 2.00, 1.00, 0.50, 0.20, 0.10];
@@ -1495,7 +1547,7 @@
                 badge.style.borderRadius = '50%';
                 badge.classList.add(configMonedas[denom].css);
                 badge.innerText = denom >= 1 ? `S/ ${denom.toFixed(0)}` : `${(denom * 100).toFixed(0)}¢`;
-                badge.style.fontSize = '12px';
+                badge.style.fontSize = '13px';
             }
             contenedor.appendChild(badge);
         }
@@ -1507,21 +1559,19 @@
                 const src = obtenerSrcFoto('billete', denom);
                 containerBilletes.innerHTML += `
                     <div class="item-card">
-                        <div class="item-visual-area" ondblclick="reiniciarDenominacion('billete', ${denom})" title="Doble toque para reiniciar">
-                            <div class="billete-container">
-                                <img src="${src}" class="billete-real-img" alt="S/ ${denom}" loading="eager" onerror="manejarErrorFoto(this, 'billete', ${denom})">
-                            </div>
-                            <div class="item-data-col">
-                                <span class="subtotal-tag">SUBTOTAL</span>
-                                <div class="subtotal-valor-box">
-                                    <span class="item-subtotal" id="sub-b-${denom}">0</span>
-                                </div>
-                            </div>
+                        <div class="billete-container" ondblclick="reiniciarDenominacion('billete', ${denom})" title="Doble toque para reiniciar">
+                            <img src="${src}" class="billete-real-img" alt="S/ ${denom}" loading="eager" onerror="manejarErrorFoto(this, 'billete', ${denom})">
                         </div>
                         <div class="stepper-control">
-                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'billete', ${denom}, -1)">−</button>
-                            <input type="text" inputmode="numeric" class="input-qty" id="input-b-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('billete', ${denom}, this.value)">
-                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'billete', ${denom}, 1)">+</button>
+                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'billete', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
+                            <input type="text" inputmode="numeric" class="input-qty" id="input-b-${denom}" placeholder="0" enterkeyhint="done" onfocus="asegurarVisibilidadInput(this)" oninput="updateQty('billete', ${denom}, this.value)">
+                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'billete', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
+                        </div>
+                        <div class="item-data-col" ondblclick="reiniciarDenominacion('billete', ${denom})" title="Doble toque para reiniciar">
+                            <span class="subtotal-tag">SUBTOTAL</span>
+                            <div class="subtotal-valor-box">
+                                <span class="item-subtotal" id="sub-b-${denom}">0</span>
+                            </div>
                         </div>
                     </div>`;
             });
@@ -1533,21 +1583,19 @@
                 const conf = configMonedas[denom];
                 containerMonedas.innerHTML += `
                     <div class="item-card">
-                        <div class="item-visual-area" ondblclick="reiniciarDenominacion('moneda', ${denom})" title="Doble toque para reiniciar">
-                            <div class="moneda-real-frame">
-                                <img src="${src}" class="moneda-real-img ${conf.css}" alt="S/ ${denom.toFixed(2)}" loading="eager" onerror="manejarErrorFoto(this, 'moneda', ${denom})">
-                            </div>
-                            <div class="item-data-col">
-                                <span class="subtotal-tag">SUBTOTAL</span>
-                                <div class="subtotal-valor-box">
-                                    <span class="item-subtotal" id="sub-m-${denom}">0.00</span>
-                                </div>
-                            </div>
+                        <div class="moneda-real-frame" ondblclick="reiniciarDenominacion('moneda', ${denom})" title="Doble toque para reiniciar">
+                            <img src="${src}" class="moneda-real-img ${conf.css}" alt="S/ ${denom.toFixed(2)}" loading="eager" onerror="manejarErrorFoto(this, 'moneda', ${denom})">
                         </div>
                         <div class="stepper-control">
-                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'moneda', ${denom}, -1)">−</button>
-                            <input type="text" inputmode="numeric" class="input-qty" id="input-m-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('moneda', ${denom}, this.value)">
-                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'moneda', ${denom}, 1)">+</button>
+                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'moneda', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
+                            <input type="text" inputmode="numeric" class="input-qty" id="input-m-${denom}" placeholder="0" enterkeyhint="done" onfocus="asegurarVisibilidadInput(this)" oninput="updateQty('moneda', ${denom}, this.value)">
+                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'moneda', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
+                        </div>
+                        <div class="item-data-col" ondblclick="reiniciarDenominacion('moneda', ${denom})" title="Doble toque para reiniciar">
+                            <span class="subtotal-tag">SUBTOTAL</span>
+                            <div class="subtotal-valor-box">
+                                <span class="item-subtotal" id="sub-m-${denom}">0.00</span>
+                            </div>
                         </div>
                     </div>`;
             });
