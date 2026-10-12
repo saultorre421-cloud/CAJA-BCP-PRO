@@ -16,8 +16,8 @@
             --danger-color: #D32F2F;
             --app-bg: #f1f5f9;
 
-            /* Multiplicador: Fondos neutros de alto contraste */
-            --bg-neutral-tab: #f1f5f9;
+            /* Multiplicador: Fondo contraste neutro */
+            --bg-neutral-tab: #e2e8f0;
             --border-neutral-tab: #cbd5e1;
             --accent-tab-active: #002A8D;
 
@@ -387,7 +387,7 @@
         }
 
         /* =========================================
-           MULTIPLICADOR: FONDOS NEUTROS Y RESPIRACIÓN
+           MULTIPLICADOR: FONDOS Y ESTRUCTURA
            ========================================= */
         .multiplicador-wrapper {
             background-color: var(--bg-light);
@@ -497,14 +497,14 @@
             margin: 0 auto; 
         }
 
-        /* FONDO NEUTRO LIMPIO: RESALTE TOTAL DE BILLETES Y MONEDAS */
+        /* FONDOS CONTENEDORES CON ALTO CONTRASTE */
         #tab-billetes {
             background-color: var(--bg-neutral-tab);
             border-bottom: 3px solid var(--border-neutral-tab);
             border-left: 2px solid var(--border-neutral-tab);
             border-right: 2px solid var(--border-neutral-tab);
             border-radius: 0 0 14px 14px;
-            padding: 9px 5px 6px 5px;
+            padding: 9px 6px 6px 6px;
         }
 
         #tab-monedas {
@@ -513,26 +513,23 @@
             border-left: 2px solid var(--border-neutral-tab);
             border-right: 2px solid var(--border-neutral-tab);
             border-radius: 0 0 14px 14px;
-            padding: 4px 4px 4px 4px;
+            padding: 8px 6px 6px 6px; /* Separación periférica */
         }
 
-        .item-card {
+        /* BILLETES: CÁPSULAS INDEPENDIENTES CON ESQUINAS CUADRADAS A LA IZQUIERDA */
+        #containerBilletes .item-card {
             background: var(--card-bg); 
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
-            border: 1px solid rgba(0, 0, 0, 0.12);
-            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
-            overflow: hidden; 
-        }
-
-        /* BILLETES: ESQUINAS CUADRADAS A LA IZQUIERDA PARA NO RECORTAR EL BILLETE */
-        #containerBilletes .item-card {
             height: 70px;
             margin-bottom: 9px;
             border-radius: 0 12px 12px 0;
             padding: 0 6px 0 0;
             gap: 6px;
+            border: 1.5px solid #cbd5e1;
+            box-shadow: 0 3px 7px rgba(15, 23, 42, 0.08);
+            overflow: hidden; 
         }
 
         #containerBilletes .billete-container {
@@ -562,37 +559,45 @@
             border-radius: 7px;
         }
 
-        /* MONEDAS: CÁPSULA REDONDEADA ORIGINAL */
+        /* MONEDAS: CÁPSULAS INDEPENDIENTES Y SEPARADAS (ROMPEMOS EL BLOQUE CONTINUO) */
         #containerMonedas .item-card {
-            height: 62px;
-            margin-bottom: 6px;
-            border-radius: 10px;
-            padding: 0 5px 0 0;
-            gap: 4px;
+            background: var(--card-bg); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            height: 68px;
+            margin-bottom: 10px; /* Separación amplia entre cada moneda */
+            border-radius: 12px;  /* Forma de cápsula independiente completa */
+            padding: 0 6px 0 0;
+            gap: 5px;
+            border: 1.5px solid #cbd5e1;
+            box-shadow: 0 3px 8px rgba(15, 23, 42, 0.09), 0 1px 3px rgba(15, 23, 42, 0.05); /* Efecto flotante */
+            overflow: hidden; 
         }
 
         #containerMonedas .moneda-real-frame {
-            width: 66px;
+            width: 76px;
             height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            background: rgba(0, 0, 0, 0.02);
-            border-right: 1.5px solid rgba(0, 0, 0, 0.06);
+            background: #f8fafc; /* Fondo suave que resalta el metal sin crear un riel continuo */
+            border-radius: 10px 0 0 10px;
+            border-right: 1px solid #e2e8f0; /* Divisor tenue */
         }
 
         #containerMonedas .btn-step {
-            width: 35px;
-            height: 48px;
+            width: 36px;
+            height: 50px;
             font-size: 28px;
             border-radius: 6px;
         }
 
         #containerMonedas .input-qty {
-            width: 62px;
-            height: 48px;
-            font-size: 27px;
+            width: 64px;
+            height: 50px;
+            font-size: 28px;
             border-radius: 6px;
         }
 
@@ -608,17 +613,19 @@
             object-fit: cover;
             display: block;
             box-shadow: 
-                inset 0 1px 2px rgba(255, 255, 255, 0.65),
+                inset 0 1px 2px rgba(255, 255, 255, 0.75),
                 inset 0 -1px 2px rgba(0, 0, 0, 0.4),
-                0 2px 5px rgba(0, 0, 0, 0.3);
+                0 3px 6px rgba(15, 23, 42, 0.22),
+                0 0 0 1px rgba(0, 0, 0, 0.12);
         }
 
-        .moneda-500 { width: 54px; height: 54px; }
-        .moneda-200 { width: 49px; height: 49px; }
-        .moneda-100 { width: 56px; height: 56px; }
-        .moneda-050 { width: 48px; height: 48px; }
-        .moneda-020 { width: 50px; height: 50px; }
-        .moneda-010 { width: 44px; height: 44px; }
+        /* ESCALA PROPORCIONAL AMPLIA BCRP */
+        .moneda-100 { width: 62px; height: 62px; }
+        .moneda-500 { width: 60px; height: 60px; }
+        .moneda-020 { width: 57px; height: 57px; }
+        .moneda-200 { width: 55px; height: 55px; }
+        .moneda-050 { width: 54px; height: 54px; }
+        .moneda-010 { width: 50px; height: 50px; }
 
         .fallback-badge {
             width: 100%;
@@ -643,9 +650,7 @@
             height: 100%;
         }
 
-        /* =========================================
-           SUBTOTALES: ALTO IMPACTO Y MÁXIMA LECTURA
-           ========================================= */
+        /* SUBTOTALES LIMPIOS */
         .item-data-col {
             display: flex;
             flex-direction: column;
@@ -690,7 +695,7 @@
             letter-spacing: -0.8px;
         }
 
-        /* STEPPERS GENERALES */
+        /* STEPPERS */
         .stepper-control { 
             display: flex; 
             align-items: center; 
@@ -1488,6 +1493,7 @@
             } else {
                 badge.style.backgroundColor = configMonedas[denom].color;
                 badge.style.borderRadius = '50%';
+                badge.classList.add(configMonedas[denom].css);
                 badge.innerText = denom >= 1 ? `S/ ${denom.toFixed(0)}` : `${(denom * 100).toFixed(0)}¢`;
                 badge.style.fontSize = '12px';
             }
@@ -1593,7 +1599,7 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    let maxW = (tipo === 'billete') ? 340 : 140;
+                    let maxW = (tipo === 'billete') ? 340 : 160;
                     let scale = maxW / img.width;
                     canvas.width = maxW;
                     canvas.height = img.height * scale;
