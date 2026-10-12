@@ -523,7 +523,7 @@
             overflow-y: hidden;
         }
 
-        /* FONDOS CONTENEDORES CON AJUSTE ESTÁTICO (SIN PADDING EXCESIVO) */
+        /* FONDOS CONTENEDORES CON AJUSTE ESTÁTICO */
         #tab-billetes {
             background-color: var(--bg-neutral-tab);
             border-bottom: 3px solid var(--border-neutral-tab);
@@ -586,7 +586,7 @@
             border-radius: 7px;
         }
 
-        /* MONEDAS: TOTALMENTE CALIBRADAS Y ESTÁTICAS */
+        /* MONEDAS: CALIBRADAS Y ESTÁTICAS */
         #containerMonedas .item-card {
             background: var(--card-bg); 
             display: flex; 
@@ -711,56 +711,64 @@
         }
         .input-qty:focus { outline: none; border-color: var(--bcp-orange); background-color: white; }
 
-        /* SUBTOTAL */
+        /* =========================================
+           SUBTOTAL ALINEADO A LA ALTURA DEL INPUT
+           ========================================= */
         .item-data-col {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center; /* Alineado al centro, exactamente a la altura del input */
             align-items: flex-end;
             flex: 1;
             min-width: 0;
             height: 100%;
-            padding: 5px 6px 4px 2px;
+            padding: 1px 8px 1px 2px;
             text-align: right;
             cursor: pointer;
             user-select: none;
+            gap: 1px;
         }
 
         .subtotal-tag {
             font-size: 10px;
             font-weight: 900;
-            letter-spacing: 0.9px;
+            letter-spacing: 0.8px;
             color: #64748b;
             text-transform: uppercase;
             line-height: 1;
-            padding-top: 1px;
-            margin-bottom: auto;
+            margin-bottom: 2px;
         }
 
         .subtotal-valor-box {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             justify-content: flex-end;
             width: 100%;
             overflow: hidden;
             line-height: 1;
         }
 
+        /* TIPOGRAFÍA MÁS ALTA Y NO TAN ANCHA */
         .item-subtotal {
             color: var(--subtotal-color);
+            font-family: "Arial Narrow", "Roboto Condensed", -apple-system, sans-serif;
             font-weight: 900;
             white-space: nowrap;
             text-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+            display: inline-block;
+            transform: scaleY(1.14); /* Más alto verticalmente sin expandir el ancho */
+            transform-origin: right center;
+            line-height: 1;
         }
 
         #containerBilletes .item-subtotal {
-            font-size: clamp(25px, 6.8vw, 32px);
-            letter-spacing: -0.8px;
+            font-size: clamp(27px, 7.2vw, 34px);
+            letter-spacing: -0.6px;
         }
 
         #containerMonedas .item-subtotal {
-            font-size: clamp(21px, 5.8vw, 27px);
-            letter-spacing: -0.8px;
+            font-size: clamp(23px, 6.4vw, 29px);
+            letter-spacing: -0.6px;
         }
 
         /* MODAL DE FOTOS */
@@ -997,7 +1005,7 @@
             }
         }
 
-        // CONTROL ESTÁTICO PERMANENTE
+        // CONTROL ESTÁTICO PERMANENTE (CERO SCROLL)
         function mantenerPosicionEstatica() {
             if (window.scrollY !== 0 || window.scrollX !== 0) {
                 window.scrollTo(0, 0);
@@ -1299,6 +1307,7 @@
             btnMonedas.classList.toggle('active', esMonedas);
         }
 
+        /* GESTION DE STEP SIN PERDER EL FOCO DEL TECLADO */
         function gestionarStep(event, type, denom, delta) {
             if (event) {
                 event.preventDefault();
@@ -1306,6 +1315,12 @@
             }
             vibrarRapido();
             changeQty(type, denom, delta);
+
+            // Blindaje de teclado: asegura que el input mantenga el foco activo sin cerrar el teclado
+            const inputEl = document.getElementById(`input-${type === 'billete' ? 'b' : 'm'}-${denom}`);
+            if (inputEl) {
+                inputEl.focus({ preventScroll: true });
+            }
         }
 
         const getValCentimos = (id) => {
@@ -1581,15 +1596,15 @@
                 const src = obtenerSrcFoto('billete', denom);
                 containerBilletes.innerHTML += `
                     <div class="item-card">
-                        <div class="billete-container" ondblclick="reiniciarDenominacion('billete', ${denom})" title="Doble toque para reiniciar">
+                        <div class="billete-container" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" ondblclick="reiniciarDenominacion('billete', ${denom})" title="Doble toque para reiniciar">
                             <img src="${src}" class="billete-real-img" alt="S/ ${denom}" loading="eager" onerror="manejarErrorFoto(this, 'billete', ${denom})">
                         </div>
                         <div class="stepper-control">
-                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'billete', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
+                            <button type="button" class="btn-step" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'billete', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
                             <input type="text" inputmode="numeric" class="input-qty" id="input-b-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('billete', ${denom}, this.value)">
-                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'billete', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
+                            <button type="button" class="btn-step" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'billete', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
                         </div>
-                        <div class="item-data-col" ondblclick="reiniciarDenominacion('billete', ${denom})" title="Doble toque para reiniciar">
+                        <div class="item-data-col" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" ondblclick="reiniciarDenominacion('billete', ${denom})" title="Doble toque para reiniciar">
                             <span class="subtotal-tag">SUBTOTAL</span>
                             <div class="subtotal-valor-box">
                                 <span class="item-subtotal" id="sub-b-${denom}">0</span>
@@ -1605,15 +1620,15 @@
                 const conf = configMonedas[denom];
                 containerMonedas.innerHTML += `
                     <div class="item-card">
-                        <div class="moneda-real-frame" ondblclick="reiniciarDenominacion('moneda', ${denom})" title="Doble toque para reiniciar">
+                        <div class="moneda-real-frame" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" ondblclick="reiniciarDenominacion('moneda', ${denom})" title="Doble toque para reiniciar">
                             <img src="${src}" class="moneda-real-img ${conf.css}" alt="S/ ${denom.toFixed(2)}" loading="eager" onerror="manejarErrorFoto(this, 'moneda', ${denom})">
                         </div>
                         <div class="stepper-control">
-                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'moneda', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
+                            <button type="button" class="btn-step" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'moneda', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
                             <input type="text" inputmode="numeric" class="input-qty" id="input-m-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('moneda', ${denom}, this.value)">
-                            <button type="button" class="btn-step" onclick="gestionarStep(event, 'moneda', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
+                            <button type="button" class="btn-step" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'moneda', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
                         </div>
-                        <div class="item-data-col" ondblclick="reiniciarDenominacion('moneda', ${denom})" title="Doble toque para reiniciar">
+                        <div class="item-data-col" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" ondblclick="reiniciarDenominacion('moneda', ${denom})" title="Doble toque para reiniciar">
                             <span class="subtotal-tag">SUBTOTAL</span>
                             <div class="subtotal-valor-box">
                                 <span class="item-subtotal" id="sub-m-${denom}">0.00</span>
@@ -1695,6 +1710,7 @@
             const inputEl = document.getElementById(`input-${type === 'billete' ? 'b' : 'm'}-${denom}`);
             inputEl.value = '';
             updateQty(type, denom, 0);
+            if (inputEl) inputEl.focus({ preventScroll: true });
         }
 
         function changeQty(type, denom, delta) {
