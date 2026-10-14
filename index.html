@@ -7,6 +7,7 @@
     <style>
         :root {
             --bcp-blue: #002A8D;
+            --bcp-blue-dark: #001B5E;
             --bcp-orange: #FF6A00;
             --bg-light: #F4F6F9;
             --card-bg: #FFFFFF;
@@ -49,6 +50,7 @@
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* BLINDAJE VERTICAL COMPLETO: CERO SCROLL ARRIBA/ABAJO */
@@ -75,7 +77,7 @@
             width: 100%;
             height: 100%;
             overflow-y: hidden;
-            animation: fadeInScreen 0.2s forwards;
+            animation: fadeInScreen 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .main-app-container.active-app {
@@ -93,6 +95,9 @@
             overflow-y: hidden;
         }
 
+        /* =========================================
+           PANELES DE CABECERA (100% LIMPIOS)
+           ========================================= */
         .panel-total { 
             display: flex; 
             justify-content: space-between; 
@@ -104,14 +109,14 @@
             text-transform: uppercase; 
             box-shadow: 0 2px 4px rgba(0,0,0,0.06); 
             user-select: none;
-            transition: background-color 0.2s ease, color 0.2s ease;
+            transition: background 0.2s ease, color 0.2s ease;
             gap: 6px;
         }
         
         .panel-title-area {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             flex-shrink: 1;
             min-width: 0;
         }
@@ -120,14 +125,15 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            letter-spacing: 0.2px;
         }
 
         .header-dots {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            background: rgba(0, 0, 0, 0.12);
-            padding: 2px 6px;
+            background: rgba(0, 0, 0, 0.14);
+            padding: 2.5px 6px;
             border-radius: 10px;
             flex-shrink: 0;
         }
@@ -138,6 +144,7 @@
             background-color: rgba(255, 255, 255, 0.4);
             cursor: pointer;
             transition: all 0.2s ease;
+            position: relative;
         }
         .tema-recibo-header .h-dot {
             background-color: rgba(0, 0, 0, 0.25);
@@ -148,6 +155,15 @@
         }
         .tema-recibo-header .h-dot.active {
             background-color: #000000 !important;
+        }
+        .h-dot.has-data:not(.active) {
+            background-color: #ff6a00 !important;
+            box-shadow: 0 0 6px #ff6a00;
+            animation: dotAlertPulse 0.9s infinite alternate;
+        }
+        @keyframes dotAlertPulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.38); }
         }
 
         .panel-total span:nth-child(2) {
@@ -160,18 +176,21 @@
         }
 
         .tema-recibo-header { 
-            background-color: var(--recibo-header) !important; 
+            background: linear-gradient(135deg, #facc15 0%, #eab308 100%) !important; 
             color: var(--recibo-header-text) !important; 
         }
         .tema-deposito-header { 
-            background-color: var(--deposito-header) !important; 
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%) !important; 
             color: var(--deposito-header-text) !important; 
         }
         .tema-retiro-header { 
-            background-color: var(--retiro-header) !important; 
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important; 
             color: var(--retiro-header-text) !important; 
         }
 
+        /* =========================================
+           CAJAS DE ENTRADA NUMÉRICA
+           ========================================= */
         .caja-contenedor { 
             padding: 4px 5px 5px 5px; 
             border-radius: 0 0 10px 10px; 
@@ -256,12 +275,17 @@
             color: #0f172a; 
             background-color: #ffffff; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
-            transition: border-color 0.15s, background-color 0.15s, color 0.15s;
+            transition: border-color 0.15s, background-color 0.15s, color 0.15s, box-shadow 0.15s;
+        }
+        .caja-contenedor input:not(:placeholder-shown) {
+            border-color: #334155;
+            background-color: #ffffff;
         }
         .caja-contenedor input:focus { 
             outline: none; 
             border-color: var(--bcp-orange); 
             background-color: #ffffff; 
+            box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.25);
         }
         .caja-contenedor input::placeholder { 
             color: #94a3b8; 
@@ -285,6 +309,9 @@
             color: var(--retiro-header) !important;
         }
 
+        /* ===============================================================
+           PANEL DE RESULTADO PRINCIPAL: 100% CENTRADO Y SEÑALIZACIÓN VIVA
+           =============================================================== */
         .panel-resultado { 
             padding: 0 6px 5px 6px;
             border-radius: 10px; 
@@ -292,13 +319,30 @@
             font-weight: bold; 
             margin-bottom: 5px;
             border: 3px solid; 
-            transition: all 0.2s; 
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease; 
             box-shadow: 0 2px 6px rgba(0,0,0,0.06); 
             position: relative;
             overflow: hidden;
+            isolation: isolate;
+        }
+
+        .panel-resultado::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -130%;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.48), transparent);
+            transform: skewX(-25deg);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
         }
 
         .badge-operacion {
+            position: relative;
+            z-index: 2;
             display: inline-block;
             padding: 2px 14px;
             border-radius: 0 0 8px 8px;
@@ -310,36 +354,321 @@
             margin-bottom: 2px;
             background: rgba(0, 0, 0, 0.11);
             line-height: 1.2;
+            transition: background 0.2s ease, color 0.2s ease;
         }
 
         #textoFinal {
+            position: relative;
+            z-index: 2;
             font-size: clamp(16px, 4.6vw, 22px);
             font-weight: 900;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.7px;
             line-height: 1.1;
             text-transform: uppercase;
             margin-top: 2px;
             margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-align: center;
+        }
+
+        .sig-wing {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(16px, 4.2vw, 20px);
+            height: clamp(16px, 4.2vw, 20px);
+            flex-shrink: 0;
+        }
+
+        .sig-wing svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            overflow: visible;
         }
 
         .monto-final { 
+            position: relative;
+            z-index: 2;
             display: block; 
+            width: 100%;
+            text-align: center;
             font-size: clamp(52px, 14vw, 70px); 
             font-weight: 900; 
             margin-top: 1px; 
             line-height: 0.95; 
             letter-spacing: -2px;
+            will-change: transform;
         }
 
-        .estado-esperando { background-color: #f8fafc; border-color: #cbd5e1; color: #475569; }
-        .estado-proceso { background-color: #f3e8ff; border-color: #9333ea; color: #7e22ce; }
-        .estado-cobrar { background-color: #ffedd5; border-color: #ea580c; color: #c2410c; }
-        .estado-vuelto { background-color: #e0f2fe; border-color: #0284c7; color: #0369a1; }
-        .estado-faltante { background-color: #fee2e2; border-color: #dc2626; color: #b91c1c; }
-        .estado-exacto { background-color: #dcfce7; border-color: #16a34a; color: #15803d; }
-        .estado-retiro { background-color: #FFF1F2; border-color: var(--retiro-header); color: #9F1239; }
-        .estado-deposito { background-color: #ccfbf1; border-color: var(--deposito-header); color: #0f766e; }
+        .monto-pop {
+            animation: montoPopAnim 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
 
+        @keyframes montoPopAnim {
+            0% { transform: scale(0.96); }
+            60% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* ESTADOS OPERATIVOS DEL PANEL DE RESULTADOS */
+        .estado-esperando { 
+            background-color: #f8fafc; 
+            border-color: #cbd5e1; 
+            color: #475569; 
+        }
+        .estado-esperando .sig-wing {
+            opacity: 0.55;
+        }
+
+        .estado-proceso { 
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); 
+            border-color: #9333ea; 
+            color: #6b21a8; 
+            box-shadow: 0 3px 10px rgba(147, 51, 234, 0.16);
+        }
+        .estado-proceso .badge-operacion {
+            background: #7e22ce;
+            color: #ffffff;
+        }
+        .estado-proceso .sig-wing {
+            animation: pulseSoftWing 1s ease-in-out infinite alternate;
+        }
+        @keyframes pulseSoftWing {
+            from { transform: scale(0.92); opacity: 0.75; }
+            to { transform: scale(1.1); opacity: 1; }
+        }
+
+        .estado-cobrar { 
+            background: repeating-linear-gradient(
+                -45deg,
+                #ffedd5,
+                #ffedd5 14px,
+                #fed7aa 14px,
+                #fed7aa 28px
+            );
+            background-size: 40px 40px;
+            border-color: #ea580c; 
+            color: #9a3412; 
+            box-shadow: 0 3px 12px rgba(234, 88, 12, 0.22);
+            animation: stripeFlowSlow 1.6s linear infinite;
+        }
+        .estado-cobrar .badge-operacion {
+            background: #ea580c;
+            color: #ffffff;
+        }
+        .estado-cobrar .sig-wing {
+            animation: arrowDownCobrar 0.65s ease-in-out infinite alternate;
+        }
+        @keyframes arrowDownCobrar {
+            from { transform: translateY(-2.5px); }
+            to { transform: translateY(2.5px); }
+        }
+
+        .estado-vuelto { 
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 55%, #7dd3fc 100%); 
+            border-color: #0284c7; 
+            color: #0369a1; 
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+        }
+        .estado-vuelto::before {
+            opacity: 1;
+            animation: shimmerSweep 2.1s infinite;
+        }
+        .estado-vuelto .badge-operacion {
+            background: #0284c7;
+            color: #ffffff;
+        }
+        .estado-vuelto .sig-wing.wing-left {
+            animation: wingOutLeft 0.65s ease-in-out infinite alternate;
+        }
+        .estado-vuelto .sig-wing.wing-right {
+            animation: wingOutRight 0.65s ease-in-out infinite alternate;
+        }
+        @keyframes wingOutLeft {
+            from { transform: translateX(2px); }
+            to { transform: translateX(-3px); }
+        }
+        @keyframes wingOutRight {
+            from { transform: translateX(-2px); }
+            to { transform: translateX(3px); }
+        }
+
+        .estado-faltante { 
+            background: repeating-linear-gradient(
+                45deg,
+                #fee2e2,
+                #fee2e2 12px,
+                #fecaca 12px,
+                #fecaca 24px
+            );
+            background-size: 34px 34px;
+            border-color: #dc2626 !important; 
+            color: #991b1b !important; 
+            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.28), 0 5px 16px rgba(220, 38, 38, 0.38) !important;
+            animation: faltanteJolt 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both, stripeFlowFast 1s linear infinite, dangerBorderPulse 0.65s infinite alternate;
+        }
+        .estado-faltante .badge-operacion {
+            background: #dc2626 !important;
+            color: #ffffff !important;
+        }
+        .estado-faltante .sig-wing {
+            color: #dc2626;
+            animation: warningScalePulse 0.45s infinite alternate;
+        }
+        @keyframes faltanteJolt {
+            0%, 100% { transform: translateY(0); }
+            25%, 75% { transform: translateY(-4px); }
+            50% { transform: translateY(4px); }
+        }
+        @keyframes dangerBorderPulse {
+            from { border-color: #dc2626; }
+            to { border-color: #991b1b; }
+        }
+
+        .estado-faltante-entregar {
+            background: repeating-linear-gradient(
+                -45deg,
+                #fff7ed,
+                #fff7ed 12px,
+                #ffedd5 12px,
+                #fed7aa 24px
+            );
+            background-size: 34px 34px;
+            border-color: #ea580c !important;
+            color: #9a3412 !important;
+            box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.25), 0 4px 15px rgba(234, 88, 12, 0.32) !important;
+            animation: stripeFlowFast 1.2s linear infinite, entregarBorderPulse 0.75s infinite alternate;
+        }
+        .estado-faltante-entregar .badge-operacion {
+            background: #c2410c !important;
+            color: #ffffff !important;
+        }
+        .estado-faltante-entregar .sig-wing {
+            color: #ea580c;
+            animation: arrowUpEntregar 0.55s ease-in-out infinite alternate;
+        }
+        @keyframes entregarBorderPulse {
+            from { border-color: #f97316; }
+            to { border-color: #c2410c; }
+        }
+        @keyframes arrowUpEntregar {
+            from { transform: translateY(2.5px) scale(0.95); }
+            to { transform: translateY(-2.5px) scale(1.12); }
+        }
+
+        .estado-exacto { 
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 55%, #86efac 100%); 
+            border-color: #16a34a; 
+            color: #14532d; 
+            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.30);
+            animation: exactoGlow 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .estado-exacto::before {
+            opacity: 1;
+            animation: shimmerSweep 1.8s infinite;
+        }
+        .estado-exacto .badge-operacion {
+            background: #15803d;
+            color: #ffffff;
+        }
+        .estado-exacto .sig-wing {
+            color: #15803d;
+            animation: checkBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes shimmerSweep {
+            0% { left: -130%; }
+            60%, 100% { left: 160%; }
+        }
+        @keyframes exactoGlow {
+            0% { transform: scale(0.985); }
+            60% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+        @keyframes checkBounce {
+            0% { transform: scale(0.4); }
+            75% { transform: scale(1.22); }
+            100% { transform: scale(1); }
+        }
+
+        .estado-peligro-mas {
+            background: repeating-linear-gradient(
+                -45deg,
+                #fef2f2,
+                #fef2f2 12px,
+                #fee2e2 12px,
+                #fecaca 24px
+            );
+            background-size: 34px 34px;
+            border-color: #dc2626 !important;
+            color: #991b1b !important;
+            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.35), 0 6px 20px rgba(220, 38, 38, 0.5) !important;
+            animation: dangerShakeAlert 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both, stripeFlowFast 0.85s linear infinite, dangerStrobe 0.55s infinite alternate;
+        }
+        .estado-peligro-mas .badge-operacion {
+            background: #dc2626 !important;
+            color: #ffffff !important;
+        }
+        .estado-peligro-mas .sig-wing {
+            color: #dc2626;
+            animation: warningScalePulse 0.42s infinite alternate;
+        }
+        @keyframes stripeFlowFast {
+            from { background-position: 0 0; }
+            to { background-position: 34px 0; }
+        }
+        @keyframes stripeFlowSlow {
+            from { background-position: 0 0; }
+            to { background-position: 40px 0; }
+        }
+        @keyframes dangerShakeAlert {
+            0%, 100% { transform: translateX(0); }
+            15%, 45%, 75% { transform: translateX(-5px); }
+            30%, 60%, 90% { transform: translateX(5px); }
+        }
+        @keyframes dangerStrobe {
+            from { border-color: #dc2626; }
+            to { border-color: #ea580c; }
+        }
+        @keyframes warningScalePulse {
+            from { transform: scale(0.92); }
+            to { transform: scale(1.22); }
+        }
+
+        .estado-retiro { 
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); 
+            border-color: var(--retiro-header); 
+            color: #9F1239; 
+            box-shadow: 0 3px 10px rgba(225, 29, 72, 0.16);
+        }
+        .estado-retiro .badge-operacion {
+            background: var(--retiro-header);
+            color: #ffffff;
+        }
+        .estado-retiro .sig-wing {
+            animation: pulseSoftWing 1s ease-in-out infinite alternate;
+        }
+
+        .estado-deposito { 
+            background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%); 
+            border-color: var(--deposito-header); 
+            color: #0f766e; 
+            box-shadow: 0 3px 10px rgba(13, 148, 136, 0.16);
+        }
+        .estado-deposito .badge-operacion {
+            background: var(--deposito-header);
+            color: #ffffff;
+        }
+        .estado-deposito .sig-wing {
+            animation: pulseSoftWing 1s ease-in-out infinite alternate;
+        }
+
+        /* =========================================
+           SELECTOR DE MODOS OPERATIVOS
+           ========================================= */
         .selector-modos-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -374,7 +703,7 @@
             border-color: #99f6e4;
         }
         #btn-modo-deposito.active-modo {
-            background-color: var(--deposito-header) !important;
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%) !important;
             color: #ffffff !important;
             border-color: #0f766e !important;
             box-shadow: 0 3px 8px rgba(13, 148, 136, 0.4);
@@ -386,7 +715,7 @@
             border-color: #fef08a;
         }
         #btn-modo-servicio.active-modo {
-            background-color: var(--recibo-header) !important;
+            background: linear-gradient(135deg, #facc15 0%, #eab308 100%) !important;
             color: #000000 !important;
             border-color: #ca8a04 !important;
             box-shadow: 0 3px 8px rgba(234, 179, 8, 0.4);
@@ -398,15 +727,15 @@
             border-color: #fecdd3;
         }
         #btn-modo-retiro.active-modo {
-            background-color: var(--retiro-header) !important;
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
             color: #ffffff !important;
             border-color: #be123c !important;
             box-shadow: 0 3px 8px rgba(225, 29, 72, 0.4);
         }
 
-        /* =========================================
-           MULTIPLICADOR: FONDOS Y ESTRUCTURA
-           ========================================= */
+        /* =========================================================
+           MULTIPLICADOR: FONDOS, STEPPERS DINÁMICOS Y SUBTOTALES
+           ========================================================= */
         .multiplicador-wrapper {
             background-color: var(--bg-light);
             height: 100%;
@@ -464,7 +793,7 @@
         
         .sub-tab-btn {
             flex: 1; 
-            padding: 9px 4px; 
+            padding: 8px 4px; 
             text-align: center; 
             background: none; 
             border: none; 
@@ -490,12 +819,21 @@
         }
 
         .tab-badge-subtotal {
-            font-size: 12px;
+            font-size: 13.5px;
             font-weight: 900;
             color: var(--bcp-blue);
-            background: rgba(0, 42, 141, 0.09);
-            padding: 2px 8px;
+            background: rgba(0, 42, 141, 0.10);
+            border: 1px solid rgba(0, 42, 141, 0.18);
+            padding: 2px 9px;
             border-radius: 10px;
+            transition: all 0.18s ease;
+        }
+
+        .tab-badge-subtotal.badge-con-monto {
+            background: var(--bcp-blue);
+            color: #ffffff;
+            border-color: var(--bcp-blue);
+            box-shadow: 0 2px 5px rgba(0, 42, 141, 0.25);
         }
 
         .multiplicador-slider {
@@ -555,7 +893,15 @@
             gap: 6px;
             border: 1.5px solid #cbd5e1;
             box-shadow: 0 3px 7px rgba(15, 23, 42, 0.08);
-            overflow: hidden; 
+            overflow: hidden;
+            transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        #containerBilletes .item-card.fila-activa,
+        #containerMonedas .item-card.fila-activa {
+            border-color: #94a3b8;
+            background-color: #ffffff;
+            box-shadow: 0 3px 9px rgba(0, 42, 141, 0.12);
         }
 
         #containerBilletes .billete-container {
@@ -576,14 +922,14 @@
         #containerBilletes .btn-step {
             width: 36px;
             height: 50px;
-            border-radius: 7px;
+            border-radius: 8px;
         }
 
         #containerBilletes .input-qty {
             width: 64px;
             height: 50px;
             font-size: 28px;
-            border-radius: 7px;
+            border-radius: 8px;
         }
 
         /* MONEDAS: CALIBRADAS Y ESTÁTICAS */
@@ -599,7 +945,8 @@
             gap: 6px;
             border: 1.5px solid #cbd5e1;
             box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
-            overflow: hidden; 
+            overflow: hidden;
+            transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
         }
 
         #containerMonedas .item-card:last-child {
@@ -622,14 +969,14 @@
         #containerMonedas .btn-step {
             width: 36px;
             height: 48px;
-            border-radius: 6px;
+            border-radius: 7px;
         }
 
         #containerMonedas .input-qty {
             width: 64px;
             height: 48px;
             font-size: 26px;
-            border-radius: 6px;
+            border-radius: 7px;
         }
 
         .billete-real-img {
@@ -668,9 +1015,12 @@
             font-size: 18px;
             color: #ffffff;
             letter-spacing: -0.5px;
+            overflow: hidden;
         }
 
-        /* STEPPERS CON ICONOS DIRECCIONALES */
+        /* =========================================================
+           STEPPERS CON DELTAS DINÁMICOS DE DOBLE ALA (SIN + NI -)
+           ========================================================= */
         .stepper-control { 
             display: flex; 
             align-items: center; 
@@ -680,26 +1030,49 @@
         }
         
         .btn-step {
-            border: 1px solid var(--border-color);
-            background-color: #F8FAFC; 
+            border: 1.5px solid #cbd5e1;
+            background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%); 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             cursor: pointer; 
-            color: #475569; 
             user-select: none;
-            transition: background 0.1s, transform 0.08s ease, color 0.1s;
+            transition: background 0.12s ease, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
             touch-action: manipulation;
             padding: 0;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
         }
-        .btn-step:active { 
-            background-color: #E2E8F0; 
+
+        .btn-step-down {
+            color: #475569;
+        }
+
+        .btn-step-up {
             color: var(--bcp-blue);
-            transform: scale(0.94); 
+            border-color: #bac8dc;
+            background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
         }
+
+        .btn-step-down:active { 
+            background: #e2e8f0; 
+            color: #0f172a;
+            border-color: #94a3b8;
+            transform: translateY(1.5px) scale(0.93); 
+        }
+
+        .btn-step-up:active { 
+            background: #dbeafe; 
+            color: var(--bcp-orange);
+            border-color: var(--bcp-blue);
+            transform: translateY(-1.5px) scale(0.93); 
+        }
+
         .btn-step svg {
+            width: 21px;
+            height: 21px;
             pointer-events: none;
             display: block;
+            overflow: visible;
         }
         
         .input-qty {
@@ -708,57 +1081,76 @@
             font-weight: 900; 
             color: var(--bcp-blue); 
             background-color: #FAFAFA;
+            transition: border-color 0.15s ease, background-color 0.15s ease;
         }
         .input-qty:focus { outline: none; border-color: var(--bcp-orange); background-color: white; }
 
-        /* =========================================
-           SUBTOTAL ALINEADO A LA ALTURA DEL INPUT
-           ========================================= */
+        .item-card.fila-activa .input-qty {
+            background-color: #ffffff;
+            border-color: var(--bcp-blue);
+        }
+
+        /* =========================================================
+           COLUMNA DE SUBTOTAL: ETIQUETA ARRIBA Y NÚMERO SIN DISTORSIÓN
+           ========================================================= */
         .item-data-col {
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Alineado al centro, exactamente a la altura del input */
+            justify-content: flex-start;
             align-items: flex-end;
             flex: 1;
             min-width: 0;
             height: 100%;
-            padding: 1px 8px 1px 2px;
+            padding: 6px 9px 4px 2px;
             text-align: right;
             cursor: pointer;
             user-select: none;
-            gap: 1px;
         }
 
+        /* Texto SUBTOTAL más arriba, limpio y fijo */
         .subtotal-tag {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 900;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.9px;
             color: #64748b;
             text-transform: uppercase;
             line-height: 1;
-            margin-bottom: 2px;
+            margin-bottom: auto;
+            transition: color 0.15s ease;
         }
 
+        .item-card.fila-activa .subtotal-tag {
+            color: var(--bcp-blue);
+        }
+
+        /* Caja del número con espacio vertical libre (sin recorte de bordes) */
         .subtotal-valor-box {
             display: flex;
             align-items: center;
             justify-content: flex-end;
             width: 100%;
-            overflow: hidden;
-            line-height: 1;
+            flex: 1;
+            padding-top: 1px;
+            padding-bottom: 2px;
+            overflow: visible;
         }
 
-        /* TIPOGRAFÍA MÁS ALTA Y NO TAN ANCHA */
+        /* Número del Subtotal: tamaño intacto, sin recorte y con contraste inteligente */
         .item-subtotal {
-            color: var(--subtotal-color);
+            color: #94a3b8;
             font-family: "Arial Narrow", "Roboto Condensed", -apple-system, sans-serif;
             font-weight: 900;
             white-space: nowrap;
-            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
             display: inline-block;
-            transform: scaleY(1.14); /* Más alto verticalmente sin expandir el ancho */
+            transform: scaleY(1.12);
             transform-origin: right center;
-            line-height: 1;
+            line-height: 1.05;
+            transition: color 0.15s ease, transform 0.15s ease;
+        }
+
+        .item-card.fila-activa .item-subtotal {
+            color: var(--subtotal-color);
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
         }
 
         #containerBilletes .item-subtotal {
@@ -899,8 +1291,9 @@
                     </div>
                 </div>
 
+                <!-- PANEL DE RESULTADO: ESTRUCTURA 100% CENTRADA ORIGINAL -->
                 <div class="panel-resultado estado-esperando" id="panelFinal">
-                    <div class="badge-operacion" id="badgeOperacion">PAGO DE SERVICIOS</div>
+                    <div class="badge-operacion" id="badgeOperacion">PAGO DE SERVICIOS / RECIBO</div>
                     <div id="textoFinal">ESPERANDO MONTOS...</div>
                     <span class="monto-final" id="montoFinal">0.00</span>
                 </div>
@@ -976,6 +1369,7 @@
         const formatoEntero = (num) => Math.round(num).toLocaleString('en-US');
         
         let modoOperacion = 'recibo'; 
+        let ultimoEstadoResultado = '';
         
         let datosSuperior = {
             recibo: { b1: '', b2: '', b3: '', b4: '', b5: '', b6: '', b7: '', b8: '' },
@@ -995,13 +1389,78 @@
         let esTransicionClickTab = false;
         let timerFinTransicion = null;
 
-        // ÍCONOS DIRECCIONALES PROFESIONALES
-        const ICON_BAJAR = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
-        const ICON_SUBIR = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>`;
+        /* ===============================================================
+           NUEVOS ICONOS DINÁMICOS DE DOBLE ALA PARA STEPPERS (SIN + NI -)
+           Diseño aerodinámico con punta sólida + ala impulsora secundaria
+           =============================================================== */
+        const ICON_BAJAR = `
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.8 6.2L12 11.2L17.2 6.2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>
+            <path d="M12 19.5L18.6 12.6L16.2 10.8L12 15L7.8 10.8L5.4 12.6L12 19.5Z" fill="currentColor"/>
+        </svg>`;
 
-        function vibrarRapido() {
+        const ICON_SUBIR = `
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 4.5L18.6 11.4L16.2 13.2L12 9L7.8 13.2L5.4 11.4L12 4.5Z" fill="currentColor"/>
+            <path d="M6.8 17.8L12 12.8L17.2 17.8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>
+        </svg>`;
+
+        /* ===============================================================
+           SEÑALES SIMÉTRICAS DE ALTA PRECISIÓN EN CAJA (INTACTAS AL 100%)
+           =============================================================== */
+        const SIGNALS = {
+            esperando: {
+                L: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`,
+                R: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`
+            },
+            mano: {
+                L: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>`,
+                R: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>`
+            },
+            cobrar: {
+                L: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14"/><path d="m6 11 6 6 6-6"/><line x1="4" y1="21" x2="20" y2="21"/></svg>`,
+                R: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14"/><path d="m6 11 6 6 6-6"/><line x1="4" y1="21" x2="20" y2="21"/></svg>`
+            },
+            faltante: {
+                L: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="7" x2="12" y2="13"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>`,
+                R: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="7" x2="12" y2="13"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>`
+            },
+            entregar: {
+                L: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V7"/><path d="m6 13 6-6 6 6"/><line x1="4" y1="3" x2="20" y2="3"/></svg>`,
+                R: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V7"/><path d="m6 13 6-6 6 6"/><line x1="4" y1="3" x2="20" y2="3"/></svg>`
+            },
+            vuelto: {
+                L: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>`,
+                R: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg>`
+            },
+            exacto: {
+                L: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+                R: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
+            },
+            peligro: {
+                L: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>`,
+                R: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>`
+            }
+        };
+
+        function setResultadoExpresivo(iconoKey, mensajeTexto, valorFormateado) {
+            const textoEl = document.getElementById('textoFinal');
+            const montoEl = document.getElementById('montoFinal');
+            const sig = SIGNALS[iconoKey] || SIGNALS.esperando;
+
+            textoEl.innerHTML = `<span class="sig-wing wing-left">${sig.L}</span><span>${mensajeTexto}</span><span class="sig-wing wing-right">${sig.R}</span>`;
+
+            if (montoEl.innerText !== valorFormateado) {
+                montoEl.innerText = valorFormateado;
+                montoEl.classList.remove('monto-pop');
+                void montoEl.offsetWidth;
+                montoEl.classList.add('monto-pop');
+            }
+        }
+
+        function vibrarRapido(patron = 12) {
             if (typeof navigator !== 'undefined' && navigator.vibrate) {
-                navigator.vibrate(12);
+                navigator.vibrate(patron);
             }
         }
 
@@ -1135,6 +1594,7 @@
             guardarValoresModoActual();
             modoOperacion = nuevoModo;
             ultimoInputCajaActivo = null;
+            ultimoEstadoResultado = '';
 
             actualizarEstiloVisualModo();
             restaurarValoresModoActual();
@@ -1316,7 +1776,6 @@
             vibrarRapido();
             changeQty(type, denom, delta);
 
-            // Blindaje de teclado: asegura que el input mantenga el foco activo sin cerrar el teclado
             const inputEl = document.getElementById(`input-${type === 'billete' ? 'b' : 'm'}-${denom}`);
             if (inputEl) {
                 inputEl.focus({ preventScroll: true });
@@ -1398,10 +1857,23 @@
 
         function calcularTodo() {
             var centimosSuperior = 0;
-            for (let i = 1; i <= 8; i++) centimosSuperior += getValCentimos('b' + i);
+            var centimosSupPag2 = 0;
+            for (let i = 1; i <= 8; i++) {
+                let v = getValCentimos('b' + i);
+                centimosSuperior += v;
+                if (i >= 5) centimosSupPag2 += v;
+            }
             
             var centimosInferior = 0;
-            for (let i = 1; i <= 8; i++) centimosInferior += getValCentimos('p' + i);
+            var centimosInfPag2 = 0;
+            for (let i = 1; i <= 8; i++) {
+                let v = getValCentimos('p' + i);
+                centimosInferior += v;
+                if (i >= 5) centimosInfPag2 += v;
+            }
+
+            document.getElementById('dot-sup-2').classList.toggle('has-data', centimosSupPag2 > 0);
+            document.getElementById('dot-inf-2').classList.toggle('has-data', centimosInfPag2 > 0);
 
             var totalSuperior = centimosSuperior / 100;
             var totalInferior = centimosInferior / 100;
@@ -1410,98 +1882,108 @@
             document.getElementById('lblRecibo').innerText = formatoSoles(totalInferior);
 
             var panel = document.getElementById('panelFinal');
-            var texto = document.getElementById('textoFinal');
-            var monto = document.getElementById('montoFinal');
+            var estadoClave = '';
 
             if (modoOperacion === 'recibo') {
                 var difCentimos = centimosSuperior - centimosInferior;
 
                 if (centimosInferior === 0 && centimosSuperior === 0) {
                     panel.className = "panel-resultado estado-esperando";
-                    texto.innerText = "ESPERANDO MONTOS..."; 
-                    monto.innerText = "0.00";
+                    setResultadoExpresivo('esperando', "ESPERANDO MONTOS...", "0.00");
+                    estadoClave = 'esperando';
                 } else if (centimosInferior === 0 && centimosSuperior > 0) {
                     panel.className = "panel-resultado estado-proceso";
-                    texto.innerText = "EFECTIVO RECIBIDO"; 
-                    monto.innerText = formatoSoles(totalSuperior);
+                    setResultadoExpresivo('mano', "EFECTIVO RECIBIDO", formatoSoles(totalSuperior));
+                    estadoClave = 'proceso';
                 } else if (centimosInferior > 0 && centimosSuperior === 0) {
                     panel.className = "panel-resultado estado-cobrar";
-                    texto.innerText = "FALTA QUE TE PAGUE"; 
-                    monto.innerText = formatoSoles(totalInferior);
+                    setResultadoExpresivo('cobrar', "FALTA QUE TE PAGUE", formatoSoles(totalInferior));
+                    estadoClave = 'cobrar';
                 } else {
                     if (difCentimos === 0) {
                         panel.className = "panel-resultado estado-exacto";
-                        texto.innerText = "PAGO EXACTO CONFORME"; 
-                        monto.innerText = formatoSoles(0);
+                        setResultadoExpresivo('exacto', "PAGO EXACTO CONFORME", formatoSoles(0));
+                        estadoClave = 'exacto';
                     } else if (difCentimos < 0) {
                         panel.className = "panel-resultado estado-faltante";
-                        texto.innerText = "FALTA QUE TE PAGUE"; 
-                        monto.innerText = formatoSoles(Math.abs(difCentimos) / 100);
+                        setResultadoExpresivo('faltante', "FALTA QUE TE PAGUE", formatoSoles(Math.abs(difCentimos) / 100));
+                        estadoClave = 'faltante';
                     } else {
                         panel.className = "panel-resultado estado-vuelto";
-                        texto.innerText = "VUELTO PARA EL CLIENTE"; 
-                        monto.innerText = formatoSoles(difCentimos / 100);
+                        setResultadoExpresivo('vuelto', "VUELTO PARA EL CLIENTE", formatoSoles(difCentimos / 100));
+                        estadoClave = 'vuelto';
                     }
                 }
             } else if (modoOperacion === 'retiro') {
                 if (centimosInferior === 0 && centimosSuperior === 0) {
                     panel.className = "panel-resultado estado-esperando";
-                    texto.innerText = "ESPERANDO RETIRO..."; 
-                    monto.innerText = "0.00";
+                    setResultadoExpresivo('esperando', "ESPERANDO RETIRO...", "0.00");
+                    estadoClave = 'esperando';
                 } else if (centimosInferior > 0 && centimosSuperior === 0) {
                     panel.className = "panel-resultado estado-retiro";
-                    texto.innerText = "DINERO CONTADO EN MANO"; 
-                    monto.innerText = formatoSoles(totalInferior);
+                    setResultadoExpresivo('mano', "DINERO CONTADO EN MANO", formatoSoles(totalInferior));
+                    estadoClave = 'mano';
                 } else if (centimosSuperior > 0 && centimosInferior === 0) {
                     panel.className = "panel-resultado estado-proceso";
-                    texto.innerText = "MONTO POR ENTREGAR"; 
-                    monto.innerText = formatoSoles(totalSuperior);
+                    setResultadoExpresivo('entregar', "MONTO POR ENTREGAR", formatoSoles(totalSuperior));
+                    estadoClave = 'proceso';
                 } else {
                     var difRetiroCentimos = centimosSuperior - centimosInferior;
                     if (difRetiroCentimos === 0) {
                         panel.className = "panel-resultado estado-exacto";
-                        texto.innerText = "MONTO EXACTO A ENTREGAR"; 
-                        monto.innerText = formatoSoles(0);
+                        setResultadoExpresivo('exacto', "MONTO EXACTO A ENTREGAR", formatoSoles(0));
+                        estadoClave = 'exacto';
                     } else if (difRetiroCentimos > 0) {
-                        panel.className = "panel-resultado estado-faltante";
-                        texto.innerText = "FALTA ENTREGAR AL CLIENTE"; 
-                        monto.innerText = formatoSoles(difRetiroCentimos / 100);
+                        panel.className = "panel-resultado estado-faltante-entregar";
+                        setResultadoExpresivo('entregar', "FALTA ENTREGAR AL CLIENTE", formatoSoles(difRetiroCentimos / 100));
+                        estadoClave = 'entregar';
                     } else {
-                        panel.className = "panel-resultado estado-cobrar";
-                        texto.innerText = "¡CUIDADO! DAS DE MÁS"; 
-                        monto.innerText = formatoSoles(Math.abs(difRetiroCentimos) / 100);
+                        panel.className = "panel-resultado estado-peligro-mas";
+                        setResultadoExpresivo('peligro', "¡CUIDADO! DAS DE MÁS", formatoSoles(Math.abs(difRetiroCentimos) / 100));
+                        estadoClave = 'peligro-mas';
                     }
                 }
             } else {
                 if (centimosInferior === 0 && centimosSuperior === 0) {
                     panel.className = "panel-resultado estado-esperando";
-                    texto.innerText = "ESPERANDO DEPÓSITO..."; 
-                    monto.innerText = "0.00";
+                    setResultadoExpresivo('esperando', "ESPERANDO DEPÓSITO...", "0.00");
+                    estadoClave = 'esperando';
                 } else if (centimosSuperior > 0 && centimosInferior === 0) {
                     panel.className = "panel-resultado estado-exacto";
-                    texto.innerText = "DEPÓSITO DIRECTO (SIN VUELTO)"; 
-                    monto.innerText = formatoSoles(totalSuperior);
+                    setResultadoExpresivo('exacto', "DEPÓSITO DIRECTO (SIN VUELTO)", formatoSoles(totalSuperior));
+                    estadoClave = 'deposito-directo';
                 } else if (centimosSuperior === 0 && centimosInferior > 0) {
                     panel.className = "panel-resultado estado-deposito";
-                    texto.innerText = "DINERO CONTADO EN MANO"; 
-                    monto.innerText = formatoSoles(totalInferior);
+                    setResultadoExpresivo('mano', "DINERO CONTADO EN MANO", formatoSoles(totalInferior));
+                    estadoClave = 'mano';
                 } else {
                     var balanceDepositoCentimos = centimosInferior - centimosSuperior;
 
                     if (balanceDepositoCentimos === 0) {
                         panel.className = "panel-resultado estado-exacto";
-                        texto.innerText = "DEPÓSITO EXACTO CONFORME"; 
-                        monto.innerText = formatoSoles(0);
+                        setResultadoExpresivo('exacto', "DEPÓSITO EXACTO CONFORME", formatoSoles(0));
+                        estadoClave = 'exacto';
                     } else if (balanceDepositoCentimos > 0) {
                         panel.className = "panel-resultado estado-vuelto";
-                        texto.innerText = "VUELTO PARA EL CLIENTE"; 
-                        monto.innerText = formatoSoles(balanceDepositoCentimos / 100);
+                        setResultadoExpresivo('vuelto', "VUELTO PARA EL CLIENTE", formatoSoles(balanceDepositoCentimos / 100));
+                        estadoClave = 'vuelto';
                     } else {
                         panel.className = "panel-resultado estado-faltante";
-                        texto.innerText = "FALTA QUE TE PAGUE"; 
-                        monto.innerText = formatoSoles(Math.abs(balanceDepositoCentimos) / 100);
+                        setResultadoExpresivo('faltante', "FALTA QUE TE PAGUE", formatoSoles(Math.abs(balanceDepositoCentimos) / 100));
+                        estadoClave = 'faltante';
                     }
                 }
+            }
+
+            if (estadoClave !== ultimoEstadoResultado) {
+                if (estadoClave === 'peligro-mas') {
+                    vibrarRapido([50, 30, 80]);
+                } else if (estadoClave === 'faltante') {
+                    vibrarRapido([30, 25, 45]);
+                } else if (estadoClave === 'exacto') {
+                    vibrarRapido(20);
+                }
+                ultimoEstadoResultado = estadoClave;
             }
         }
 
@@ -1522,21 +2004,22 @@
 
             cuadroVinculado = null; 
             ultimoInputCajaActivo = null;
+            ultimoEstadoResultado = '';
             
             document.getElementById('swipeEfectivo').scrollTo({ left: 0, behavior: 'instant' });
             document.getElementById('swipeRecibo').scrollTo({ left: 0, behavior: 'instant' });
             
             document.getElementById('dot-sup-1').classList.add('active');
-            document.getElementById('dot-sup-2').classList.remove('active');
+            document.getElementById('dot-sup-2').classList.remove('active', 'has-data');
             document.getElementById('dot-inf-1').classList.add('active');
-            document.getElementById('dot-inf-2').classList.remove('active');
+            document.getElementById('dot-inf-2').classList.remove('active', 'has-data');
 
             calcularTodo();
             vibrarRapido();
         }
 
         // =======================================================
-        // PERSISTENCIA Y RENDERIZADO VISUAL
+        // PERSISTENCIA Y RENDERIZADO VISUAL BCRP
         // =======================================================
         const denominacionesBilletes = [200, 100, 50, 20, 10];
         const denominacionesMonedas = [5.00, 2.00, 1.00, 0.50, 0.20, 0.10];
@@ -1546,11 +2029,11 @@
         denominacionesMonedas.forEach(d => cantidadesMonedas[d] = 0);
 
         const coloresBilletes = {
-            200: '#581c87',
-            100: '#0284c7',
-            50:  '#78350f',
-            20:  '#ea580c',
-            10:  '#059669'
+            200: { c1: '#4c1d95', c2: '#7c3aed', acc: '#ddd6fe' },
+            100: { c1: '#0c4a6e', c2: '#0284c7', acc: '#bae6fd' },
+            50:  { c1: '#7c2d12', c2: '#c2410c', acc: '#fed7aa' },
+            20:  { c1: '#78350f', c2: '#d97706', acc: '#fde68a' },
+            10:  { c1: '#064e3b', c2: '#059669', acc: '#a7f3d0' }
         };
 
         const configMonedas = {
@@ -1561,6 +2044,49 @@
             0.20: { css: 'moneda-020', color: '#a16207' },
             0.10: { css: 'moneda-010', color: '#a16207' }
         };
+
+        function crearSvgBilleteFallback(denom) {
+            const t = coloresBilletes[denom] || coloresBilletes[100];
+            return `<svg viewBox="0 0 136 70" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="gB${denom}" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="${t.c1}"/>
+                        <stop offset="100%" stop-color="${t.c2}"/>
+                    </linearGradient>
+                </defs>
+                <rect width="136" height="70" fill="url(#gB${denom})"/>
+                <rect x="4" y="4" width="128" height="62" rx="3" fill="none" stroke="${t.acc}" stroke-opacity="0.35" stroke-width="1"/>
+                <rect x="34" y="0" width="3" height="70" fill="${t.acc}" fill-opacity="0.3"/>
+                <circle cx="110" cy="35" r="20" fill="rgba(255,255,255,0.08)"/>
+                <text x="10" y="16" fill="${t.acc}" font-family="sans-serif" font-size="7.5" font-weight="900" letter-spacing="0.8">BCRP · PERÚ</text>
+                <text x="10" y="49" fill="#ffffff" font-family="sans-serif" font-size="27" font-weight="900" letter-spacing="-1">S/ ${denom}</text>
+            </svg>`;
+        }
+
+        function crearSvgMonedaFallback(denom) {
+            const esBimetal = (denom === 5 || denom === 2);
+            const esPlata = (denom === 1 || denom === 0.5);
+            const txt = denom >= 1 ? `S/ ${denom.toFixed(0)}` : `${(denom * 100).toFixed(0)}¢`;
+            if (esBimetal) {
+                return `<svg viewBox="0 0 64 64" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="32" cy="32" r="31" fill="#94a3b8" stroke="#475569" stroke-width="1.5"/>
+                    <circle cx="32" cy="32" r="21" fill="#d97706" stroke="#78350f" stroke-width="1"/>
+                    <text x="32" y="37" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="900">${txt}</text>
+                </svg>`;
+            } else if (esPlata) {
+                return `<svg viewBox="0 0 64 64" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="32" cy="32" r="31" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+                    <circle cx="32" cy="32" r="25" fill="none" stroke="#64748b" stroke-width="1" stroke-dasharray="3 2"/>
+                    <text x="32" y="37" text-anchor="middle" fill="#0f172a" font-family="sans-serif" font-size="16" font-weight="900">${txt}</text>
+                </svg>`;
+            } else {
+                return `<svg viewBox="0 0 64 64" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="32" cy="32" r="31" fill="#eab308" stroke="#854d0e" stroke-width="1.5"/>
+                    <circle cx="32" cy="32" r="25" fill="none" stroke="#713f12" stroke-width="1" stroke-opacity="0.4"/>
+                    <text x="32" y="37" text-anchor="middle" fill="#422006" font-family="sans-serif" font-size="16" font-weight="900">${txt}</text>
+                </svg>`;
+            }
+        }
 
         function obtenerSrcFoto(tipo, denom) {
             const guardada = localStorage.getItem(`foto_${tipo}_${denom}`);
@@ -1577,14 +2103,11 @@
             badge.className = 'fallback-badge';
             
             if (tipo === 'billete') {
-                badge.style.backgroundColor = coloresBilletes[denom];
-                badge.innerText = `S/ ${denom}`;
+                badge.innerHTML = crearSvgBilleteFallback(denom);
             } else {
-                badge.style.backgroundColor = configMonedas[denom].color;
                 badge.style.borderRadius = '50%';
                 badge.classList.add(configMonedas[denom].css);
-                badge.innerText = denom >= 1 ? `S/ ${denom.toFixed(0)}` : `${(denom * 100).toFixed(0)}¢`;
-                badge.style.fontSize = '13px';
+                badge.innerHTML = crearSvgMonedaFallback(denom);
             }
             contenedor.appendChild(badge);
         }
@@ -1595,14 +2118,14 @@
             denominacionesBilletes.forEach(denom => {
                 const src = obtenerSrcFoto('billete', denom);
                 containerBilletes.innerHTML += `
-                    <div class="item-card">
+                    <div class="item-card" id="card-b-${denom}">
                         <div class="billete-container" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" ondblclick="reiniciarDenominacion('billete', ${denom})" title="Doble toque para reiniciar">
                             <img src="${src}" class="billete-real-img" alt="S/ ${denom}" loading="eager" onerror="manejarErrorFoto(this, 'billete', ${denom})">
                         </div>
                         <div class="stepper-control">
-                            <button type="button" class="btn-step" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'billete', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
+                            <button type="button" class="btn-step btn-step-down" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'billete', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
                             <input type="text" inputmode="numeric" class="input-qty" id="input-b-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('billete', ${denom}, this.value)">
-                            <button type="button" class="btn-step" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'billete', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
+                            <button type="button" class="btn-step btn-step-up" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'billete', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
                         </div>
                         <div class="item-data-col" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" ondblclick="reiniciarDenominacion('billete', ${denom})" title="Doble toque para reiniciar">
                             <span class="subtotal-tag">SUBTOTAL</span>
@@ -1619,14 +2142,14 @@
                 const src = obtenerSrcFoto('moneda', denom);
                 const conf = configMonedas[denom];
                 containerMonedas.innerHTML += `
-                    <div class="item-card">
+                    <div class="item-card" id="card-m-${denom}">
                         <div class="moneda-real-frame" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" ondblclick="reiniciarDenominacion('moneda', ${denom})" title="Doble toque para reiniciar">
                             <img src="${src}" class="moneda-real-img ${conf.css}" alt="S/ ${denom.toFixed(2)}" loading="eager" onerror="manejarErrorFoto(this, 'moneda', ${denom})">
                         </div>
                         <div class="stepper-control">
-                            <button type="button" class="btn-step" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'moneda', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
+                            <button type="button" class="btn-step btn-step-down" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'moneda', ${denom}, -1)" title="Bajar">${ICON_BAJAR}</button>
                             <input type="text" inputmode="numeric" class="input-qty" id="input-m-${denom}" placeholder="0" enterkeyhint="done" oninput="updateQty('moneda', ${denom}, this.value)">
-                            <button type="button" class="btn-step" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'moneda', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
+                            <button type="button" class="btn-step btn-step-up" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="gestionarStep(event, 'moneda', ${denom}, 1)" title="Subir">${ICON_SUBIR}</button>
                         </div>
                         <div class="item-data-col" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" ondblclick="reiniciarDenominacion('moneda', ${denom})" title="Doble toque para reiniciar">
                             <span class="subtotal-tag">SUBTOTAL</span>
@@ -1695,6 +2218,7 @@
                     try {
                         localStorage.setItem(`foto_${tipo}_${denom}`, optimizada);
                         renderizarListasVisuales();
+                        calculateAllCounter();
                         abrirModalFotos();
                     } catch(err) {
                         alert('Memoria llena en el navegador móvil.');
@@ -1739,14 +2263,27 @@
         function calculateAllCounter() {
             let centimosBilletes = 0, centimosMonedas = 0;
             denominacionesBilletes.forEach(d => { 
-                const subCentimos = Math.round(d * 100) * (cantidadesBilletes[d] || 0); 
+                const cant = cantidadesBilletes[d] || 0;
+                const subCentimos = Math.round(d * 100) * cant; 
                 centimosBilletes += subCentimos; 
-                document.getElementById(`sub-b-${d}`).innerText = formatoEntero(subCentimos / 100); 
+
+                const subEl = document.getElementById(`sub-b-${d}`);
+                const cardEl = document.getElementById(`card-b-${d}`);
+
+                if (subEl) subEl.innerText = formatoEntero(subCentimos / 100);
+                if (cardEl) cardEl.classList.toggle('fila-activa', cant > 0);
             });
+
             denominacionesMonedas.forEach(d => { 
-                const subCentimos = Math.round(d * 100) * (cantidadesMonedas[d] || 0); 
+                const cant = cantidadesMonedas[d] || 0;
+                const subCentimos = Math.round(d * 100) * cant; 
                 centimosMonedas += subCentimos; 
-                document.getElementById(`sub-m-${d}`).innerText = formatoSoles(subCentimos / 100); 
+
+                const subEl = document.getElementById(`sub-m-${d}`);
+                const cardEl = document.getElementById(`card-m-${d}`);
+
+                if (subEl) subEl.innerText = formatoSoles(subCentimos / 100);
+                if (cardEl) cardEl.classList.toggle('fila-activa', cant > 0);
             });
 
             let totalBilletesVal = centimosBilletes / 100;
@@ -1754,8 +2291,14 @@
             let granTotalNumerico = (centimosBilletes + centimosMonedas) / 100;
 
             document.getElementById('txtGranTotal').innerText = formatoSoles(granTotalNumerico);
-            document.getElementById('badgeTotalBilletes').innerText = `S/ ${formatoEntero(totalBilletesVal)}`;
-            document.getElementById('badgeTotalMonedas').innerText = `S/ ${formatoSoles(totalMonedasVal)}`;
+
+            const badgeBilletes = document.getElementById('badgeTotalBilletes');
+            const badgeMonedas = document.getElementById('badgeTotalMonedas');
+            badgeBilletes.innerText = `S/ ${formatoEntero(totalBilletesVal)}`;
+            badgeMonedas.innerText = `S/ ${formatoSoles(totalMonedasVal)}`;
+
+            badgeBilletes.classList.toggle('badge-con-monto', centimosBilletes > 0);
+            badgeMonedas.classList.toggle('badge-con-monto', centimosMonedas > 0);
 
             if (granTotalNumerico > 0) {
                 const listaOpciones = (modoOperacion === 'retiro' || modoOperacion === 'deposito') 
@@ -1876,6 +2419,7 @@
         }, true);
 
         renderizarListasVisuales();
+        calcularTodo();
     </script>
 </body>
 </html>
